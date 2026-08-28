@@ -64,7 +64,7 @@ jobs:
         run: |
           set -euo pipefail
           grep -q 'Student Digital Twin' docs/00-governance/BASELINE-RECONCILIATION-v1.0.md
-          grep -q 'SOURCE OF TRUTH' docs/00-governance/BASELINE-RECONCILIATION-v1.0.md
+          grep -q 'source of truth' docs/00-governance/BASELINE-RECONCILIATION-v1.0.md
           grep -q 'UNKNOWN' docs/00-governance/BASELINE-RECONCILIATION-v1.0.md
           grep -q 'minimum sufficient context' AI-GOVERNANCE.md
           echo 'Governance terminology checks OK.'
