@@ -29,6 +29,6 @@ governance:
   cross_llm_portability: APPROVED-DIRECTION
   architecture_tests: PENDING
   ci_governance_validation: VERIFIED
-  branch_protection: NOT_VERIFIED
+  branch_protection: BLOCKED_BY_CURRENT_GITHUB_PLAN
 
 next_milestone: PGKI-1.0-FINAL
