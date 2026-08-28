@@ -1,10 +1,9 @@
-version: 1.0
+version: 1.1
 status: APPROVED_FOR_BASELINE
 bootstrap:
   - PROJECT-STATE.yaml
   - PROJECT-CONSTITUTION.md
   - AI-GOVERNANCE.md
-  - CONTEXT-MANIFEST.yaml
   - DECISION-LEDGER.yaml
   - docs/ARCHITECTURE-BIBLE.md
 rules:
