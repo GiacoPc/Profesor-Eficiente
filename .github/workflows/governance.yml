@@ -1,0 +1,63 @@
+name: Governance
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  governance:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Required governance files
+        shell: bash
+        run: |
+          set -euo pipefail
+          required=(
+            AGENTS.md
+            AI-GOVERNANCE.md
+            PROJECT-CONSTITUTION.md
+            PROJECT-STATE.yaml
+            CONTEXT-MANIFEST.yaml
+            DECISION-LEDGER.yaml
+            README.md
+            docs/ARCHITECTURE-BIBLE.md
+            docs/00-governance/BASELINE-RECONCILIATION-v1.0.md
+            docs/00-governance/ADR-POLICY.md
+            docs/00-governance/TRACEABILITY.md
+          )
+          for f in "${required[@]}"; do
+            test -f "$f" || { echo "Missing required file: $f"; exit 1; }
+          done
+
+      - name: Validate YAML syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          ruby -e 'require "yaml"; ARGV.each { |f| YAML.load_file(f); puts "OK: #{f}" }' \
+            PROJECT-STATE.yaml CONTEXT-MANIFEST.yaml DECISION-LEDGER.yaml
+
+      - name: Governance invariants
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'offline_first: APPROVED' PROJECT-STATE.yaml
+          grep -q 'pedagogical_authority_outside_llm: APPROVED-DIRECTION' PROJECT-STATE.yaml
+          grep -q 'llm_provider_model: UNKNOWN' PROJECT-STATE.yaml
+          grep -q 'minimum_sufficient_context: true' CONTEXT-MANIFEST.yaml
+          grep -q 'missing_information: UNKNOWN' CONTEXT-MANIFEST.yaml
+          echo 'Governance invariants OK.'
+
+      - name: Basic secret hygiene
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git grep -nE 'AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9_]{30,}|BEGIN (RSA|OPENSSH|EC) PRIVATE KEY' -- .; then
+            echo 'Potential credential material detected.'
+            exit 1
+          fi
