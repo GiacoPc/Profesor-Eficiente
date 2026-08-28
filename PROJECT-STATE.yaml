@@ -1,7 +1,7 @@
 project:
   name: Profesor-Eficiente
   baseline: PGKI-1.0
-  state: BASELINE-CANDIDATE
+  state: READY_FOR_HUMAN_MERGE_REVIEW
   production_code: NOT_STARTED
 
 source_of_truth:
@@ -30,5 +30,6 @@ governance:
   architecture_tests: PENDING
   ci_governance_validation: VERIFIED
   branch_protection: BLOCKED_BY_CURRENT_GITHUB_PLAN
+  second_audit: PASS_WITH_EXPLICIT_PLATFORM_EXCEPTION
 
 next_milestone: PGKI-1.0-FINAL
