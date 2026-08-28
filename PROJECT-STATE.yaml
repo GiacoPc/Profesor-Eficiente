@@ -28,7 +28,7 @@ governance:
   ai_context_routing: APPROVED-DIRECTION
   cross_llm_portability: APPROVED-DIRECTION
   architecture_tests: PENDING
-  ci_governance_validation: PENDING
-  branch_protection: PENDING
+  ci_governance_validation: VERIFIED
+  branch_protection: NOT_VERIFIED
 
 next_milestone: PGKI-1.0-FINAL
