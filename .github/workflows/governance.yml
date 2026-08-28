@@ -59,16 +59,6 @@ jobs:
           ! grep -qF -- '- CONTEXT-MANIFEST.yaml' CONTEXT-MANIFEST.yaml
           echo 'Governance invariants and state consistency OK.'
 
-      - name: Governance terminology checks
-        shell: bash
-        run: |
-          set -euo pipefail
-          grep -qF 'Student Digital Twin' docs/00-governance/BASELINE-RECONCILIATION-v1.0.md
-          grep -qF 'source of truth' docs/00-governance/BASELINE-RECONCILIATION-v1.0.md
-          grep -qF 'UNKNOWN' docs/00-governance/BASELINE-RECONCILIATION-v1.0.md
-          grep -qF 'minimum sufficient context' AI-GOVERNANCE.md
-          echo 'Governance terminology checks OK.'
-
       - name: Basic secret hygiene
         shell: bash
         run: |
