@@ -1,7 +1,17 @@
 # AI Governance
 
-**Version:** 1.0
+**Version:** 1.1
 **Status:** APPROVED FOR BASELINE
+
+## Authority hierarchy
+
+1. Approved repository artifacts and recorded evidence.
+2. Human-approved decisions recorded in the Decision Ledger/ADRs.
+3. Task-specific specifications.
+4. AI proposals and reasoning.
+5. Conversation history.
+
+Conversation history MUST NOT override an approved repository artifact.
 
 ## Mandatory rules
 
@@ -12,7 +22,7 @@
 5. If required information is absent, state `UNKNOWN`.
 6. Detect contradictions before implementation.
 7. Do not silently modify architectural invariants.
-8. Significant architectural changes require an ADR.
+8. Use `docs/00-governance/CHANGE-CLASSIFICATION.md` to determine whether an ADR is required; if ambiguous, classify upward.
 9. Implementation must reference the applicable specification.
 10. Do not claim hardware compatibility without evidence.
 11. Do not claim performance without benchmarks.
@@ -23,6 +33,8 @@
 16. Do not bypass tests to obtain a green build.
 17. Preserve traceability between requirements, specifications, implementation, tests and evidence.
 18. Load the minimum sufficient context for each task; do not dump the entire repository into every prompt.
+19. Record evidence separately from decisions.
+20. Never claim a test, benchmark, security property or repository state that has not been verified.
 
 ## Evidence labels
 
