@@ -30,6 +30,7 @@ jobs:
             docs/00-governance/BASELINE-RECONCILIATION-v1.0.md
             docs/00-governance/ADR-POLICY.md
             docs/00-governance/TRACEABILITY.md
+            docs/00-governance/CHANGE-CLASSIFICATION.md
           )
           for f in "${required[@]}"; do
             test -f "$f" || { echo "Missing required file: $f"; exit 1; }
@@ -42,7 +43,7 @@ jobs:
           ruby -e 'require "yaml"; ARGV.each { |f| YAML.load_file(f); puts "OK: #{f}" }' \
             PROJECT-STATE.yaml CONTEXT-MANIFEST.yaml DECISION-LEDGER.yaml
 
-      - name: Governance invariants
+      - name: Governance invariants and state consistency
         shell: bash
         run: |
           set -euo pipefail
@@ -50,14 +51,31 @@ jobs:
           grep -q 'pedagogical_authority_outside_llm: APPROVED-DIRECTION' PROJECT-STATE.yaml
           grep -q 'llm_provider_model: UNKNOWN' PROJECT-STATE.yaml
           grep -q 'minimum_sufficient_context: true' CONTEXT-MANIFEST.yaml
+          grep -q 'repository_dump_per_task: false' CONTEXT-MANIFEST.yaml
           grep -q 'missing_information: UNKNOWN' CONTEXT-MANIFEST.yaml
-          echo 'Governance invariants OK.'
+          grep -q 'ci_governance_validation: VERIFIED' PROJECT-STATE.yaml
+          grep -q 'branch_protection: NOT_VERIFIED' PROJECT-STATE.yaml
+          grep -q 'required_fields: \[id, decision, status, evidence, affected_artifacts\]' DECISION-LEDGER.yaml
+          ! grep -q '^  - CONTEXT-MANIFEST.yaml$' CONTEXT-MANIFEST.yaml
+          echo 'Governance invariants and state consistency OK.'
+
+      - name: Governance terminology checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'Student Digital Twin' docs/00-governance/BASELINE-RECONCILIATION-v1.0.md
+          grep -q 'SOURCE OF TRUTH' docs/00-governance/BASELINE-RECONCILIATION-v1.0.md
+          grep -q 'UNKNOWN' docs/00-governance/BASELINE-RECONCILIATION-v1.0.md
+          grep -q 'minimum sufficient context' AI-GOVERNANCE.md
+          echo 'Governance terminology checks OK.'
 
       - name: Basic secret hygiene
         shell: bash
         run: |
           set -euo pipefail
-          if git grep -nE 'AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9_]{30,}|BEGIN (RSA|OPENSSH|EC) PRIVATE KEY' -- .; then
+          pattern='AKIA[0-9A-Z]{16}|ASIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9_]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{20,}|AIza[0-9A-Za-z_-]{30,}|-----BEGIN [A-Z0-9 ]*PRIVATE KEY-----|(?i)(api[_-]?key|secret[_-]?key|access[_-]?token)[[:space:]]*[:=][[:space:]]*["'"'][^"'"']{16,}["'"']'
+          if git grep -nE "$pattern" -- . ':!docs/00-governance/BASELINE-RECONCILIATION-v1.0.md'; then
             echo 'Potential credential material detected.'
             exit 1
           fi
+          echo 'Basic secret hygiene OK.'
