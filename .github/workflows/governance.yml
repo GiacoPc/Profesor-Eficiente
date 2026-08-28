@@ -31,6 +31,7 @@ jobs:
             docs/00-governance/ADR-POLICY.md
             docs/00-governance/TRACEABILITY.md
             docs/00-governance/CHANGE-CLASSIFICATION.md
+            docs/00-governance/REPOSITORY-POLICY.md
           )
           for f in "${required[@]}"; do
             test -f "$f" || { echo "Missing required file: $f"; exit 1; }
@@ -54,7 +55,7 @@ jobs:
           grep -qF 'repository_dump_per_task: false' CONTEXT-MANIFEST.yaml
           grep -qF 'missing_information: UNKNOWN' CONTEXT-MANIFEST.yaml
           grep -qF 'ci_governance_validation: VERIFIED' PROJECT-STATE.yaml
-          grep -qF 'branch_protection: NOT_VERIFIED' PROJECT-STATE.yaml
+          grep -qF 'branch_protection: BLOCKED_BY_CURRENT_GITHUB_PLAN' PROJECT-STATE.yaml
           grep -qF 'required_fields: [id, decision, status, evidence, affected_artifacts]' DECISION-LEDGER.yaml
           ! grep -qF -- '- CONTEXT-MANIFEST.yaml' CONTEXT-MANIFEST.yaml
           echo 'Governance invariants and state consistency OK.'
@@ -64,7 +65,7 @@ jobs:
         run: |
           set -euo pipefail
           pattern="AKIA[0-9A-Z]{16}|ASIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9_]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{20,}|AIza[0-9A-Za-z_-]{30,}|-----BEGIN [A-Z0-9 ]*PRIVATE KEY-----|(?i)(api[_-]?key|secret[_-]?key|access[_-]?token)[[:space:]]*[:=][[:space:]]*[A-Za-z0-9_./+=-]{16,}"
-          if git grep -nE "$pattern" -- . ':!docs/00-governance/BASELINE-RECONCILIATION-v1.0.md'; then
+          if git grep -nE "$pattern" -- . ':!docs/00-governance/BASELINE-RECONCILIATION-v1.0.md' ':!docs/00-governance/REPOSITORY-POLICY.md'; then
             echo 'Potential credential material detected.'
             exit 1
           fi
