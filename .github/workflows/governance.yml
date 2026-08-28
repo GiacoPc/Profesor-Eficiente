@@ -47,26 +47,26 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          grep -q 'offline_first: APPROVED' PROJECT-STATE.yaml
-          grep -q 'pedagogical_authority_outside_llm: APPROVED-DIRECTION' PROJECT-STATE.yaml
-          grep -q 'llm_provider_model: UNKNOWN' PROJECT-STATE.yaml
-          grep -q 'minimum_sufficient_context: true' CONTEXT-MANIFEST.yaml
-          grep -q 'repository_dump_per_task: false' CONTEXT-MANIFEST.yaml
-          grep -q 'missing_information: UNKNOWN' CONTEXT-MANIFEST.yaml
-          grep -q 'ci_governance_validation: VERIFIED' PROJECT-STATE.yaml
-          grep -q 'branch_protection: NOT_VERIFIED' PROJECT-STATE.yaml
-          grep -q 'required_fields: \[id, decision, status, evidence, affected_artifacts\]' DECISION-LEDGER.yaml
-          ! grep -q '^  - CONTEXT-MANIFEST.yaml$' CONTEXT-MANIFEST.yaml
+          grep -qF 'offline_first: APPROVED' PROJECT-STATE.yaml
+          grep -qF 'pedagogical_authority_outside_llm: APPROVED-DIRECTION' PROJECT-STATE.yaml
+          grep -qF 'llm_provider_model: UNKNOWN' PROJECT-STATE.yaml
+          grep -qF 'minimum_sufficient_context: true' CONTEXT-MANIFEST.yaml
+          grep -qF 'repository_dump_per_task: false' CONTEXT-MANIFEST.yaml
+          grep -qF 'missing_information: UNKNOWN' CONTEXT-MANIFEST.yaml
+          grep -qF 'ci_governance_validation: VERIFIED' PROJECT-STATE.yaml
+          grep -qF 'branch_protection: NOT_VERIFIED' PROJECT-STATE.yaml
+          grep -qF 'required_fields: [id, decision, status, evidence, affected_artifacts]' DECISION-LEDGER.yaml
+          ! grep -qF -- '- CONTEXT-MANIFEST.yaml' CONTEXT-MANIFEST.yaml
           echo 'Governance invariants and state consistency OK.'
 
       - name: Governance terminology checks
         shell: bash
         run: |
           set -euo pipefail
-          grep -q 'Student Digital Twin' docs/00-governance/BASELINE-RECONCILIATION-v1.0.md
-          grep -q 'source of truth' docs/00-governance/BASELINE-RECONCILIATION-v1.0.md
-          grep -q 'UNKNOWN' docs/00-governance/BASELINE-RECONCILIATION-v1.0.md
-          grep -q 'minimum sufficient context' AI-GOVERNANCE.md
+          grep -qF 'Student Digital Twin' docs/00-governance/BASELINE-RECONCILIATION-v1.0.md
+          grep -qF 'source of truth' docs/00-governance/BASELINE-RECONCILIATION-v1.0.md
+          grep -qF 'UNKNOWN' docs/00-governance/BASELINE-RECONCILIATION-v1.0.md
+          grep -qF 'minimum sufficient context' AI-GOVERNANCE.md
           echo 'Governance terminology checks OK.'
 
       - name: Basic secret hygiene
