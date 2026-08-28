@@ -73,7 +73,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          pattern='AKIA[0-9A-Z]{16}|ASIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9_]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{20,}|AIza[0-9A-Za-z_-]{30,}|-----BEGIN [A-Z0-9 ]*PRIVATE KEY-----|(?i)(api[_-]?key|secret[_-]?key|access[_-]?token)[[:space:]]*[:=][[:space:]]*["'"'][^"'"']{16,}["'"']'
+          pattern="AKIA[0-9A-Z]{16}|ASIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9_]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{20,}|AIza[0-9A-Za-z_-]{30,}|-----BEGIN [A-Z0-9 ]*PRIVATE KEY-----|(?i)(api[_-]?key|secret[_-]?key|access[_-]?token)[[:space:]]*[:=][[:space:]]*[A-Za-z0-9_./+=-]{16,}"
           if git grep -nE "$pattern" -- . ':!docs/00-governance/BASELINE-RECONCILIATION-v1.0.md'; then
             echo 'Potential credential material detected.'
             exit 1
