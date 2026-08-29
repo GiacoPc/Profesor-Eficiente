@@ -71,13 +71,24 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          grep -qF 'NO EVIDENCE -> NO VERIFIED CLAIM -> NO GATE PASS' docs/00-governance/PGKI-1.1-EVIDENCE-CLAIM-INTEGRITY.md
-          grep -qF 'NOT_AVAILABLE' docs/00-governance/PGKI-1.1-EVIDENCE-CLAIM-INTEGRITY.md
-          grep -qF 'EVIDENCE CONFLICT' docs/00-governance/PGKI-1.1-EVIDENCE-CLAIM-INTEGRITY.md
-          grep -qF 'Do not claim that an artifact was seen, reviewed, inspected or verified' AGENTS.md
-          grep -qF 'Never claim absence of failures without a defined audit scope' AGENTS.md
-          grep -qF 'The secondary auditor MUST receive the defined audit pack' docs/00-governance/SECONDARY-AI-AUDITOR-PROTOCOL.md
-          echo 'Evidence and claim integrity controls present.'
+          ruby <<'RUBY'
+          checks = {
+            'PGKI policy invariant' => ['docs/00-governance/PGKI-1.1-EVIDENCE-CLAIM-INTEGRITY.md', 'NO EVIDENCE -> NO VERIFIED CLAIM -> NO GATE PASS'],
+            'NOT_AVAILABLE state' => ['docs/00-governance/PGKI-1.1-EVIDENCE-CLAIM-INTEGRITY.md', 'NOT_AVAILABLE'],
+            'EVIDENCE CONFLICT state' => ['docs/00-governance/PGKI-1.1-EVIDENCE-CLAIM-INTEGRITY.md', 'EVIDENCE CONFLICT'],
+            'observation rule' => ['AGENTS.md', 'Do not claim that an artifact was seen, reviewed, inspected or verified'],
+            'absence-claim rule' => ['AGENTS.md', 'Never claim absence of failures without a defined audit scope'],
+            'secondary auditor independence' => ['docs/00-governance/SECONDARY-AI-AUDITOR-PROTOCOL.md', 'The secondary auditor MUST receive the defined audit pack']
+          }
+          failures = checks.filter_map do |name, (file, text)|
+            [name, file, text] unless File.read(file).include?(text)
+          end
+          if failures.any?
+            failures.each { |name, file, text| warn "Missing #{name}: #{file}: #{text}" }
+            exit 1
+          end
+          puts 'Evidence and claim integrity controls present.'
+          RUBY
 
       - name: Repository whitespace sanity
         shell: bash
