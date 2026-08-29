@@ -33,6 +33,10 @@ jobs:
             docs/00-governance/CHANGE-CLASSIFICATION.md
             docs/00-governance/REPOSITORY-POLICY.md
             docs/00-governance/PGKI-1.0-SECOND-AUDIT.md
+            docs/00-governance/PGKI-1.1-EVIDENCE-CLAIM-INTEGRITY.md
+            docs/00-governance/PGKI-1.1-RETROSPECTIVE-INTEGRITY-AUDIT.md
+            docs/00-governance/CLAIM-REGISTER.yaml
+            docs/00-governance/SECONDARY-AI-AUDITOR-PROTOCOL.md
           )
           for f in "${required[@]}"; do
             test -f "$f" || { echo "Missing required file: $f"; exit 1; }
@@ -43,7 +47,7 @@ jobs:
         run: |
           set -euo pipefail
           ruby -e 'require "yaml"; ARGV.each { |f| YAML.load_file(f); puts "OK: #{f}" }' \
-            PROJECT-STATE.yaml CONTEXT-MANIFEST.yaml DECISION-LEDGER.yaml
+            PROJECT-STATE.yaml CONTEXT-MANIFEST.yaml DECISION-LEDGER.yaml docs/00-governance/CLAIM-REGISTER.yaml
 
       - name: Governance invariants and state consistency
         shell: bash
@@ -62,6 +66,35 @@ jobs:
           grep -qF 'required_fields: [id, decision, status, evidence, affected_artifacts]' DECISION-LEDGER.yaml
           ! grep -qF -- '- CONTEXT-MANIFEST.yaml' CONTEXT-MANIFEST.yaml
           echo 'Governance invariants and state consistency OK.'
+
+      - name: Evidence and claim integrity controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          ruby <<'RUBY'
+          checks = {
+            'PGKI policy invariant' => ['docs/00-governance/PGKI-1.1-EVIDENCE-CLAIM-INTEGRITY.md', 'NO EVIDENCE -> NO VERIFIED CLAIM -> NO GATE PASS'],
+            'NOT_AVAILABLE state' => ['docs/00-governance/PGKI-1.1-EVIDENCE-CLAIM-INTEGRITY.md', 'NOT_AVAILABLE'],
+            'EVIDENCE CONFLICT state' => ['docs/00-governance/PGKI-1.1-EVIDENCE-CLAIM-INTEGRITY.md', 'EVIDENCE CONFLICT'],
+            'observation rule' => ['AGENTS.md', 'Do not claim that an artifact was seen, reviewed, inspected or verified'],
+            'absence-claim rule' => ['AGENTS.md', 'Do not claim absence of failures without a defined audit scope'],
+            'secondary auditor independence' => ['docs/00-governance/SECONDARY-AI-AUDITOR-PROTOCOL.md', 'The secondary auditor MUST receive the defined audit pack']
+          }
+          failures = checks.filter_map do |name, (file, text)|
+            [name, file, text] unless File.read(file).include?(text)
+          end
+          if failures.any?
+            failures.each { |name, file, text| warn "Missing #{name}: #{file}: #{text}" }
+            exit 1
+          end
+          puts 'Evidence and claim integrity controls present.'
+          RUBY
+
+      - name: Repository whitespace sanity
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check
 
       - name: Basic secret hygiene
         shell: bash
