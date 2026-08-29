@@ -35,6 +35,8 @@ jobs:
             docs/00-governance/PGKI-1.0-SECOND-AUDIT.md
             docs/00-governance/PGKI-1.1-EVIDENCE-CLAIM-INTEGRITY.md
             docs/00-governance/PGKI-1.1-RETROSPECTIVE-INTEGRITY-AUDIT.md
+            docs/00-governance/CLAIM-REGISTER.yaml
+            docs/00-governance/SECONDARY-AI-AUDITOR-PROTOCOL.md
           )
           for f in "${required[@]}"; do
             test -f "$f" || { echo "Missing required file: $f"; exit 1; }
@@ -45,7 +47,7 @@ jobs:
         run: |
           set -euo pipefail
           ruby -e 'require "yaml"; ARGV.each { |f| YAML.load_file(f); puts "OK: #{f}" }' \
-            PROJECT-STATE.yaml CONTEXT-MANIFEST.yaml DECISION-LEDGER.yaml
+            PROJECT-STATE.yaml CONTEXT-MANIFEST.yaml DECISION-LEDGER.yaml docs/00-governance/CLAIM-REGISTER.yaml
 
       - name: Governance invariants and state consistency
         shell: bash
@@ -74,6 +76,7 @@ jobs:
           grep -qF 'EVIDENCE CONFLICT' docs/00-governance/PGKI-1.1-EVIDENCE-CLAIM-INTEGRITY.md
           grep -qF 'Do not claim that an artifact was seen, reviewed, inspected or verified' AGENTS.md
           grep -qF 'Never claim absence of failures without a defined audit scope' AGENTS.md
+          grep -qF 'The secondary auditor MUST receive the defined audit pack' docs/00-governance/SECONDARY-AI-AUDITOR-PROTOCOL.md
           echo 'Evidence and claim integrity controls present.'
 
       - name: Repository whitespace sanity
