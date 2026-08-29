@@ -1,7 +1,8 @@
 # AI Governance
 
-**Version:** 1.1
-**Status:** APPROVED FOR BASELINE
+**Version:** 1.2
+**Status:** PROPOSED HARDENING — PENDING HUMAN APPROVAL
+**Parent baseline:** PGKI-1.0 / AI Governance 1.1
 
 ## Authority hierarchy
 
@@ -35,16 +36,27 @@ Conversation history MUST NOT override an approved repository artifact.
 18. Load the minimum sufficient context for each task; do not dump the entire repository into every prompt.
 19. Record evidence separately from decisions.
 20. Never claim a test, benchmark, security property or repository state that has not been verified.
+21. Apply `docs/00-governance/PGKI-1.1-EVIDENCE-CLAIM-INTEGRITY.md` to all externally verifiable claims.
+22. Establish evidence availability before asserting that an artifact was seen, reviewed, inspected or verified.
+23. Never claim absence of prior failures without a defined audit scope and coverage statement.
+24. Treat `NOT_AVAILABLE` and `UNKNOWN` as controlled states, not implicit success.
+25. For high-impact gates, use independent secondary verification when defined by the applicable gate policy.
 
 ## Evidence labels
 
 - `FACT`
 - `EVIDENCE`
+- `OBSERVED`
+- `VERIFIED`
 - `INFERENCE`
 - `PROPOSAL`
 - `DECISION`
 - `UNKNOWN`
+- `NOT_AVAILABLE`
+- `CONFLICT`
 
 ## Conflict rule
 
 If two authoritative artifacts conflict, stop and report `ARCHITECTURAL CONFLICT`. Do not silently choose one.
+
+If evidence sources disagree, stop and report `EVIDENCE CONFLICT`. Resolve the evidence before proceeding.
