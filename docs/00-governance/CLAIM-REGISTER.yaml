@@ -1,0 +1,60 @@
+schema_version: "1.0"
+status: ACTIVE
+purpose: "Structured register for critical externally verifiable claims."
+rules:
+  - "Every critical claim requires evidence before VERIFIED."
+  - "UNKNOWN and NOT_AVAILABLE are controlled states."
+  - "CONFLICT blocks dependent governance gates."
+claims:
+  - id: PGKI11-CLAIM-001
+    statement: "PGKI-1.0 baseline remains unchanged by the PGKI-1.1 hardening branch."
+    classification: VERIFIED
+    evidence:
+      - source: github
+        reference: "PR #2 base=baseline/pgki-1.0; base_sha=0f125501917587642f769507e6b162f96f202d00"
+      - source: github
+        reference: "PR #2 head=hardening/pgki-1.1-evidence-integrity"
+    verification_method: "PR metadata and repository refs"
+    status: RESOLVED
+
+  - id: PGKI11-CLAIM-002
+    statement: "The PGKI-1.1 CI initially failed because one assertion searched for wording not present in AGENTS.md."
+    classification: VERIFIED
+    evidence:
+      - source: github_actions
+        reference: "Workflow run 33280233979 / job 99174051606 / Evidence and claim integrity controls"
+    verification_method: "Workflow job status and decoded job log"
+    status: RESOLVED
+
+  - id: PGKI11-CLAIM-003
+    statement: "The corrected PGKI-1.1 workflow is currently executing on commit 4299d54de7f8f5890301789d9555878c014780a2."
+    classification: VERIFIED
+    evidence:
+      - source: github_actions
+        reference: "Workflow run 33281451638"
+    verification_method: "GitHub Actions run metadata"
+    status: RESOLVED
+
+  - id: PGKI11-CLAIM-004
+    statement: "No additional integrity defect was found in the bounded PGKI-1.0 repository artifact audit beyond the confirmed incident and documented platform exception."
+    classification: VERIFIED_WITH_SCOPE_LIMIT
+    evidence:
+      - source: repository
+        reference: "docs/00-governance/PGKI-1.1-RETROSPECTIVE-INTEGRITY-AUDIT.md"
+    verification_method: "Bounded artifact inspection"
+    status: RESOLVED
+    limitation: "This does not prove absence of unsupported claims in the complete historical conversation."
+
+  - id: PGKI11-CLAIM-005
+    statement: "PGKI-1.1 has final human approval."
+    classification: NOT_AVAILABLE
+    evidence: []
+    verification_method: "No human review record exists yet for PR #2."
+    status: OPEN
+
+  - id: PGKI11-CLAIM-006
+    statement: "The repository main branch is protected by an enforced ruleset."
+    classification: NOT_VERIFIED
+    evidence: []
+    verification_method: "Current project state records branch protection as blocked by the current GitHub plan."
+    status: OPEN
