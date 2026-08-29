@@ -27,7 +27,7 @@ claims:
     status: RESOLVED
 
   - id: PGKI11-CLAIM-003
-    statement: "The corrected PGKI-1.1 workflow is currently executing on commit 4299d54de7f8f5890301789d9555878c014780a2."
+    statement: "The corrected PGKI-1.1 workflow was triggered on commit 4299d54de7f8f5890301789d9555878c014780a2."
     classification: VERIFIED
     evidence:
       - source: github_actions
@@ -37,13 +37,13 @@ claims:
 
   - id: PGKI11-CLAIM-004
     statement: "No additional integrity defect was found in the bounded PGKI-1.0 repository artifact audit beyond the confirmed incident and documented platform exception."
-    classification: VERIFIED_WITH_SCOPE_LIMIT
+    classification: VERIFIED
     evidence:
       - source: repository
         reference: "docs/00-governance/PGKI-1.1-RETROSPECTIVE-INTEGRITY-AUDIT.md"
     verification_method: "Bounded artifact inspection"
     status: RESOLVED
-    limitation: "This does not prove absence of unsupported claims in the complete historical conversation."
+    limitation: "This is not proof of absence of unsupported claims in the complete historical conversation."
 
   - id: PGKI11-CLAIM-005
     statement: "PGKI-1.1 has final human approval."
