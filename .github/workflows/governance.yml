@@ -77,7 +77,7 @@ jobs:
             'NOT_AVAILABLE state' => ['docs/00-governance/PGKI-1.1-EVIDENCE-CLAIM-INTEGRITY.md', 'NOT_AVAILABLE'],
             'EVIDENCE CONFLICT state' => ['docs/00-governance/PGKI-1.1-EVIDENCE-CLAIM-INTEGRITY.md', 'EVIDENCE CONFLICT'],
             'observation rule' => ['AGENTS.md', 'Do not claim that an artifact was seen, reviewed, inspected or verified'],
-            'absence-claim rule' => ['AGENTS.md', 'Never claim absence of failures without a defined audit scope'],
+            'absence-claim rule' => ['AGENTS.md', 'Do not claim absence of failures without a defined audit scope'],
             'secondary auditor independence' => ['docs/00-governance/SECONDARY-AI-AUDITOR-PROTOCOL.md', 'The secondary auditor MUST receive the defined audit pack']
           }
           failures = checks.filter_map do |name, (file, text)|
