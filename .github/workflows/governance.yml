@@ -33,6 +33,8 @@ jobs:
             docs/00-governance/CHANGE-CLASSIFICATION.md
             docs/00-governance/REPOSITORY-POLICY.md
             docs/00-governance/PGKI-1.0-SECOND-AUDIT.md
+            docs/00-governance/PGKI-1.1-EVIDENCE-CLAIM-INTEGRITY.md
+            docs/00-governance/PGKI-1.1-RETROSPECTIVE-INTEGRITY-AUDIT.md
           )
           for f in "${required[@]}"; do
             test -f "$f" || { echo "Missing required file: $f"; exit 1; }
@@ -62,6 +64,24 @@ jobs:
           grep -qF 'required_fields: [id, decision, status, evidence, affected_artifacts]' DECISION-LEDGER.yaml
           ! grep -qF -- '- CONTEXT-MANIFEST.yaml' CONTEXT-MANIFEST.yaml
           echo 'Governance invariants and state consistency OK.'
+
+      - name: Evidence and claim integrity controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -qF 'NO EVIDENCE -> NO VERIFIED CLAIM -> NO GATE PASS' docs/00-governance/PGKI-1.1-EVIDENCE-CLAIM-INTEGRITY.md
+          grep -qF 'NO EVIDENCE' docs/00-governance/PGKI-1.1-EVIDENCE-CLAIM-INTEGRITY.md
+          grep -qF 'NOT_AVAILABLE' docs/00-governance/PGKI-1.1-EVIDENCE-CLAIM-INTEGRITY.md
+          grep -qF 'EVIDENCE CONFLICT' docs/00-governance/PGKI-1.1-EVIDENCE-CLAIM-INTEGRITY.md
+          grep -qF 'Do not claim that an artifact was seen, reviewed, inspected or verified' AGENTS.md
+          grep -qF 'Never claim absence of failures without a defined audit scope' AGENTS.md
+          echo 'Evidence and claim integrity controls present.'
+
+      - name: Repository whitespace sanity
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check
 
       - name: Basic secret hygiene
         shell: bash
