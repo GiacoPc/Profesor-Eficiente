@@ -20,17 +20,39 @@ This document indexes the governed architecture. Detailed specifications are add
 
 ## Specifications / status
 
-- PRD formalization — established direction; approval status governed by repository evidence.
-- PAD — established architectural input; final repository contract pending reconciliation.
-- CLM — established architectural input; final repository contract pending reconciliation.
-- APE — intended authority/orchestrator; formal contract pending.
-- FDM — intended domain boundary; formal contract pending.
+- PRD — no formal repository document currently established on this branch; requirements remain governed by baseline artifacts until formalized.
+- PAD — **PROPOSED / DRAFT v0.1**, newly formalized; not approved.
+- CLM — **PROPOSED / DRAFT v0.1**, newly formalized; not approved.
+- APE — **PROPOSED / DRAFT v0.1**, newly formalized; not approved.
+- FDM — **PROPOSED / DRAFT v0.1**, newly formalized; not approved.
 - LPH-SPEC — **PROPOSED / DRAFT v0.1**, implementation not authorized by this document alone.
 - SRA — pending; must consume approved upstream contracts rather than redefine them during implementation.
 - LLM/inference architecture — pending evidence-backed decisions.
 - Audio architecture — pending.
 - Data architecture — pending.
 - Benchmark plan — pending.
+
+## Formalization sequence
+
+The current architecture work establishes the following dependency order:
+
+```text
+Requirements / governed baseline
+          |
+          +--> PAD  (how to teach)
+          |
+          +--> CLM  (how learning state is represented)
+          |
+          +--> FDM  (formal domain semantics and invariants)
+          |
+          +--> APE  (pedagogical decision authority)
+          |
+          +--> LPH  (linguistic/pedagogical control around generation)
+          |
+          +--> SRA  (implementation architecture)
+```
+
+These documents are currently **draft specifications**, not a claim that the contracts have already been mutually reconciled.
 
 ## LPH architectural role
 
