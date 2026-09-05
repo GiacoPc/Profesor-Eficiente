@@ -99,6 +99,38 @@ APE next decision
 
 The LLM may generate language and interaction content but does not become the authority for curriculum, mastery, or progression.
 
+### 3.1 P1 C-001 authority contract
+
+For cross-document reconciliation, the authority hierarchy is normative at the contract level:
+
+```text
+Curriculum Authority
+        ↓
+CLM learning-state semantics + FDM domain invariants
+        ↓
+SDT learner-state projection
+        ↓
+APE pedagogical decision authority
+        ↓
+LPH linguistic/interaction constraint + validation boundary
+        ↓
+LLM / bounded generation capability
+        ↓
+Learner interaction
+        ↓
+Evidence
+```
+
+The hierarchy above does not grant any lower layer authority over a higher layer. In particular:
+
+- LPH may constrain and validate linguistic/interaction processing but cannot authorize pedagogical progression or mutate authoritative learner state.
+- The LLM is a bounded generation/interpretation capability and cannot redefine curriculum, mastery, prerequisites, or progression.
+- APE owns the pedagogical decision, but does not become the source of curriculum truth, learning-state semantics, or FDM domain invariants.
+- SDT represents governed learner state and does not independently decide pedagogical actions.
+- Evidence produced after learner interaction must enter the governed evidence/assessment pipeline before it can affect authoritative learning state.
+
+This section integrates **P1 Contract C-001** from `docs/architecture/P1-RESOLUTION-CONTRACTS-v0.1.md`. The contract remains `PROPOSED / REQUIRES APPROVAL`; this integration does not approve PAD or the contract.
+
 ## 4. Curriculum architecture
 
 ### 4.1 Curriculum authority
