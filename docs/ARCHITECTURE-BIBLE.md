@@ -20,39 +20,31 @@ This document indexes the governed architecture. Detailed specifications are add
 
 ## Specifications / status
 
-- PRD — no formal repository document currently established on this branch; requirements remain governed by baseline artifacts until formalized.
+- PRD — **NOT FOUND on inspected branch at expected path**; requirements remain governed by baseline artifacts until formalized.
 - PAD — **PROPOSED / DRAFT v0.1**, newly formalized; not approved.
 - CLM — **PROPOSED / DRAFT v0.1**, newly formalized; not approved.
 - APE — **PROPOSED / DRAFT v0.1**, newly formalized; not approved.
 - FDM — **PROPOSED / DRAFT v0.1**, newly formalized; not approved.
 - LPH-SPEC — **PROPOSED / DRAFT v0.1**, implementation not authorized by this document alone.
+- SDT standalone specification — **NOT FOUND on inspected branch at expected path**; required for CLM/APE contract closure.
 - SRA — pending; must consume approved upstream contracts rather than redefine them during implementation.
-- LLM/inference architecture — pending evidence-backed decisions.
+- LLM/inference architecture — pending; expected artifact not found on inspected branch.
+- RAG architecture — pending; expected artifact not found on inspected branch.
 - Audio architecture — pending.
 - Data architecture — pending.
 - Benchmark plan — pending.
 
-## Formalization sequence
+## Formalization and reconciliation status
 
-The current architecture work establishes the following dependency order:
+The four upstream documents now exist as draft artifacts, but they have **not** yet been mutually approved. Cross-document reconciliation identified P1 ambiguities and missing supporting contracts.
 
-```text
-Requirements / governed baseline
-          |
-          +--> PAD  (how to teach)
-          |
-          +--> CLM  (how learning state is represented)
-          |
-          +--> FDM  (formal domain semantics and invariants)
-          |
-          +--> APE  (pedagogical decision authority)
-          |
-          +--> LPH  (linguistic/pedagogical control around generation)
-          |
-          +--> SRA  (implementation architecture)
-```
+Current reconciliation artifacts:
 
-These documents are currently **draft specifications**, not a claim that the contracts have already been mutually reconciled.
+- `docs/architecture/CONTRADICTION-MATRIX-v0.1.md`
+- `docs/architecture/CONTRACT-MATRIX-v0.1.md`
+- `docs/architecture/MISSING-ARTIFACTS-REGISTER-v0.1.md`
+
+**Current gate: BLOCKED / NOT READY FOR LPH v1.0 or SRA.**
 
 ## LPH architectural role
 
