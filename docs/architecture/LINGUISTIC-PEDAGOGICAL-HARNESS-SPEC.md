@@ -1,7 +1,7 @@
 # Linguistic & Pedagogical Harness (LPH) — Specification
 
 **Document ID:** LPH-SPEC
-**Version:** 0.2-draft
+**Version:** 0.3-draft
 **Status:** PROPOSED / NOT YET APPROVED
 **Branch:** `architecture/pad-clm-fdm-ape-v1.0`
 **Depends on:** PAD, CLM, FDM, APE, SDT, PGKI governance, Architecture Bible, P1 reconciliation contracts
@@ -45,7 +45,8 @@ LPH is **not** superior to APE, CLM or FDM. LPH may constrain, validate and stru
 - define or override mastery policy;
 - mutate authoritative learner state;
 - override curriculum or prerequisite authority;
-- convert an LLM candidate directly into authoritative evidence/state.
+- convert an LLM candidate directly into authoritative evidence/state;
+- create authoritative Evidence or Assessment directly from a linguistic candidate.
 
 APE remains the pedagogical decision authority; FDM remains the domain/invariant enforcement boundary.
 
@@ -177,9 +178,47 @@ STT / acoustic analysis
         CLM / SDT
 ```
 
-LPH may produce a linguistic assessment candidate. FDM owns authoritative evidence/assessment semantics and mutation.
+LPH may produce a `LinguisticAssessmentCandidate`. It is a **non-authoritative candidate**. FDM owns authoritative Evidence and Assessment semantics, provenance and mutation.
 
-## 10. Error model
+A candidate result must not be promoted merely because it is structured, scored, syntactically valid, or accompanied by a confidence value. Candidate acceptance is a separate governed domain operation.
+
+## 10. C-011 linguistic assessment ownership
+
+The canonical terminology is:
+
+```text
+LinguisticAssessmentCandidate = proposed linguistic interpretation
+Evidence                       = accepted authoritative domain record
+Assessment                     = authoritative evaluation of accepted evidence
+```
+
+The lifecycle is:
+
+```text
+Learner response / speech artifact
+          ↓
+Bounded linguistic processing
+          ↓
+LinguisticAssessmentCandidate
+          ↓
+validation + provenance
+          ↓
+FDM Evidence / Assessment acceptance
+          ↓
+CLM / SDT
+          ↓
+APE pedagogical decision
+```
+
+LPH may produce candidate results for grammar, lexicon, phonology, pronunciation, prosody or discourse. It may preserve uncertainty and disagreement and may reject or request regeneration. It may not directly create authoritative Evidence, Assessment, MasteryRecord, ErrorObservation or ProgressionEligibility.
+
+An assessment-like LLM output remains a candidate. JSON structure, tool-call formatting, model confidence, or LPH syntax validation does not change its authority class.
+
+If multiple linguistic dimensions are assessed, their source artifact, dimension, target/criterion, result, uncertainty and capability provenance remain separable until governed domain acceptance.
+
+Failure of a linguistic capability maps to controlled insufficiency/unavailability; it must not be converted into learner failure merely to complete a pedagogical flow.
+
+## 11. Error model
 
 The canonical domain record is `ErrorObservation`.
 
@@ -197,7 +236,7 @@ error_observation_candidate:
   source_evidence: <evidence-id-or-candidate-reference>
 ```
 
-## 11. Mastery and progression boundary
+## 12. Mastery and progression boundary
 
 The authoritative sequence is:
 
@@ -221,7 +260,7 @@ LPH and APE **reference** the applicable `MasteryPolicy` by identifier/version. 
 
 `ProgressionEligibility.status == ELIGIBLE` is a necessary condition for APE `PROGRESS`, subject to all other hard preconditions. LPH cannot create or override eligibility.
 
-## 12. Pedagogical orchestration boundary
+## 13. Pedagogical orchestration boundary
 
 APE remains the director of the pedagogical process.
 
@@ -239,7 +278,7 @@ APE may supply LPH with:
 
 LPH translates these into a bounded linguistic task contract. It cannot alter the governing values.
 
-## 13. Lesson state machine
+## 14. Lesson state machine
 
 Conceptual flow:
 
@@ -257,7 +296,7 @@ LOCKED → AVAILABLE → IN_PROGRESS → ASSESSMENT
 
 Exact states and transitions belong to FDM/SRA. LPH cannot create unauthorized transitions.
 
-## 14. Deterministic vs probabilistic responsibilities
+## 15. Deterministic vs probabilistic responsibilities
 
 Prefer deterministic mechanisms for state transitions, prerequisites, approved thresholds, schema validation, evidence identifiers, persistence integrity, policy enforcement, reproducible calculations and governance gates.
 
@@ -265,7 +304,7 @@ Permit ML/LLM for natural-language generation, bounded semantic interpretation, 
 
 Every probabilistic component requires an explicit uncertainty/failure boundary.
 
-## 15. Failure containment
+## 16. Failure containment
 
 Malformed, unsupported, hallucinated, constraint-violating or unauthorized LLM output remains a failed/non-authoritative candidate.
 
@@ -279,36 +318,38 @@ Schema / policy / knowledge validation
 
 No validation pass grants authority to bypass FDM/APE policy boundaries.
 
-## 16. Offline-first constraint
+## 17. Offline-first constraint
 
 LPH must operate without network access after required local assets are provisioned. No pedagogically critical decision may require a remote service.
 
-## 17. Performance/resource boundary
+## 18. Performance/resource boundary
 
 Independent budgets for CPU, GPU, NPU, RAM, storage, audio buffers, model memory and caches are required later. No numerical budget is asserted without measurement.
 
-## 18. Security/privacy boundary
+## 19. Security/privacy boundary
 
 Learner audio, transcripts, errors, weaknesses, progress and assessment evidence are local learner data. LPH must not implicitly embed sensitive learner state into prompts without a defined data contract.
 
-## 19. Testability
+## 20. Testability
 
 Future tests must cover lesson transitions, mastery/progression gates, error classification, RAG contracts, LLM adapter contracts, malformed output, hallucination containment, offline operation, resource budgets, concurrency, audio pipeline and persistence/recovery.
 
-## 20. Evidence requirements
+C-011-specific tests must additionally cover candidate isolation, provenance, criterion/target traceability, dimensional separation, conflict handling, model replacement and capability-failure containment.
+
+## 21. Evidence requirements
 
 No implementation, performance, model-superiority, pronunciation-reliability or hardware-utilization claim is verified without appropriate evidence.
 
-## 21. Open decisions
+## 22. Open decisions
 
 Still unresolved: final LLM, quantization, inference runtime, NPU/GPU strategy, STT/TTS, pronunciation/prosody assessment, persistence, exact mastery thresholds, CEFR data model, resource budgets, concurrency model, and Rust/Kotlin boundary.
 
-## 22. Acceptance criteria for LPH v1.0
+## 23. Acceptance criteria for LPH v1.0
 
 LPH cannot be promoted until PAD/CLM/FDM/APE/SDT interfaces are reconciled, authoritative/generative boundaries are testable, speech boundaries are defined, failure containment is tested, offline guarantees are testable, required ADRs exist, and independent architectural review is complete.
 
-## 23. Status
+## 24. Status
 
-**PROPOSED / DRAFT v0.2.**
+**PROPOSED / DRAFT v0.3.**
 
-This revision integrates P1 authority/policy boundaries without promoting unresolved thresholds or implementation choices to decisions.
+This revision integrates C-011 at the LPH contract boundary without promoting unresolved assessment algorithms, thresholds or implementation choices to decisions.
