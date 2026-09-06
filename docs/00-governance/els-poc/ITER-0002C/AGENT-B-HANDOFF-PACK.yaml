@@ -1,0 +1,24 @@
+handoff_id: ELS-POC-002C-H01
+iteration: ITER-0002C
+source_agent: Agent-A
+receiving_agent: Agent-B
+conversation_context: EXCLUDED
+repository:
+  ref: recovery/els-poc-002
+  source_state_head: 4c641c124b10a4d15c81639121493b186d5298a6
+  checkpoint_commit: 14eedc5f5ce081f132e2486ccf5e9ce35d33129d
+objective: Validate independent-agent recovery continuity.
+completed:
+  - ELS-POC-002A target-integrity negative test
+  - ELS-POC-002B checkpoint identity and recovery simulation
+pending:
+  - independent handoff verification
+  - verify repository identity before continuation
+  - report any checkpoint inconsistency
+constraints:
+  - do not modify main
+  - do not force-update refs
+  - do not merge or cherry-pick
+  - do not infer missing state from conversation memory
+  - do not claim production readiness
+next_authorized_action: verify repository ref, source_state_head, checkpoint_commit, and handoff consistency; then produce an independent handoff assessment
