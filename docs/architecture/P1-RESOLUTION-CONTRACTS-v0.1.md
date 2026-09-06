@@ -183,23 +183,34 @@ Thus the phrase "mastery requirements" means a reference to the applicable gover
 
 ## Contract 8 — Generation candidate lifecycle (C-010)
 
-The authoritative generation lifecycle is:
+The canonical C-010 contract is `docs/architecture/LLM-GENERATION-CANDIDATE-LIFECYCLE-v0.1.md`, with cross-document checks in `docs/architecture/LLM-GENERATION-CANDIDATE-INTEGRATION-MATRIX-v0.1.md`.
+
+The authoritative boundary is:
 
 ```text
 LLMRequest
    ↓
-LLMGenerationCandidate (GENERATED)
+LLMGenerationCandidate
    ↓
-Schema / linguistic / pedagogical validation
-   ├── REJECTED → discard candidate / repair / regenerate
-   └── ACCEPTABLE → controlled delivery or explicit acceptance
+Candidate validation
+   ├── REJECTED → discard / repair / regenerate
+   └── ACCEPTED_FOR_USE → scoped controlled delivery
+
+If an assessment contribution is legitimately required:
+LLMGenerationCandidate
+   ↓
+separate evidence/assessment contract
+   ↓
+authoritative domain record only through governed acceptance
 ```
 
-A candidate is not learner evidence merely because it contains a classification or assessment-like statement.
+`LLMGenerationCandidate` is **non-authoritative**. It cannot directly mutate mastery, progression, SDT, CLM state, curriculum or other authoritative domain state.
 
-If a candidate is converted into an assessment input, that conversion must create a separate assessment/evidence record with provenance identifying the candidate and the validating component/policy. LLM text cannot directly become authoritative mastery state.
+Acceptance is **scoped**, not blanket trust. Acceptance for learner-facing wording does not automatically authorize assessment use. Repair/regeneration creates a new candidate and preserves lineage where applicable.
 
-Historical candidates are immutable records where persistence is required; repair creates a new candidate rather than rewriting the old one.
+LLM-generated claims about learner errors, mastery or readiness are not authoritative learner evidence merely because they are syntactically structured, confidently worded, or produced by a validated model.
+
+Model replacement must not alter authoritative domain rules. LLM unavailability must not corrupt authoritative learner state or permit invalid progression.
 
 ## Contract 9 — Linguistic assessment ownership (C-011)
 
