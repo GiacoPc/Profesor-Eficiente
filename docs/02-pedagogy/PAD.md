@@ -137,21 +137,27 @@ This section integrates **P1 Contract C-001** from `docs/architecture/P1-RESOLUT
 
 The curriculum is a governed structured artifact. The runtime may retrieve relevant curriculum content, but retrieval does not authorize mutation of curriculum truth.
 
-### 4.2 Curriculum hierarchy
+### 4.2 Curriculum hierarchy and objective/competency mapping
 
-PAD proposes the following logical hierarchy, subject to reconciliation with the formal domain model:
+PAD proposes the following logical hierarchy and mapping, subject to final curriculum-schema approval:
 
 ```text
 Curriculum
   └── Level / proficiency band
        └── Unit / module
             └── Lesson
-                 └── Competency
-                      └── Objective
-                           └── Activity / assessment criterion
+                 ├── Competency ──┐
+                 │                │
+                 └── Objective ───┘
+                                  ↕
+                         governed many-to-many
+
+Objective 1 ── * Criterion
 ```
 
-This hierarchy is a **PROPOSED formalization** until FDM and the curriculum schema are approved.
+For P1 C-002, `Objective` is a curriculum-authority entity, `Competency ↔ Objective` is a many-to-many relationship, and `Criterion` is an assessment-contract element rather than a second kind of objective. A competency may contribute to multiple objectives, and an objective may require multiple competencies when the governed curriculum explicitly defines that mapping.
+
+This replaces the previously ambiguous hierarchy that could be read as `Competency → Objective → Criterion` with a one-to-many objective relationship. The final persistence/cardinality representation remains `PENDING` until schema validation.
 
 ### 4.3 Lesson contract
 
