@@ -33,9 +33,12 @@ This document indexes the governed architecture. Detailed specifications are add
 - ErrorObservation Integration Matrix — **PROPOSED / v0.1**, at `docs/architecture/ERROR-OBSERVATION-INTEGRATION-MATRIX-v0.1.md`.
 - Speech Evidence/Assessment Contract — **PROPOSED / DRAFT v0.1**, at `docs/architecture/SPEECH-EVIDENCE-ASSESSMENT-CONTRACT-v0.1.md`.
 - Speech Evidence Integration Matrix — **PROPOSED / v0.1**, at `docs/architecture/SPEECH-EVIDENCE-INTEGRATION-MATRIX-v0.1.md`.
+- Progression Eligibility Contract — **PROPOSED / DRAFT v0.1**, at `docs/architecture/PROGRESSION-ELIGIBILITY-CONTRACT-v0.1.md`.
+- Progression Eligibility Integration Matrix — **PROPOSED / v0.1**, at `docs/architecture/PROGRESSION-ELIGIBILITY-INTEGRATION-MATRIX-v0.1.md`.
+- Mastery Policy Reference Boundary Integration Matrix — **PROPOSED / DRAFT v0.1**, at `docs/architecture/MASTERY-POLICY-REFERENCE-BOUNDARY-INTEGRATION-MATRIX-v0.1.md`.
 - P1 reconciliation contracts — **PROPOSED / v0.1**, at `docs/architecture/P1-RESOLUTION-CONTRACTS-v0.1.md`.
 - Contract Matrix — **PROPOSED / v0.2**, at `docs/architecture/CONTRACT-MATRIX-v0.1.md`.
-- Contradiction Matrix — **PROPOSED / v0.5**, at `docs/architecture/CONTRADICTION-MATRIX-v0.1.md`.
+- Contradiction Matrix — **PROPOSED / v0.6**, at `docs/architecture/CONTRADICTION-MATRIX-v0.1.md`.
 - SRA — pending; must consume approved upstream contracts rather than redefine them during implementation.
 - LLM/inference architecture — pending; expected artifact not found on inspected branch.
 - RAG architecture — pending; expected artifact not found on inspected branch.
@@ -45,9 +48,9 @@ This document indexes the governed architecture. Detailed specifications are add
 
 ## Reconciliation state
 
-Gate A has progressed from a missing-artifact blocker to **SDT FORMALIZED / PROPOSED**.
+Gate A remains **IN PROGRESS / NOT READY FOR APPROVAL**.
 
-P1 findings C-001 through C-011 have explicit proposed contracts. They are **not yet closed at approval level** because contracts require source-spec integration and independent audit.
+P1 findings C-001 through C-011 have explicit proposed contracts. They are **not yet closed at approval level** because contracts require complete source-spec integration, executable checks, independent audit and human approval.
 
 ### P1 resolution map
 
@@ -57,68 +60,28 @@ P1 findings C-001 through C-011 have explicit proposed contracts. They are **not
 - C-004 → SDT artifact `docs/03-cognitive/SDT.md` plus `SDT-INTEGRATION-MATRIX-v0.1.md`.
 - C-005 → canonical `ErrorObservation` lifecycle in `ERROR-OBSERVATION-LIFECYCLE-v0.1.md` plus cross-document integration matrix. Source specifications already contain the relevant bounded responsibilities; final direct normative references remain part of the source-spec integration gate.
 - C-006 → `SPEECH-EVIDENCE-ASSESSMENT-CONTRACT-v0.1.md` plus `SPEECH-EVIDENCE-INTEGRATION-MATRIX-v0.1.md`; authoritative sequence is speech artifact → bounded processing → validated evidence → assessment → MasteryPolicy/CLM → governed state → SDT → APE.
-- C-007/C-008 → `ProgressionEligibility` and APE `PROGRESS` hard gates in P1 Contract 6.
-- C-009 → policy reference versus policy definition in P1 Contract 7.
+- C-007/C-008 → `ProgressionEligibility` and APE `PROGRESS` hard gates in P1 Contract 6, plus dedicated progression contract/integration matrix.
+- C-009 → policy reference versus policy definition in P1 Contract 7 plus `MASTERY-POLICY-REFERENCE-BOUNDARY-INTEGRATION-MATRIX-v0.1.md`; APE, CLM, FDM and LPH source specifications explicitly preserve the boundary.
 - C-010 → `LLMGenerationCandidate` lifecycle in P1 Contract 8.
 - C-011 → LPH candidate assessment versus FDM authoritative assessment/evidence in P1 Contract 9.
 
-## C-005 authority rule
+## C-009 mastery policy reference rule
 
-The canonical error chain is:
-
-```text
-Observation → Evidence → Assessment
-        ↓
-ErrorObservationCandidate (optional)
-        ↓
-FDM validation / acceptance
-        ↓
-ErrorObservation (authoritative)
-        ↓
-CLM interpretation
-        ↓
-SDT summary
-        ↓
-APE reinforcement / reassessment
-```
-
-`ErrorObservation` is historical evidence-linked domain state. LLM/LPH candidates, feedback, recurrence counters and SDT summaries cannot replace it. Recurrence remains a derived signal governed by a future approved policy.
-
-## C-006 speech evidence authority rule
-
-The canonical speech chain is:
+The normative distinction is:
 
 ```text
-Learner speech
-   ↓
-Audio artifact
-   ↓
-Bounded speech processing
-   ↓
-Speech candidate evidence
-   ↓
-FDM evidence validation/provenance
-   ↓
-Assessment
-   ↓
-MasteryPolicy + CLM interpretation
-   ↓
-MasteryRecord / ErrorObservation / governed learning state
-   ↓
-SDT projection
-   ↓
-APE pedagogical decision
+Governed MasteryPolicy definition
+        ↓
+policy reference (stable id + version)
+        ↓
+consumer use / enforcement
 ```
 
-STT, acoustic/prosodic analysis, pronunciation analysis, LPH and LLM are bounded capability/processing components. None can independently establish mastery, progression or authoritative SDT state. Processing failure does not become learner failure; uncertainty and conflict remain explicit. No claim about the validity of a specific speech model is made until empirical evaluation exists.
+APE, CLM, FDM, SDT and LPH may consume or preserve a policy reference and governed constraint/evidence references. They cannot create an authoritative local definition of thresholds, evidence requirements, aggregation, stability, transfer or uncertainty semantics.
 
-## LPH architectural role
+If policy resolution is undefined, unavailable, stale, malformed, out of scope or conflicting, the system must enter controlled policy-resolution/insufficient-evidence/conflict handling. No hard-coded, inferred, conversational or LLM-generated replacement is authoritative.
 
-LPH is a bounded control/validation harness. APE remains the pedagogical decision authority; FDM remains the domain/invariant enforcement boundary; CLM defines learning-state semantics; SDT represents derived learner state; the LLM remains a replaceable probabilistic capability.
-
-For C-005, LPH may classify candidate errors and structure linguistic evidence, but cannot create authoritative `ErrorObservation` state without the governed evidence/assessment/FDM acceptance path.
-
-For C-006, LPH may structure linguistic speech candidates and validate candidate interpretation, but cannot convert STT/acoustic/pronunciation/LLM output directly into authoritative mastery, progression or SDT mutation.
+Every authoritative mastery evaluation must retain the exact `mastery_policy_id` and `mastery_policy_version` used for reproducibility. A policy revision creates governed new versioning and does not silently rewrite historical decisions.
 
 ## Current gate
 
@@ -128,7 +91,7 @@ Before LPH v1.0 or SRA:
 
 1. integrate P1 contracts into PAD/CLM/FDM/APE/LPH/SDT source specifications;
 2. reconcile remaining missing governance/AI artifacts;
-3. add automated checks for normative contracts;
+3. add automated checks for normative contracts, including C-009 identity/version/scope/no-fallback behavior;
 4. verify CI against the exact resulting HEAD;
 5. run the mandatory independent secondary audit for P1 architecture/governance;
 6. record human approval;
