@@ -1,6 +1,6 @@
 # Contradiction Matrix — PAD / CLM / FDM / APE / LPH
 
-**Version:** 0.4
+**Version:** 0.5
 **Status:** PROPOSED / REQUIRES INTEGRATION + INDEPENDENT AUDIT
 **Branch:** `architecture/pad-clm-fdm-ape-v1.0`
 **Scope:** Cross-document reconciliation before LPH v1.0 and SRA.
@@ -18,7 +18,7 @@ This matrix records findings from direct inspection of repository artifacts and 
 | C-003 | P1 | No explicit authoritative MasteryPolicy contract. | P1 Contract 3; `docs/architecture/MASTERY-POLICY-v0.1.md`; PAD/CLM/FDM/APE/LPH policy references | **INTEGRATED + VERIFIED** |
 | C-004 | P1 | SDT artifact was missing on inspected branch; downstream ownership/authority boundaries required formal reconciliation. | `docs/03-cognitive/SDT.md`; `docs/architecture/SDT-INTEGRATION-MATRIX-v0.1.md`; CLM/FDM/APE/PAD/LPH existing contract sections | **INTEGRATED AT CONTRACT LEVEL + AUTHORITY LIMITS VERIFIED; SDT REMAINS PROPOSED** |
 | C-005 | P1 | LPH `Error` versus FDM `ErrorObservation` lifecycle mismatch; recurrence semantics unclear. | P1 Contract 5; `ERROR-OBSERVATION-LIFECYCLE-v0.1.md`; `ERROR-OBSERVATION-INTEGRATION-MATRIX-v0.1.md` | **INTEGRATED AT CONTRACT LEVEL + LIFECYCLE/BOUNDARY VERIFIED; SOURCE-SPEC DIRECT REFERENCES REMAIN PENDING** |
-| C-006 | P1 | Speech evidence → assessment → mastery/SDT ownership/order incomplete. | P1 Contract 4 | **RESOLVED AT CONTRACT LEVEL; SOURCE SPEC INTEGRATION REQUIRED** |
+| C-006 | P1 | Speech evidence → assessment → mastery/SDT ownership/order incomplete. | P1 Contract 4; `SPEECH-EVIDENCE-ASSESSMENT-CONTRACT-v0.1.md`; `SPEECH-EVIDENCE-INTEGRATION-MATRIX-v0.1.md` | **INTEGRATED AT CONTRACT LEVEL + AUTHORITY/SEQUENCING VERIFIED; SOURCE-SPEC DIRECT REFERENCES REMAIN PENDING** |
 | C-007 | P1 | `ProgressionEligibility` versus APE `PROGRESS` boundary incomplete. | P1 Contract 6 | **RESOLVED AT CONTRACT LEVEL; SOURCE SPEC INTEGRATION REQUIRED** |
 | C-008 | P1 | APE progression discretion versus mandatory mastery/progression gates underspecified. | P1 Contract 6 | **RESOLVED AT CONTRACT LEVEL; SOURCE SPEC INTEGRATION REQUIRED** |
 | C-009 | P1 | APE/LPH mastery requirements could be interpreted as policy definition. | P1 Contract 7 | **RESOLVED AT CONTRACT LEVEL; SOURCE SPEC INTEGRATION REQUIRED** |
@@ -65,7 +65,71 @@ The C-005 integration matrix defines ten acceptance tests covering evidence link
 
 No new P1 authority contradiction was identified during the C-005 review. The remaining limitation is that direct normative references may still need to be inserted into each source specification during the broader P1 source-spec integration pass; this is intentionally not claimed as complete.
 
-## 3. P2 findings retained
+## 3. C-006 speech evidence → assessment → mastery/SDT verification
+
+C-006 is now formally defined by a dedicated speech evidence/assessment contract and integration matrix. The review explicitly separates speech acquisition and processing from authoritative evidence, assessment, mastery interpretation, learner-state projection and pedagogical decision.
+
+Canonical chain:
+
+```text
+Learner speech
+   ↓
+Audio artifact
+   ↓
+Bounded speech processing
+   ├─ transcript candidate
+   ├─ acoustic/prosodic measurements
+   └─ pronunciation/phonological candidate measures
+   ↓
+Speech Evidence Candidate(s)
+   ↓
+FDM evidence validation + provenance
+   ↓
+Authoritative Evidence
+   ↓
+Assessment
+   ↓
+MasteryPolicy + CLM interpretation
+   ↓
+MasteryRecord / ErrorObservation / other governed state
+   ↓
+SDT projection
+   ↓
+APE pedagogical decision
+```
+
+Verified authority boundaries:
+
+- Audio capture owns acquisition/reference, not correctness or mastery.
+- STT produces transcript candidates; transcript output is not itself linguistic correctness or mastery evidence.
+- Acoustic/prosodic analysis produces measurements; measurements do not independently authorize pedagogy/progression.
+- Pronunciation/phonological analysis produces bounded candidate assessments; it cannot bypass evidence/assessment boundaries.
+- LPH may structure linguistic evidence and validate candidates, but cannot directly mutate mastery, progression or authoritative SDT.
+- FDM owns authoritative evidence/provenance and domain mutation/invariants.
+- CLM interprets accepted evidence as learning state.
+- MasteryPolicy defines applicable mastery requirements; consumers reference identity/version rather than inventing thresholds.
+- SDT receives governed projections and cannot replace authoritative speech history.
+- APE decides pedagogical action from governed state and cannot manufacture evidence from raw speech signals.
+- LLM output remains a bounded, non-authoritative candidate.
+
+Critical integrity rules:
+
+1. Transcript ≠ linguistic correctness.
+2. Acoustic measurement ≠ pedagogical assessment.
+3. Candidate assessment ≠ authoritative assessment.
+4. Assessment ≠ mastery.
+5. Mastery ≠ progression action.
+6. Speech-processing failure ≠ learner failure.
+7. Unsupported/uncertain speech dimensions remain unassessed/uncertain.
+8. Conflicting assessments remain `CONFLICT` until governed resolution.
+9. Mastery interpretation requires explicit `MasteryPolicy` identity/version.
+10. Reassessment creates new evidence/assessment records rather than rewriting historical evidence.
+
+The C-006 integration matrix defines authority, evidence-integrity and offline-path acceptance tests. The contract intentionally leaves model choice, measurement validity, final schemas, runtime topology and numerical mastery thresholds pending empirical/SRA work.
+
+C-006 is therefore **integrated at contract level**, but direct normative references inside every source specification and automated executable checks remain pending. No empirical claim about the validity of a specific STT/acoustic/pronunciation model is made by this reconciliation.
+
+## 4. P2 findings retained
 
 | ID | Severity | Finding | Disposition |
 |---|---|---|---|
@@ -75,7 +139,7 @@ No new P1 authority contradiction was identified during the C-005 review. The re
 | C-015 | P2 | Offline critical path shared invariant. | Retain as cross-cutting invariant; test in SRA. |
 | C-016 | P2 | Conceptual schemas not ready for implementation. | Block SRA until contracts are executable/testable. |
 
-## 4. Previously observed missing artifacts
+## 5. Previously observed missing artifacts
 
 At the time of the original reconciliation the following were not found at expected paths on this branch:
 
@@ -89,7 +153,7 @@ At the time of the original reconciliation the following were not found at expec
 
 `docs/03-cognitive/SDT.md` is no longer a missing-artifact gap; it exists as v0.1-draft. The remaining gaps are not silently reclassified as resolved.
 
-## 5. Resolution principles
+## 6. Resolution principles
 
 1. APE is the pedagogical decision authority.
 2. FDM is the domain/invariant enforcement boundary.
@@ -103,11 +167,13 @@ At the time of the original reconciliation the following were not found at expec
 10. Source specifications must incorporate the contracts before promotion to v1.0.
 11. SDT is a projection/state representation and cannot become an additional decision authority.
 12. `ErrorObservation` is the canonical authoritative error record; candidates, feedback and derived summaries cannot replace its provenance-bearing history.
+13. Speech processing components are bounded evidence producers; they are not pedagogical authorities.
+14. Speech-derived mastery requires accepted evidence, assessment and explicit MasteryPolicy provenance.
 
-## 6. Gate status
+## 7. Gate status
 
 **P1 RECONCILIATION: PARTIALLY RESOLVED / NOT READY FOR APPROVAL.**
 
-C-001 through C-004 are integrated at contract level with repository evidence. C-005 is now formally specified with a canonical lifecycle, candidate/authoritative separation, recurrence boundary and ten explicit acceptance tests; the new repository artifacts were created and re-read successfully. C-005 is therefore integrated at contract level, while direct normative references in each source specification remain part of the broader source-spec integration gate. Remaining P1 contracts, missing governance/AI artifacts, automated contract checks, exact-head CI verification, independent secondary audit and human approval remain required.
+C-001 through C-004 are integrated at contract level with repository evidence. C-005 and C-006 are formally specified with dedicated canonical contracts/integration matrices and explicit authority/lifecycle/sequence tests. C-005 and C-006 remain subject to direct source-spec integration. Remaining P1 contracts, missing governance/AI artifacts, automated contract checks, exact-head CI verification, independent secondary audit and human approval remain required.
 
 Therefore this work does **not** authorize LPH v1.0, SRA implementation, or final baseline/tagging.
