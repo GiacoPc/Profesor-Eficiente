@@ -69,7 +69,8 @@ For each competency, the system may maintain:
 - recurring error patterns;
 - reinforcement requirement;
 - last meaningful assessment;
-- temporal stability of performance.
+- temporal stability of performance;
+- applicable MasteryPolicy identity/version.
 
 ### 4.3 Error state
 
@@ -152,9 +153,19 @@ REASSESSMENT_REQUIRED
 
 These labels are `PROPOSED`; exact state names and transition rules require approval.
 
+### 7.1 MasteryPolicy relationship
+
+Mastery state is interpreted under an explicit governed `MasteryPolicy`.
+
+CLM defines the learning-state semantics, while the `MasteryPolicy` defines the applicable mastery requirements. CLM must preserve the policy identity/version associated with an authoritative mastery interpretation so that the state remains attributable and reproducible.
+
+CLM does not define numerical thresholds, evidence counts, weighting, stability windows, transfer thresholds, or confidence cutoffs. Those values belong to the governed policy and remain `PENDING/TBD` until approved.
+
+A consumer or probabilistic component cannot replace an unresolved policy value with an inferred value.
+
 ## 8. Mastery evidence
 
-Mastery must be based on explicit evidence appropriate to the competency.
+Mastery must be based on explicit evidence appropriate to the competency and evaluated under the applicable `MasteryPolicy`.
 
 Conceptual relationship:
 
@@ -164,13 +175,13 @@ Competency
    + required evidence
    + observed performance
    + assessment result
-   + policy
+   + MasteryPolicy(identity + version)
    → mastery evidence
 ```
 
 A single conversational success may be insufficient when the competency requires stability, transfer, or multiple modalities.
 
-Exact evidence counts, thresholds, confidence requirements, and temporal windows are `PENDING/TBD`.
+Exact evidence counts, thresholds, confidence requirements, and temporal windows are `PENDING/TBD` and belong to the approved MasteryPolicy.
 
 ## 9. Learning event model
 
@@ -238,7 +249,7 @@ Reinforcement should be targeted to the weakest relevant competency rather than 
 
 Where a competency is intended to be communicative, mastery should eventually be evaluated beyond the exact surface form practiced.
 
-The precise transfer criteria are `PENDING` and must be defined per competency/curriculum contract.
+The precise transfer criteria are `PENDING` and must be defined per competency/curriculum contract and applicable MasteryPolicy.
 
 ## 14. Cognitive techniques
 
@@ -271,6 +282,8 @@ Assessment
  ↓
 Evidence classification
  ↓
+MasteryPolicy evaluation where applicable
+ ↓
 CLM state update
  ↓
 SDT projection
@@ -278,7 +291,7 @@ SDT projection
 APE decision
 ```
 
-The LLM can participate in observation interpretation or candidate feedback but cannot directly commit an authoritative learner-state mutation.
+The LLM can participate in observation interpretation or candidate feedback but cannot directly commit an authoritative learner-state mutation or redefine the applicable MasteryPolicy.
 
 ## 16. Uncertainty and insufficient evidence
 
@@ -293,6 +306,8 @@ This is especially important for:
 - weak acoustic evidence;
 - uncertain semantic interpretation;
 - insufficient sample size.
+
+An undefined, unavailable, stale, or conflicting MasteryPolicy is itself a controlled policy-resolution problem and must not be silently converted into a mastery decision.
 
 ## 17. Session versus longitudinal state
 
@@ -330,7 +345,8 @@ APE may use CLM-derived signals such as:
 - recent performance;
 - evidence sufficiency;
 - reinforcement need;
-- progression eligibility.
+- progression eligibility;
+- applicable MasteryPolicy identity/version.
 
 APE should not infer unsupported personal or psychological characteristics merely because they might improve personalization.
 
@@ -343,11 +359,12 @@ The following are proposed normative invariants:
 3. Uncertain assessments must not silently become verified mastery.
 4. LLM output is not authoritative learner state.
 5. Historical evidence must not be silently overwritten by generated text.
-6. Mastery is competency-specific and policy-governed.
+6. Mastery is competency-specific and governed by an explicit `MasteryPolicy`.
 7. Reinforcement is triggered by evidence, not arbitrary repetition.
 8. Learning-state transitions must be testable and attributable.
 9. Session context must not automatically become longitudinal memory.
 10. Privacy-sensitive learner data must remain within explicit data contracts.
+11. Authoritative mastery interpretation must retain applicable MasteryPolicy identity/version.
 
 ## 21. Required reconciliation dependencies
 
@@ -357,12 +374,14 @@ CLM must be reconciled with:
 - FDM: entity/event representation and invariants;
 - APE: decision inputs/outputs and state-transition authority;
 - LPH: linguistic evidence, error taxonomy and assessment boundaries;
+- MasteryPolicy: governed mastery requirements and policy provenance;
 - data architecture: persistence, encryption, deletion and recovery.
 
 ## 22. Open decisions
 
 - exact SDT schema;
 - exact mastery state machine;
+- exact MasteryPolicy schema;
 - mastery thresholds;
 - confidence/evidence sufficiency policy;
 - forgetting/retention model;
@@ -381,6 +400,7 @@ CLM cannot become `APPROVED` until:
 - FDM entities and events are formally mapped;
 - APE input/output contracts are defined;
 - SDT is formally specified;
+- MasteryPolicy identity/version and semantics are formally reconciled;
 - mastery and uncertainty semantics are testable;
 - evidence provenance is testable;
 - privacy/data contracts are reconciled;
