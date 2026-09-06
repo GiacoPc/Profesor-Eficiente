@@ -175,6 +175,8 @@ Every executable lesson should expose, at minimum:
 - remediation/reinforcement policy reference;
 - progression destination(s).
 
+For P1 C-003, `mastery criteria reference` means an explicit reference to the applicable governed `MasteryPolicy` identity/version. It is not an inline threshold or locally generated mastery rule. The exact lesson-to-policy cardinality remains `PENDING`.
+
 Exact fields belong to FDM/curriculum schema and are `PENDING`.
 
 ## 5. Competency model
@@ -258,16 +260,20 @@ The learner must not advance solely because a generative model says that the lea
 Evidence
   → Assessment
   → Mastery evidence
-  → Mastery decision
+  → Mastery decision under MasteryPolicy
   → Progression eligibility
   → APE decision
 ```
 
 ### 8.3 Mastery policy
 
-The exact threshold, aggregation method, confidence policy, minimum evidence, temporal stability, and reassessment policy are `PENDING/TBD`.
+The applicable `MasteryPolicy` is governed policy data identified by `mastery_policy_id` and `mastery_policy_version`. It defines the mastery requirements applicable to the relevant competency/policy scope.
 
-PAD therefore defines the architectural requirement, not the numerical answer.
+PAD consumes the policy as a reference. PAD does not define or override its numerical thresholds, evidence counts, aggregation, stability requirements, transfer requirements, or uncertainty rules.
+
+The exact threshold, aggregation method, confidence policy, minimum evidence, temporal stability, and reassessment policy remain `PENDING/TBD` until the MasteryPolicy is validated and approved.
+
+If the applicable policy is undefined, unavailable, stale, or conflicting, the system must not invent a replacement threshold or silently grant mastery.
 
 ## 9. Reinforcement architecture
 
@@ -404,6 +410,8 @@ Probabilistic components may provide candidate evidence or language, but uncerta
 
 If evidence is insufficient, the pedagogical system must prefer `INSUFFICIENT_EVIDENCE` / equivalent controlled states over fabricated certainty.
 
+If the applicable `MasteryPolicy` is undefined, unavailable, stale, or conflicting, the pedagogical system must preserve that policy-resolution failure rather than infer a mastery threshold.
+
 ## 17. Privacy and learner data
 
 Learner audio, transcripts, errors, weaknesses, progress, and assessment evidence are local learner data.
@@ -415,15 +423,16 @@ PAD requires explicit policies for collection, retention, deletion, access, and 
 The following are proposed normative invariants for approval:
 
 1. Curriculum authority is external to the LLM.
-2. Mastery authority is external to the LLM.
+2. Mastery authority is external to the LLM and governed by an explicit MasteryPolicy.
 3. Progression authority is external to the LLM.
 4. Approved prerequisites cannot be bypassed by generated dialogue.
 5. Uncertain evidence cannot be silently promoted to verified mastery.
 6. Reinforcement must be traceable to an evidenced learning need.
-7. Pedagogical adaptation may vary execution but may not silently weaken approved learning objectives.
+7. Pedagogical adaptation may vary execution but may not silently weaken approved learning objectives or mastery policy requirements.
 8. Core pedagogical operation must remain offline-first.
 9. Learner-state mutation must be attributable to evidence and policy.
 10. All normative pedagogical rules must be testable.
+11. Authoritative mastery evaluation must retain applicable MasteryPolicy identity/version.
 
 ## 19. Acceptance criteria for PAD v1.0
 
@@ -433,7 +442,8 @@ PAD cannot become `APPROVED` until:
 - CEFR/MCER mapping is formally represented;
 - competency taxonomy is approved;
 - lesson contract is reconciled with FDM;
-- mastery evidence policy is reconciled with CLM and APE;
+- MasteryPolicy identity/version and mastery requirements are reconciled with CLM, FDM and APE;
+- mastery evidence policy is validated pedagogically;
 - reinforcement policy is defined sufficiently for deterministic testing;
 - assessment/evidence semantics are reconciled with FDM;
 - contradiction review is completed;
