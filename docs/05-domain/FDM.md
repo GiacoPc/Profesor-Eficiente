@@ -20,11 +20,12 @@ FDM defines the authoritative domain vocabulary, entities, relationships, states
 
 1. Curriculum truth is governed data, not LLM-generated content.
 2. Learner evidence is distinct from learner-state interpretation.
-3. Mastery is a governed domain decision.
+3. Mastery is a governed domain decision under an explicit `MasteryPolicy`.
 4. Progression is a governed domain decision.
 5. LLM outputs are non-authoritative candidates.
 6. Domain invariants must be enforceable independently of probabilistic generation.
 7. Every authoritative mutation must be attributable to a command/policy and evidence where applicable.
+8. Consumers reference the applicable `MasteryPolicy` identity/version; they do not redefine its authoritative requirements.
 
 ## 3. Bounded contexts
 
@@ -182,35 +183,57 @@ Conceptual fields:
 - recurrence context;
 - status.
 
-### 4.11 MasteryRecord
+### 4.11 MasteryPolicy
+
+Represents the governed policy contract used to evaluate whether evidence and assessment results satisfy the mastery requirements for a competency or explicitly governed policy scope.
+
+Conceptual attributes:
+
+- `mastery_policy_id`;
+- `version`;
+- `competency_scope`;
+- `curriculum_version_scope`;
+- `required_evidence_types`;
+- `minimum_evidence_conditions`;
+- `assessment_rules`;
+- `stability_requirements`;
+- `transfer_requirements`;
+- `uncertainty_policy`;
+- `allowed_mastery_states`;
+- `progression_gate_reference`;
+- `status`.
+
+`MasteryPolicy` is authoritative policy data. Its exact numerical thresholds and aggregation rules remain `PENDING/TBD` until approved. Runtime consumers must reference the policy identity/version rather than redefine it.
+
+### 4.12 MasteryRecord
 
 Represents the governed mastery state/evidence for a competency.
 
-It must reference the policy and evidence supporting the state.
+It must reference the applicable `MasteryPolicy` identity/version and the evidence/assessment supporting the state.
 
-### 4.12 ProgressionEligibility
+### 4.13 ProgressionEligibility
 
 Represents whether domain prerequisites and mastery requirements permit progression.
 
 Eligibility is not identical to the APE's final pedagogical action; APE may choose reinforcement even when progression is technically allowed.
 
-### 4.13 Activity
+### 4.14 Activity
 
 Represents a pedagogical interaction/exercise instance governed by an activity policy.
 
-### 4.14 Session
+### 4.15 Session
 
 Represents a bounded learner interaction context.
 
 Session state is not automatically longitudinal learner memory.
 
-### 4.15 PedagogicalDecision
+### 4.16 PedagogicalDecision
 
 Represents an APE decision selecting the next controlled pedagogical action.
 
 It should reference the input state snapshot/version and applicable policy.
 
-### 4.16 LLMGenerationCandidate
+### 4.17 LLMGenerationCandidate
 
 Represents non-authoritative generated content proposed by an LLM.
 
@@ -233,6 +256,7 @@ activity_id
 evidence_id
 assessment_id
 error_id
+mastery_policy_id
 mastery_id
 decision_id
 generation_id
@@ -252,6 +276,8 @@ Lesson     * ── * Competency
 Competency * ── * Objective
 Objective  1 ── * Criterion
 Lesson     * ── * Prerequisite
+Lesson     * ── * MasteryPolicy
+Competency 1 ── * MasteryPolicy
 Learner    1 ── 1 SDT
 Learner    1 ── * Session
 Session    1 ── * Activity
@@ -259,11 +285,14 @@ Activity   1 ── * Evidence
 Evidence   * ── * Assessment
 Evidence   1 ── * ErrorObservation
 Competency 1 ── * MasteryRecord
+MasteryRecord * ── 1 MasteryPolicy
 APE        1 ── * PedagogicalDecision
 Generation * ── 1 PedagogicalDecision/context
 ```
 
 For C-002, `Objective` is curriculum-owned, `Competency ↔ Objective` is explicitly many-to-many, and `Objective → Criterion` is one-to-many. This replaces the previous ambiguous `Competency 1 ── * Objective/criteria` notation.
+
+For C-003, `MasteryPolicy` is an explicit governed entity referenced by mastery evaluation. The conceptual relationship does not assert that every lesson has exactly one policy; policy scope/cardinality remains subject to final curriculum/schema validation.
 
 These cardinalities are still conceptual and require final schema/persistence validation before FDM v1.0 approval.
 
@@ -295,7 +324,25 @@ CAPTURED → VALIDATED → ASSESSED → ACCEPTED
                          +→ UNCERTAIN  +→ REJECTED
 ```
 
-### 7.3 Generation candidate state
+### 7.3 Mastery evaluation boundary
+
+A mastery evaluation must identify the applicable policy before assigning an authoritative mastery state:
+
+```text
+Evidence
+   ↓
+Assessment
+   ↓
+MasteryPolicy(identity + version)
+   ↓
+Mastery evaluation
+   ↓
+MasteryRecord
+```
+
+An undefined, unavailable, stale, or conflicting policy reference must not be replaced by an ad-hoc threshold.
+
+### 7.4 Generation candidate state
 
 ```text
 REQUESTED → GENERATED → VALIDATING
@@ -324,6 +371,8 @@ EvaluateProgressionEligibility
 RequestPedagogicalDecision
 AcceptGenerationCandidate
 ```
+
+`EvaluateMastery` must resolve an explicit applicable `MasteryPolicy` identity/version. It cannot accept an ad-hoc threshold supplied by an LLM, LPH, APE, UI, or learner interaction.
 
 A command may fail if a domain invariant is violated.
 
@@ -372,7 +421,7 @@ A lesson cannot become progression-eligible when mandatory prerequisites are uns
 
 ### FDM-I05 — Mastery policy enforcement
 
-A mastery state cannot be set by bypassing the currently applicable mastery policy.
+A mastery state cannot be set by bypassing the currently applicable `MasteryPolicy`, including by supplying an ad-hoc threshold or policy interpretation from a consumer component.
 
 ### FDM-I06 — Uncertainty preservation
 
@@ -423,7 +472,7 @@ LPH may:
 - classify candidate errors;
 - enforce output constraints.
 
-LPH may not bypass FDM invariants or directly authorize progression.
+LPH may not bypass FDM invariants or directly authorize progression or redefine the applicable MasteryPolicy.
 
 ## 13. LLM boundary
 
@@ -513,7 +562,9 @@ Minimum categories:
 - event/provenance tests;
 - concurrency tests;
 - offline-path tests;
-- LLM candidate isolation tests.
+- LLM candidate isolation tests;
+- mastery-policy reference/version tests;
+- rejection tests for ad-hoc mastery thresholds.
 
 ## 20. Open decisions
 
@@ -525,7 +576,8 @@ Minimum categories:
 - transaction/consistency model;
 - persistence mapping;
 - exact curriculum schema;
-- exact mastery policy representation;
+- exact mastery policy thresholds and aggregation rules;
+- exact MasteryPolicy schema;
 - audio evidence schema;
 - final LPH/FDM interface serialization;
 - Rust/Kotlin boundary.
@@ -547,4 +599,4 @@ FDM cannot become `APPROVED` until:
 
 **PROPOSED / NOT YET APPROVED.**
 
-FDM v0.1 establishes a formal domain vocabulary and safety boundary without locking implementation technology.
+FDM v0.1 establishes a formal domain vocabulary and safety boundary without locking implementation technology or numerical mastery thresholds.
