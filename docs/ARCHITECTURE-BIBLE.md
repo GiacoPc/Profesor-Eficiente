@@ -26,7 +26,7 @@ This document indexes the governed architecture. Detailed specifications are add
 - APE — **PROPOSED / DRAFT v0.1**, not approved.
 - FDM — **PROPOSED / DRAFT v0.1**, not approved.
 - SDT — **PROPOSED / DRAFT v0.1**, formal learner-state contract exists at `docs/03-cognitive/SDT.md`.
-- LPH-SPEC — **PROPOSED / DRAFT v0.2**, not approved.
+- LPH-SPEC — **PROPOSED / DRAFT v0.3**, not approved.
 - MasteryPolicy — **PROPOSED / DRAFT v0.1**, not approved.
 - ErrorObservation Lifecycle — **PROPOSED / DRAFT v0.1**, at `docs/architecture/ERROR-OBSERVATION-LIFECYCLE-v0.1.md`.
 - SDT Integration Matrix — **PROPOSED / v0.1**, at `docs/architecture/SDT-INTEGRATION-MATRIX-v0.1.md`.
@@ -38,9 +38,11 @@ This document indexes the governed architecture. Detailed specifications are add
 - Mastery Policy Reference Boundary Integration Matrix — **PROPOSED / DRAFT v0.1**, at `docs/architecture/MASTERY-POLICY-REFERENCE-BOUNDARY-INTEGRATION-MATRIX-v0.1.md`.
 - LLMGenerationCandidate Lifecycle — **PROPOSED / DRAFT v0.1**, at `docs/architecture/LLM-GENERATION-CANDIDATE-LIFECYCLE-v0.1.md`.
 - LLMGenerationCandidate Integration Matrix — **PROPOSED / v0.1**, at `docs/architecture/LLM-GENERATION-CANDIDATE-INTEGRATION-MATRIX-v0.1.md`.
+- LinguisticAssessmentCandidate Ownership — **PROPOSED / DRAFT v0.1**, at `docs/architecture/LINGUISTIC-ASSESSMENT-CANDIDATE-OWNERSHIP-v0.1.md`.
+- LinguisticAssessment Integration Matrix — **PROPOSED / v0.1**, at `docs/architecture/LINGUISTIC-ASSESSMENT-INTEGRATION-MATRIX-v0.1.md`.
 - P1 reconciliation contracts — **PROPOSED / v0.1**, at `docs/architecture/P1-RESOLUTION-CONTRACTS-v0.1.md`.
 - Contract Matrix — **PROPOSED / v0.2**, at `docs/architecture/CONTRACT-MATRIX-v0.1.md`.
-- Contradiction Matrix — **PROPOSED / v0.7**, at `docs/architecture/CONTRADICTION-MATRIX-v0.1.md`.
+- Contradiction Matrix — **PROPOSED / v0.8**, at `docs/architecture/CONTRADICTION-MATRIX-v0.1.md`.
 - SRA — pending; must consume approved upstream contracts rather than redefine them during implementation.
 - LLM/inference architecture — pending; expected artifact not found on inspected branch.
 - RAG architecture — pending; expected artifact not found on inspected branch.
@@ -65,7 +67,7 @@ P1 findings C-001 through C-011 have explicit proposed contracts. They are **not
 - C-007/C-008 → `ProgressionEligibility` and APE `PROGRESS` hard gates in P1 Contract 6, plus dedicated progression contract/integration matrix.
 - C-009 → policy reference versus policy definition in P1 Contract 7 plus `MASTERY-POLICY-REFERENCE-BOUNDARY-INTEGRATION-MATRIX-v0.1.md`; APE, CLM, FDM and LPH source specifications explicitly preserve the boundary.
 - C-010 → `LLMGenerationCandidate` lifecycle in P1 Contract 8 plus `LLM-GENERATION-CANDIDATE-LIFECYCLE-v0.1.md` and `LLM-GENERATION-CANDIDATE-INTEGRATION-MATRIX-v0.1.md`.
-- C-011 → LPH candidate assessment versus FDM authoritative assessment/evidence in P1 Contract 9.
+- C-011 → linguistic assessment ownership in P1 Contract 9 plus `LINGUISTIC-ASSESSMENT-CANDIDATE-OWNERSHIP-v0.1.md` and `LINGUISTIC-ASSESSMENT-INTEGRATION-MATRIX-v0.1.md`; LPH §9–§10 explicitly marks the candidate as non-authoritative and FDM remains the authoritative Evidence/Assessment boundary.
 
 ## C-009 mastery policy reference rule
 
@@ -109,6 +111,30 @@ Acceptance is scoped to the declared use. A candidate accepted for learner-facin
 
 LLM-generated claims about learner error, mastery or readiness cannot directly mutate authoritative state. Repair/regeneration creates a new candidate identity and preserves lineage where applicable. Replacing or removing the LLM cannot alter authoritative domain gates, and LLM unavailability must remain a controlled capability failure rather than learner-state failure.
 
+## C-011 linguistic assessment ownership rule
+
+The normative distinction is:
+
+```text
+LPH linguistic processing
+        ↓
+LinguisticAssessmentCandidate
+        ↓
+validation + provenance
+        ↓
+FDM authoritative Evidence / Assessment
+        ↓
+CLM / SDT
+        ↓
+APE decision
+```
+
+`LinguisticAssessmentCandidate` is a non-authoritative proposed interpretation. `Evidence` is an accepted provenance-bearing domain record. `Assessment` is an authoritative evaluation of accepted evidence against the applicable target/criterion.
+
+LPH may produce or validate candidate results across grammar, lexicon, phonology, pronunciation, prosody and discourse, but cannot directly create authoritative Evidence, Assessment, MasteryRecord, ErrorObservation or ProgressionEligibility. This remains true for candidates originating from an LLM, STT system, acoustic analyzer, pronunciation model or ensemble.
+
+Structured output, syntax validation, model confidence or provider reputation does not grant domain authority. Candidate acceptance is a governed FDM operation; uncertainty and conflict remain explicit rather than being silently converted into learner failure or mastery.
+
 ## Current gate
 
 **GATE A: IN PROGRESS — NOT READY FOR APPROVAL.**
@@ -117,7 +143,7 @@ Before LPH v1.0 or SRA:
 
 1. integrate P1 contracts into PAD/CLM/FDM/APE/LPH/SDT source specifications;
 2. reconcile remaining missing governance/AI artifacts;
-3. add automated checks for normative contracts, including C-009 identity/version/scope/no-fallback behavior and C-010 candidate-authority/validation/isolation behavior;
+3. add automated checks for normative contracts, including C-009 identity/version/scope/no-fallback behavior, C-010 candidate-authority/validation/isolation behavior, and C-011 candidate/evidence/assessment ownership and provenance behavior;
 4. verify CI against the exact resulting HEAD;
 5. run the mandatory independent secondary audit for P1 architecture/governance;
 6. record human approval;
