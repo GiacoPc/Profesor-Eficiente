@@ -1,0 +1,90 @@
+manifest_id: PROFESOR-EFICIENTE-RECOVERY-2026-09-06
+version: 0.1
+status: RECOVERY_IN_PROGRESS
+classification: RECOVERED_WITH_UNVERIFIED_ARTIFACTS
+last_verified_utc: 2026-09-06T00:00:00Z
+
+repository:
+  full_name: GiacoPc/Profesor-Eficiente
+  working_branch: recovery/project-continuity-v0.1
+  forensic_branch: recovery/forensic-2026-09-06
+  pre_recovery_branch: architecture/pad-clm-fdm-ape-v1.0
+  pre_recovery_head: 90f1a31dce45ae7e1a13d42fb5ff09dcd9a0fee4
+  pre_recovery_tree: 94d96e034055014003c6f88f4834146075af2be9
+  pre_recovery_tree_recursive_verified: true
+  pre_recovery_tree_file_count_observed: 2
+  pre_recovery_tree_files:
+    - docs/architecture/ARCHITECTURE-BIBLE.md
+    - docs/architecture/CROSS-P1-RECONCILIATION-v0.1.md
+  branch_protection_at_observation: false
+
+preserved_state:
+  forensic_ref_created: true
+  forensic_ref_sha: 90f1a31dce45ae7e1a13d42fb5ff09dcd9a0fee4
+  destructive_rewrite_performed_after_preservation: false
+
+verified_repository_artifacts:
+  - path: docs/architecture/ARCHITECTURE-BIBLE.md
+    status: VERIFIED_AT_PRE_RECOVERY_HEAD
+    blob_sha: cce251a227b1eecb4b48f21934ffcf604bba5107
+  - path: docs/architecture/CROSS-P1-RECONCILIATION-v0.1.md
+    status: VERIFIED_AT_PRE_RECOVERY_HEAD
+    blob_sha: f9cd5bc2516d978569f7ad6fa144f27acea138ea
+
+recoverable_conversation_artifacts:
+  status: RECOVERED_FROM_CONVERSATION_UNVERIFIED
+  items:
+    - docs/00-governance/PGKI.md
+    - docs/03-cognitive/SDT.md
+    - docs/01-product/PRD.md
+    - docs/07-ai/RAG.md
+    - docs/07-ai/LLM-ARCHITECTURE.md
+    - schemas/project-state.schema.json
+    - schemas/context-manifest.schema.json
+    - tools/validate_governance.py
+    - docs/architecture/CONTRADICTION-MATRIX-v0.1.md
+    - docs/architecture/CONTRACT-MATRIX-v0.1.md
+    - docs/architecture/MISSING-ARTIFACTS-REGISTER-v0.1.md
+    - docs/architecture/MASTERY-POLICY-v0.1.md
+    - docs/architecture/SDT-INTEGRATION-MATRIX-v0.1.md
+    - docs/architecture/ERROR-OBSERVATION-LIFECYCLE-v0.1.md
+    - docs/architecture/ERROR-OBSERVATION-INTEGRATION-MATRIX-v0.1.md
+    - docs/architecture/SPEECH-EVIDENCE-ASSESSMENT-CONTRACT-v0.1.md
+    - docs/architecture/SPEECH-EVIDENCE-INTEGRATION-MATRIX-v0.1.md
+    - docs/architecture/PROGRESSION-ELIGIBILITY-CONTRACT-v0.1.md
+    - docs/architecture/PROGRESSION-ELIGIBILITY-INTEGRATION-MATRIX-v0.1.md
+    - docs/architecture/MASTERY-POLICY-REFERENCE-BOUNDARY-INTEGRATION-MATRIX-v0.1.md
+    - docs/architecture/LLM-GENERATION-CANDIDATE-LIFECYCLE-v0.1.md
+    - docs/architecture/LLM-GENERATION-CANDIDATE-INTEGRATION-MATRIX-v0.1.md
+    - docs/architecture/LINGUISTIC-ASSESSMENT-CANDIDATE-OWNERSHIP-v0.1.md
+    - docs/architecture/LINGUISTIC-ASSESSMENT-INTEGRATION-MATRIX-v0.1.md
+    - docs/architecture/CROSS-P1-RECONCILIATION-RESULT-v0.1.md
+
+known_history:
+  cross_p1_commit: e05bc4a479f15cd3c4a3e7c41b8cccc83b34807c
+  cross_p1_register_commit: d361e7214a7b66234127ad5f5d54036de63aa686
+  cross_p1_invariant_commit: 8d192870cd86c0ea0eb84e8142646e5ff0cc4e42
+  latest_pre_recovery_commit: 90f1a31dce45ae7e1a13d42fb5ff09dcd9a0fee4
+
+risk_register:
+  - id: RISK-GIT-TREE-INCOMPLETE
+    severity: P0
+    status: OPEN
+    description: Inspected working branch tree contains only two files; prior restoration claim is not evidence of full-tree restoration.
+  - id: RISK-ARTIFACT-PERSISTENCE
+    severity: P0
+    status: OPEN
+    description: Previously developed artifacts are not currently verified in the working branch tree.
+  - id: RISK-SOURCE-OF-TRUTH
+    severity: P0
+    status: MITIGATED
+    description: Recovery protocol and forensic preservation ref established; coherent baseline still pending.
+  - id: RISK-AUDIT-EVIDENCE
+    severity: P1
+    status: OPEN
+    description: Independent secondary audit and exact-head CI evidence are pending.
+
+next_gate:
+  name: RECOVERY-INVENTORY-AND-RECONSTRUCTION
+  implementation_authorized: false
+  required_before_resume: true
