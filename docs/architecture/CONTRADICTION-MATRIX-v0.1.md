@@ -13,9 +13,9 @@ This matrix records findings from direct inspection of repository artifacts and 
 
 | ID | Severity | Finding | Resolution artifact | Status |
 |---|---|---|---|---|
-| C-001 | P1 | LPH section 4 diagram could imply LPH authority above APE/FDM/CLM. | `docs/architecture/P1-RESOLUTION-CONTRACTS-v0.1.md`, Contract 1 | **RESOLVED AT CONTRACT LEVEL; SOURCE SPEC INTEGRATION REQUIRED** |
+| C-001 | P1 | LPH section 4 diagram could imply LPH authority above APE/FDM/CLM. | `docs/architecture/P1-RESOLUTION-CONTRACTS-v0.1.md`, Contract 1 | **INTEGRATED + VERIFIED IN PAD; CROSS-SPEC INTEGRATION CONTINUES** |
 | C-002 | P1 | Competency/Objectives ownership and cardinality ambiguous. | P1 Contract 2; `docs/05-domain/FDM.md` §4.3–4.4, §6; `docs/02-pedagogy/PAD.md` §4.2 | **INTEGRATED IN FDM + PAD; VERIFIED AGAINST CONTRACT** |
-| C-003 | P1 | No explicit authoritative MasteryPolicy contract. | P1 contract, Contract 3 | **RESOLVED AT CONTRACT LEVEL; POLICY SPEC/ADR REQUIRED BEFORE APPROVAL** |
+| C-003 | P1 | No explicit authoritative MasteryPolicy contract. | P1 Contract 3; `docs/architecture/MASTERY-POLICY-v0.1.md`; FDM §4.11, §6–10; CLM §7.1–8, §15–23; APE §5–10, §15–22; PAD §4.3, §8, §16–19; LPH §5, §11–12 | **INTEGRATED IN MASTER ARTIFACT + PAD/CLM/FDM/APE/LPH; VERIFIED AGAINST CONTRACT** |
 | C-004 | P1 | SDT artifact was missing on inspected branch. | `docs/03-cognitive/SDT.md` | **RESOLVED AS MISSING-ARTIFACT GAP; SDT REMAINS PROPOSED** |
 | C-005 | P1 | LPH `Error` versus FDM `ErrorObservation` lifecycle mismatch; recurrence semantics unclear. | P1 contract, Contract 5 | **RESOLVED AT CONTRACT LEVEL; SOURCE SPEC INTEGRATION REQUIRED** |
 | C-006 | P1 | Speech evidence → assessment → mastery/SDT ownership/order incomplete. | P1 contract, Contract 4 | **RESOLVED AT CONTRACT LEVEL; SOURCE SPEC INTEGRATION REQUIRED** |
@@ -67,6 +67,6 @@ At the time of the original reconciliation the following were not found at expec
 
 **P1 RECONCILIATION: PARTIALLY RESOLVED / NOT READY FOR APPROVAL.**
 
-The missing SDT artifact has been formally created and the eleven P1 ambiguities have explicit proposed contracts. C-001 has been integrated into PAD, and C-002 has now been integrated into both FDM and PAD and checked against the P1 contract. The remaining P1 contracts still require source-spec integration, the remaining missing governance/AI artifacts must be reconciled, automated checks must cover the contracts, and an independent secondary audit plus human approval is required.
+The missing SDT artifact has been formally created and the eleven P1 ambiguities have explicit proposed contracts. C-001 has been integrated into PAD. C-002 has been integrated into FDM and PAD. C-003 has now been formalized as a standalone proposed `MasteryPolicy` artifact and integrated into PAD, CLM, FDM, APE and the existing LPH policy boundary; each affected modification was followed by repository verification of the resulting commit/diff. The remaining P1 contracts still require source-spec integration, the remaining missing governance/AI artifacts must be reconciled, automated checks must cover the contracts, and an independent secondary audit plus human approval is required.
 
 Therefore this work does **not** authorize LPH v1.0, SRA implementation, or final baseline/tagging.
