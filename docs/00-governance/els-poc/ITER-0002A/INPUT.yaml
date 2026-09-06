@@ -1,0 +1,13 @@
+iteration: ITER-0002A
+poc: ELS-POC-002A
+status: EXECUTED
+risk_level: L2
+branch: recovery/els-poc-002
+base_state_head: e15b4aaffc67147c677c22ec52bbf0d9a9cdeb33
+objective: Validate exact repository write-target integrity before continuing ELS-POC-002.
+constraints:
+  - no product implementation
+  - no changes to PGKI/KCA authority
+  - preserve evidence of FL-002
+  - no force-update, merge, or cherry-pick of divergent commits
+  - no claim of production readiness
