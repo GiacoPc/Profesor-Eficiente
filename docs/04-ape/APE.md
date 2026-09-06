@@ -127,7 +127,7 @@ next_allowed_states: [<state>]
 policy_versions: [<version>]
 ```
 
-The `mastery_policy` fields are references, not an embedded ad-hoc policy definition. Exact schema is `PENDING`.
+The `mastery_policy` fields are **references, not an embedded ad-hoc policy definition**. APE may carry governed references to required evidence/constraints, but may not locally redefine thresholds, aggregation, stability, transfer, uncertainty, or other authoritative policy semantics. Exact schema is `PENDING`.
 
 ## 7. Decision cycle
 
@@ -137,14 +137,15 @@ The `mastery_policy` fields are references, not an embedded ad-hoc policy defini
 3. Determine current domain state
 4. Check prerequisites
 5. Resolve applicable MasteryPolicy reference
-6. Identify target objective/competency
-7. Evaluate evidence sufficiency
-8. Select pedagogical action
-9. Apply constraints/policies
-10. Emit structured decision
-11. Execute action
-12. Collect new evidence
-13. Re-evaluate
+6. Validate policy identity/version/scope
+7. Identify target objective/competency
+8. Evaluate evidence sufficiency
+9. Select pedagogical action
+10. Apply constraints/policies
+11. Emit structured decision
+12. Execute action
+13. Collect new evidence
+14. Re-evaluate
 ```
 
 The cycle is deterministic once all policy inputs and assessed evidence are fixed, although some inputs may originate from probabilistic components.
@@ -223,7 +224,9 @@ Progression eligibility
 APE action
 ```
 
-APE can request assessment/reassessment but must not invent or locally override the MasteryPolicy scoring algorithm, thresholds, evidence requirements, stability requirements, or transfer requirements.
+APE **references and consumes the applicable MasteryPolicy; it does not define it**. It must not locally override the policy scoring algorithm, thresholds, evidence requirements, stability requirements, transfer requirements, uncertainty rules, or aggregation rules.
+
+A missing, stale, malformed, out-of-scope, or conflicting policy reference is a controlled policy-resolution failure; it is not permission to use a hard-coded or LLM-generated replacement.
 
 ## 11. Reinforcement selection
 
@@ -339,7 +342,7 @@ Result should be a controlled `CONFLICT` / escalation state until the source-of-
 
 Likewise, if evidence is insufficient for a mastery decision, the correct outcome is not fabricated certainty.
 
-If the applicable MasteryPolicy is undefined, unavailable, stale, or conflicting, APE must not invent or infer a replacement policy.
+If the applicable MasteryPolicy is undefined, unavailable, stale, malformed, out of scope, or conflicting, APE must not invent or infer a replacement policy.
 
 ## 18. Offline-first requirement
 
@@ -376,6 +379,7 @@ Minimum tests:
 - mastery-gate enforcement;
 - mastery-policy identity/version resolution;
 - rejection of ad-hoc mastery thresholds;
+- rejection of stale/out-of-scope/conflicting policy references;
 - reinforcement selection;
 - deterministic replay;
 - conflict handling;
