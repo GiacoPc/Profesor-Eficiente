@@ -31,9 +31,11 @@ This document indexes the governed architecture. Detailed specifications are add
 - ErrorObservation Lifecycle — **PROPOSED / DRAFT v0.1**, at `docs/architecture/ERROR-OBSERVATION-LIFECYCLE-v0.1.md`.
 - SDT Integration Matrix — **PROPOSED / v0.1**, at `docs/architecture/SDT-INTEGRATION-MATRIX-v0.1.md`.
 - ErrorObservation Integration Matrix — **PROPOSED / v0.1**, at `docs/architecture/ERROR-OBSERVATION-INTEGRATION-MATRIX-v0.1.md`.
+- Speech Evidence/Assessment Contract — **PROPOSED / DRAFT v0.1**, at `docs/architecture/SPEECH-EVIDENCE-ASSESSMENT-CONTRACT-v0.1.md`.
+- Speech Evidence Integration Matrix — **PROPOSED / v0.1**, at `docs/architecture/SPEECH-EVIDENCE-INTEGRATION-MATRIX-v0.1.md`.
 - P1 reconciliation contracts — **PROPOSED / v0.1**, at `docs/architecture/P1-RESOLUTION-CONTRACTS-v0.1.md`.
 - Contract Matrix — **PROPOSED / v0.2**, at `docs/architecture/CONTRACT-MATRIX-v0.1.md`.
-- Contradiction Matrix — **PROPOSED / v0.2**, at `docs/architecture/CONTRADICTION-MATRIX-v0.1.md`.
+- Contradiction Matrix — **PROPOSED / v0.5**, at `docs/architecture/CONTRADICTION-MATRIX-v0.1.md`.
 - SRA — pending; must consume approved upstream contracts rather than redefine them during implementation.
 - LLM/inference architecture — pending; expected artifact not found on inspected branch.
 - RAG architecture — pending; expected artifact not found on inspected branch.
@@ -54,7 +56,7 @@ P1 findings C-001 through C-011 have explicit proposed contracts. They are **not
 - C-003 → explicit `MasteryPolicy` contract in P1 Contract 3; integrated into PAD/CLM/FDM/APE and existing LPH boundary.
 - C-004 → SDT artifact `docs/03-cognitive/SDT.md` plus `SDT-INTEGRATION-MATRIX-v0.1.md`.
 - C-005 → canonical `ErrorObservation` lifecycle in `ERROR-OBSERVATION-LIFECYCLE-v0.1.md` plus cross-document integration matrix. Source specifications already contain the relevant bounded responsibilities; final direct normative references remain part of the source-spec integration gate.
-- C-006 → evidence pipeline in P1 Contract 4.
+- C-006 → `SPEECH-EVIDENCE-ASSESSMENT-CONTRACT-v0.1.md` plus `SPEECH-EVIDENCE-INTEGRATION-MATRIX-v0.1.md`; authoritative sequence is speech artifact → bounded processing → validated evidence → assessment → MasteryPolicy/CLM → governed state → SDT → APE.
 - C-007/C-008 → `ProgressionEligibility` and APE `PROGRESS` hard gates in P1 Contract 6.
 - C-009 → policy reference versus policy definition in P1 Contract 7.
 - C-010 → `LLMGenerationCandidate` lifecycle in P1 Contract 8.
@@ -82,11 +84,41 @@ APE reinforcement / reassessment
 
 `ErrorObservation` is historical evidence-linked domain state. LLM/LPH candidates, feedback, recurrence counters and SDT summaries cannot replace it. Recurrence remains a derived signal governed by a future approved policy.
 
+## C-006 speech evidence authority rule
+
+The canonical speech chain is:
+
+```text
+Learner speech
+   ↓
+Audio artifact
+   ↓
+Bounded speech processing
+   ↓
+Speech candidate evidence
+   ↓
+FDM evidence validation/provenance
+   ↓
+Assessment
+   ↓
+MasteryPolicy + CLM interpretation
+   ↓
+MasteryRecord / ErrorObservation / governed learning state
+   ↓
+SDT projection
+   ↓
+APE pedagogical decision
+```
+
+STT, acoustic/prosodic analysis, pronunciation analysis, LPH and LLM are bounded capability/processing components. None can independently establish mastery, progression or authoritative SDT state. Processing failure does not become learner failure; uncertainty and conflict remain explicit. No claim about the validity of a specific speech model is made until empirical evaluation exists.
+
 ## LPH architectural role
 
 LPH is a bounded control/validation harness. APE remains the pedagogical decision authority; FDM remains the domain/invariant enforcement boundary; CLM defines learning-state semantics; SDT represents derived learner state; the LLM remains a replaceable probabilistic capability.
 
 For C-005, LPH may classify candidate errors and structure linguistic evidence, but cannot create authoritative `ErrorObservation` state without the governed evidence/assessment/FDM acceptance path.
+
+For C-006, LPH may structure linguistic speech candidates and validate candidate interpretation, but cannot convert STT/acoustic/pronunciation/LLM output directly into authoritative mastery, progression or SDT mutation.
 
 ## Current gate
 
