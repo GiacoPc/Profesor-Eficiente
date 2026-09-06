@@ -1,31 +1,50 @@
 # Contradiction Matrix — PAD / CLM / FDM / APE / LPH
 
-**Version:** 0.2
+**Version:** 0.3
 **Status:** PROPOSED / REQUIRES INTEGRATION + INDEPENDENT AUDIT
 **Branch:** `architecture/pad-clm-fdm-ape-v1.0`
 **Scope:** Cross-document reconciliation before LPH v1.0 and SRA.
 
 ## 0. Evidence boundary
 
-This matrix records findings from direct inspection of repository artifacts and the subsequent formalization work. It does not claim inspection of artifacts that were not retrieved.
+This matrix records findings from direct inspection of repository artifacts and subsequent formalization work. It does not claim inspection of artifacts that were not retrieved.
 
 ## 1. P1 findings and resolution status
 
 | ID | Severity | Finding | Resolution artifact | Status |
 |---|---|---|---|---|
-| C-001 | P1 | LPH section 4 diagram could imply LPH authority above APE/FDM/CLM. | `docs/architecture/P1-RESOLUTION-CONTRACTS-v0.1.md`, Contract 1 | **INTEGRATED + VERIFIED IN PAD; CROSS-SPEC INTEGRATION CONTINUES** |
-| C-002 | P1 | Competency/Objectives ownership and cardinality ambiguous. | P1 Contract 2; `docs/05-domain/FDM.md` §4.3–4.4, §6; `docs/02-pedagogy/PAD.md` §4.2 | **INTEGRATED IN FDM + PAD; VERIFIED AGAINST CONTRACT** |
-| C-003 | P1 | No explicit authoritative MasteryPolicy contract. | P1 Contract 3; `docs/architecture/MASTERY-POLICY-v0.1.md`; FDM §4.11, §6–10; CLM §7.1–8, §15–23; APE §5–10, §15–22; PAD §4.3, §8, §16–19; LPH §5, §11–12 | **INTEGRATED IN MASTER ARTIFACT + PAD/CLM/FDM/APE/LPH; VERIFIED AGAINST CONTRACT** |
-| C-004 | P1 | SDT artifact was missing on inspected branch. | `docs/03-cognitive/SDT.md` | **RESOLVED AS MISSING-ARTIFACT GAP; SDT REMAINS PROPOSED** |
-| C-005 | P1 | LPH `Error` versus FDM `ErrorObservation` lifecycle mismatch; recurrence semantics unclear. | P1 contract, Contract 5 | **RESOLVED AT CONTRACT LEVEL; SOURCE SPEC INTEGRATION REQUIRED** |
-| C-006 | P1 | Speech evidence → assessment → mastery/SDT ownership/order incomplete. | P1 contract, Contract 4 | **RESOLVED AT CONTRACT LEVEL; SOURCE SPEC INTEGRATION REQUIRED** |
-| C-007 | P1 | `ProgressionEligibility` versus APE `PROGRESS` boundary incomplete. | P1 contract, Contract 6 | **RESOLVED AT CONTRACT LEVEL; SOURCE SPEC INTEGRATION REQUIRED** |
-| C-008 | P1 | APE progression discretion versus mandatory mastery/progression gates underspecified. | P1 contract, Contract 6 | **RESOLVED AT CONTRACT LEVEL; SOURCE SPEC INTEGRATION REQUIRED** |
-| C-009 | P1 | APE/LPH mastery requirements could be interpreted as policy definition. | P1 contract, Contract 7 | **RESOLVED AT CONTRACT LEVEL; SOURCE SPEC INTEGRATION REQUIRED** |
-| C-010 | P1 | LLM candidate acceptance/persistence boundary incomplete. | P1 contract, Contract 8 | **RESOLVED AT CONTRACT LEVEL; SOURCE SPEC INTEGRATION REQUIRED** |
-| C-011 | P1 | LPH linguistic assessment versus FDM authoritative evidence ownership ambiguous. | P1 contract, Contract 9 | **RESOLVED AT CONTRACT LEVEL; SOURCE SPEC INTEGRATION REQUIRED** |
+| C-001 | P1 | LPH section 4 diagram could imply LPH authority above APE/FDM/CLM. | P1 Contract 1; PAD authority hierarchy | **INTEGRATED + VERIFIED** |
+| C-002 | P1 | Competency/Objectives ownership and cardinality ambiguous. | P1 Contract 2; FDM §§4.3–4.4, §6; PAD §4.2 | **INTEGRATED + VERIFIED** |
+| C-003 | P1 | No explicit authoritative MasteryPolicy contract. | P1 Contract 3; `docs/architecture/MASTERY-POLICY-v0.1.md`; PAD/CLM/FDM/APE/LPH policy references | **INTEGRATED + VERIFIED** |
+| C-004 | P1 | SDT artifact was missing on inspected branch; downstream ownership/authority boundaries required formal reconciliation. | `docs/03-cognitive/SDT.md`; `docs/architecture/SDT-INTEGRATION-MATRIX-v0.1.md`; CLM/FDM/APE/PAD/LPH existing contract sections | **INTEGRATED AT CONTRACT LEVEL + AUTHORITY LIMITS VERIFIED; SDT REMAINS PROPOSED** |
+| C-005 | P1 | LPH `Error` versus FDM `ErrorObservation` lifecycle mismatch; recurrence semantics unclear. | P1 Contract 5 | **RESOLVED AT CONTRACT LEVEL; SOURCE SPEC INTEGRATION REQUIRED** |
+| C-006 | P1 | Speech evidence → assessment → mastery/SDT ownership/order incomplete. | P1 Contract 4 | **RESOLVED AT CONTRACT LEVEL; SOURCE SPEC INTEGRATION REQUIRED** |
+| C-007 | P1 | `ProgressionEligibility` versus APE `PROGRESS` boundary incomplete. | P1 Contract 6 | **RESOLVED AT CONTRACT LEVEL; SOURCE SPEC INTEGRATION REQUIRED** |
+| C-008 | P1 | APE progression discretion versus mandatory mastery/progression gates underspecified. | P1 Contract 6 | **RESOLVED AT CONTRACT LEVEL; SOURCE SPEC INTEGRATION REQUIRED** |
+| C-009 | P1 | APE/LPH mastery requirements could be interpreted as policy definition. | P1 Contract 7 | **RESOLVED AT CONTRACT LEVEL; SOURCE SPEC INTEGRATION REQUIRED** |
+| C-010 | P1 | LLM candidate acceptance/persistence boundary incomplete. | P1 Contract 8 | **RESOLVED AT CONTRACT LEVEL; SOURCE SPEC INTEGRATION REQUIRED** |
+| C-011 | P1 | LPH linguistic assessment versus FDM authoritative evidence ownership ambiguous. | P1 Contract 9 | **RESOLVED AT CONTRACT LEVEL; SOURCE SPEC INTEGRATION REQUIRED** |
 
-## 2. P2 findings retained
+## 2. C-004 authority verification
+
+The C-004 review found no new P1 authority contradiction after reconciling SDT across the five consuming/adjacent contracts.
+
+Verified boundaries:
+
+```text
+CLM  = defines learning-state semantics
+SDT  = represents/projected learner state
+FDM  = owns domain invariants + authoritative mutation boundary
+APE  = owns pedagogical decisions
+LPH  = linguistic/interaction constraint + validation boundary
+LLM  = bounded probabilistic generation/interpretation capability
+```
+
+The integration matrix `SDT-INTEGRATION-MATRIX-v0.1.md` records eight explicit authority tests covering self-authority, curriculum authority, mastery-policy authority, progression authority, LLM mutation, provenance, uncertainty, and stale-state/version safety.
+
+No unresolved C-004 issue was found that justifies inventing additional SDT authority or changing the authority hierarchy.
+
+## 3. P2 findings retained
 
 | ID | Severity | Finding | Disposition |
 |---|---|---|---|
@@ -35,12 +54,11 @@ This matrix records findings from direct inspection of repository artifacts and 
 | C-015 | P2 | Offline critical path shared invariant. | Retain as cross-cutting invariant; test in SRA. |
 | C-016 | P2 | Conceptual schemas not ready for implementation. | Block SRA until contracts are executable/testable. |
 
-## 3. Previously observed missing artifacts
+## 4. Previously observed missing artifacts
 
 At the time of the original reconciliation the following were not found at expected paths on this branch:
 
 - `docs/01-product/PRD.md`
-- `docs/03-cognitive/SDT.md`
 - `docs/00-governance/PGKI.md`
 - `schemas/project-state.schema.json`
 - `schemas/context-manifest.schema.json`
@@ -48,9 +66,9 @@ At the time of the original reconciliation the following were not found at expec
 - `docs/07-ai/RAG.md`
 - `docs/07-ai/LLM-ARCHITECTURE.md`
 
-**Current update:** `docs/03-cognitive/SDT.md` now exists on this branch as v0.1-draft. The remaining gaps are not silently reclassified as resolved by this document.
+`docs/03-cognitive/SDT.md` is no longer a missing-artifact gap; it exists as v0.1-draft. The remaining gaps are not silently reclassified as resolved.
 
-## 4. Resolution principles
+## 5. Resolution principles
 
 1. APE is the pedagogical decision authority.
 2. FDM is the domain/invariant enforcement boundary.
@@ -62,11 +80,12 @@ At the time of the original reconciliation the following were not found at expec
 8. Uncertainty and conflict remain explicit.
 9. `ProgressionEligibility` is a domain result; `PROGRESS` is an APE action subject to hard gates.
 10. Source specifications must incorporate the contracts before promotion to v1.0.
+11. SDT is a projection/state representation and cannot become an additional decision authority.
 
-## 5. Gate status
+## 6. Gate status
 
 **P1 RECONCILIATION: PARTIALLY RESOLVED / NOT READY FOR APPROVAL.**
 
-The missing SDT artifact has been formally created and the eleven P1 ambiguities have explicit proposed contracts. C-001 has been integrated into PAD. C-002 has been integrated into FDM and PAD. C-003 has now been formalized as a standalone proposed `MasteryPolicy` artifact and integrated into PAD, CLM, FDM, APE and the existing LPH policy boundary; each affected modification was followed by repository verification of the resulting commit/diff. The remaining P1 contracts still require source-spec integration, the remaining missing governance/AI artifacts must be reconciled, automated checks must cover the contracts, and an independent secondary audit plus human approval is required.
+C-001, C-002, C-003 and C-004 are now integrated at contract level with repository evidence. C-004 specifically has a dedicated integration matrix and explicit authority tests across CLM/FDM/APE/PAD/LPH. The remaining P1 contracts still require source-spec integration, remaining missing governance/AI artifacts must be reconciled, automated checks must cover the contracts, and independent secondary audit plus human approval is required.
 
 Therefore this work does **not** authorize LPH v1.0, SRA implementation, or final baseline/tagging.
