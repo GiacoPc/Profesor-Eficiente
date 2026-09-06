@@ -75,7 +75,7 @@ APE conceptually consumes:
 - competency targets;
 - prerequisites;
 - permitted activities;
-- mastery-policy reference.
+- mastery-policy reference (`mastery_policy_id` + `mastery_policy_version`).
 
 ### 5.2 Learner state contract
 
@@ -86,7 +86,8 @@ APE conceptually consumes:
 - recurring errors;
 - recent performance;
 - reinforcement requirements;
-- progression eligibility.
+- progression eligibility;
+- applicable mastery-policy reference/provenance.
 
 ### 5.3 Context contract
 
@@ -118,13 +119,15 @@ constraints:
   linguistic: <reference>
   interaction: <reference>
   correction: <reference>
-  mastery: <reference>
+  mastery_policy:
+    id: <mastery-policy-id>
+    version: <mastery-policy-version>
 required_evidence: [<type>]
 next_allowed_states: [<state>]
 policy_versions: [<version>]
 ```
 
-This is conceptual; exact schema is `PENDING`.
+The `mastery_policy` fields are references, not an embedded ad-hoc policy definition. Exact schema is `PENDING`.
 
 ## 7. Decision cycle
 
@@ -133,17 +136,20 @@ This is conceptual; exact schema is `PENDING`.
 2. Load consistent learner/SDT snapshot
 3. Determine current domain state
 4. Check prerequisites
-5. Identify target objective/competency
-6. Evaluate evidence sufficiency
-7. Select pedagogical action
-8. Apply constraints/policies
-9. Emit structured decision
-10. Execute action
-11. Collect new evidence
-12. Re-evaluate
+5. Resolve applicable MasteryPolicy reference
+6. Identify target objective/competency
+7. Evaluate evidence sufficiency
+8. Select pedagogical action
+9. Apply constraints/policies
+10. Emit structured decision
+11. Execute action
+12. Collect new evidence
+13. Re-evaluate
 ```
 
 The cycle is deterministic once all policy inputs and assessed evidence are fixed, although some inputs may originate from probabilistic components.
+
+If the applicable MasteryPolicy cannot be resolved consistently, APE must not substitute an ad-hoc threshold; it must use the controlled policy/conflict handling defined by the domain contracts.
 
 ## 8. Decision priority
 
@@ -208,7 +214,7 @@ Evidence
   ↓
 Assessment
   ↓
-Mastery policy
+MasteryPolicy (identity + version)
   ↓
 Mastery state
   ↓
@@ -217,7 +223,7 @@ Progression eligibility
 APE action
 ```
 
-APE can request assessment/reassessment but should not invent the scoring algorithm.
+APE can request assessment/reassessment but must not invent or locally override the MasteryPolicy scoring algorithm, thresholds, evidence requirements, stability requirements, or transfer requirements.
 
 ## 11. Reinforcement selection
 
@@ -296,7 +302,7 @@ Every authoritative APE decision should be traceable to:
 
 - learner-state snapshot/version;
 - curriculum version;
-- policy versions;
+- applicable MasteryPolicy ID/version;
 - relevant evidence references;
 - decision ID;
 - decision timestamp;
@@ -333,6 +339,8 @@ Result should be a controlled `CONFLICT` / escalation state until the source-of-
 
 Likewise, if evidence is insufficient for a mastery decision, the correct outcome is not fabricated certainty.
 
+If the applicable MasteryPolicy is undefined, unavailable, stale, or conflicting, APE must not invent or infer a replacement policy.
+
 ## 18. Offline-first requirement
 
 The APE's critical decision path must function without network access after required local assets are provisioned.
@@ -366,6 +374,8 @@ Minimum tests:
 
 - prerequisite enforcement;
 - mastery-gate enforcement;
+- mastery-policy identity/version resolution;
+- rejection of ad-hoc mastery thresholds;
 - reinforcement selection;
 - deterministic replay;
 - conflict handling;
@@ -383,8 +393,8 @@ A key acceptance test is:
 ## 22. Open decisions
 
 - exact decision state machine;
-- exact policy representation;
-- exact mastery-policy interface;
+- exact MasteryPolicy schema;
+- exact numerical mastery thresholds and aggregation rules;
 - exact SDT schema;
 - exact evidence sufficiency rules;
 - intervention selection algorithm;
