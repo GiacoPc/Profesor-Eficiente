@@ -104,17 +104,31 @@ Conceptual attributes:
 
 - `competency_id`;
 - `domain`;
-- `objective_reference`;
+- `objective_ids`;
 - `target_criteria`;
 - `required_evidence_types`.
+
+A competency may support one or more curriculum objectives. The relationship is many-to-many because a competency may contribute to multiple objectives and an objective may require multiple competencies when the governed curriculum explicitly defines that mapping.
+
+`target_criteria` are assessable criteria associated with the competency and must not be treated as additional `Objective` entities.
 
 Exact taxonomy is `PENDING`.
 
 ### 4.4 Objective
 
-Represents an intended learning outcome associated with curriculum authority.
+Represents an intended learning outcome owned by curriculum authority.
 
-An objective is immutable at runtime by the LLM or ordinary dialogue generation.
+Conceptual attributes:
+
+- `objective_id`;
+- `curriculum_id`;
+- `statement`;
+- `competency_ids`;
+- `criterion_ids`.
+
+An `Objective` is a curriculum-authority entity. Its definition is immutable at runtime by the LLM, LPH, APE, learner, or ordinary dialogue generation.
+
+An objective may map to one or more competencies only where the governed curriculum explicitly defines that mapping. Criteria are assessment-contract elements and are not separate objectives.
 
 ### 4.5 Prerequisite
 
@@ -235,7 +249,8 @@ Curriculum 1 ── * Level
 Level      1 ── * Unit
 Unit       1 ── * Lesson
 Lesson     * ── * Competency
-Competency 1 ── * Objective/criteria
+Competency * ── * Objective
+Objective  1 ── * Criterion
 Lesson     * ── * Prerequisite
 Learner    1 ── 1 SDT
 Learner    1 ── * Session
@@ -248,7 +263,9 @@ APE        1 ── * PedagogicalDecision
 Generation * ── 1 PedagogicalDecision/context
 ```
 
-These cardinalities are proposed and require reconciliation with implementation and persistence requirements.
+For C-002, `Objective` is curriculum-owned, `Competency ↔ Objective` is explicitly many-to-many, and `Objective → Criterion` is one-to-many. This replaces the previous ambiguous `Competency 1 ── * Objective/criteria` notation.
+
+These cardinalities are still conceptual and require final schema/persistence validation before FDM v1.0 approval.
 
 ## 7. State machines
 
