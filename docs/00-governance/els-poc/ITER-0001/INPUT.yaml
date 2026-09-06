@@ -1,0 +1,19 @@
+iteration_id: ITER-0001
+risk_level: L1
+objective_id: OBJ-ELS-POC-001
+source_els: docs/00-governance/ENGINEERING-LOOP-SYSTEM-v0.1.md
+source_els_status: PROPOSED / REQUIRES HUMAN APPROVAL
+execution_ref: recovery/els-poc-001
+authorized_scope:
+  - docs/00-governance/els-poc/ITER-0001/
+forbidden_scope:
+  - product implementation
+  - recovery/forensic-2026-09-06
+  - modification of canonical product architecture
+primary_test_targets:
+  - bootstrap integrity
+  - minimum sufficient context
+  - checkpoint/resume
+  - interruption handling
+  - anti-loop guard semantics
+  - evidence-bound claims
