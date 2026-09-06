@@ -1,0 +1,18 @@
+iteration: ITER-0002B
+status: CHECKPOINTED
+repository:
+  ref: recovery/els-poc-002
+  state_head: 4c641c124b10a4d15c81639121493b186d5298a6
+  checkpoint_commit: 408a51fae47747a3ddd22918ce639b135b15bf2b
+objective: Validate recovery continuity without conversation memory.
+completed:
+  - checkpoint identity separation
+  - crash/restart process simulation
+  - cross-agent handoff process simulation
+  - context minimization process simulation
+pending:
+  - real independent-agent recovery execution
+  - real crash/restart execution
+  - real provider quota exhaustion execution
+  - secondary AI audit
+next_authorized_action: independently audit POC-002B and determine whether recovery continuity gate can advance
