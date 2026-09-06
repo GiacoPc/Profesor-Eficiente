@@ -25,8 +25,12 @@ This document indexes the governed architecture. Detailed specifications are add
 - CLM — **PROPOSED / DRAFT v0.1**, not approved.
 - APE — **PROPOSED / DRAFT v0.1**, not approved.
 - FDM — **PROPOSED / DRAFT v0.1**, not approved.
-- SDT — **PROPOSED / DRAFT v0.1**, formal learner-state contract now exists at `docs/03-cognitive/SDT.md`.
-- LPH-SPEC — **PROPOSED / DRAFT v0.1**, not approved.
+- SDT — **PROPOSED / DRAFT v0.1**, formal learner-state contract exists at `docs/03-cognitive/SDT.md`.
+- LPH-SPEC — **PROPOSED / DRAFT v0.2**, not approved.
+- MasteryPolicy — **PROPOSED / DRAFT v0.1**, not approved.
+- ErrorObservation Lifecycle — **PROPOSED / DRAFT v0.1**, at `docs/architecture/ERROR-OBSERVATION-LIFECYCLE-v0.1.md`.
+- SDT Integration Matrix — **PROPOSED / v0.1**, at `docs/architecture/SDT-INTEGRATION-MATRIX-v0.1.md`.
+- ErrorObservation Integration Matrix — **PROPOSED / v0.1**, at `docs/architecture/ERROR-OBSERVATION-INTEGRATION-MATRIX-v0.1.md`.
 - P1 reconciliation contracts — **PROPOSED / v0.1**, at `docs/architecture/P1-RESOLUTION-CONTRACTS-v0.1.md`.
 - Contract Matrix — **PROPOSED / v0.2**, at `docs/architecture/CONTRACT-MATRIX-v0.1.md`.
 - Contradiction Matrix — **PROPOSED / v0.2**, at `docs/architecture/CONTRADICTION-MATRIX-v0.1.md`.
@@ -41,26 +45,48 @@ This document indexes the governed architecture. Detailed specifications are add
 
 Gate A has progressed from a missing-artifact blocker to **SDT FORMALIZED / PROPOSED**.
 
-P1 findings C-001 through C-011 now have explicit proposed contracts. They are **not yet closed at approval level** because those contracts still need to be integrated into the source specifications and independently audited.
+P1 findings C-001 through C-011 have explicit proposed contracts. They are **not yet closed at approval level** because contracts require source-spec integration and independent audit.
 
 ### P1 resolution map
 
-- C-001 → authority hierarchy in P1 Contract 1; LPH diagram/source text must be integrated accordingly.
-- C-002 → objective ownership/cardinality in P1 Contract 2; FDM must adopt it.
-- C-003 → explicit `MasteryPolicy` contract in P1 Contract 3.
-- C-004 → SDT artifact `docs/03-cognitive/SDT.md`.
-- C-005 → canonical `ErrorObservation` lifecycle in P1 Contract 5.
+- C-001 → authority hierarchy in P1 Contract 1; integrated into PAD/LPH.
+- C-002 → objective ownership/cardinality in P1 Contract 2; integrated into FDM/PAD.
+- C-003 → explicit `MasteryPolicy` contract in P1 Contract 3; integrated into PAD/CLM/FDM/APE and existing LPH boundary.
+- C-004 → SDT artifact `docs/03-cognitive/SDT.md` plus `SDT-INTEGRATION-MATRIX-v0.1.md`.
+- C-005 → canonical `ErrorObservation` lifecycle in `ERROR-OBSERVATION-LIFECYCLE-v0.1.md` plus cross-document integration matrix. Source specifications already contain the relevant bounded responsibilities; final direct normative references remain part of the source-spec integration gate.
 - C-006 → evidence pipeline in P1 Contract 4.
 - C-007/C-008 → `ProgressionEligibility` and APE `PROGRESS` hard gates in P1 Contract 6.
 - C-009 → policy reference versus policy definition in P1 Contract 7.
 - C-010 → `LLMGenerationCandidate` lifecycle in P1 Contract 8.
 - C-011 → LPH candidate assessment versus FDM authoritative assessment/evidence in P1 Contract 9.
 
+## C-005 authority rule
+
+The canonical error chain is:
+
+```text
+Observation → Evidence → Assessment
+        ↓
+ErrorObservationCandidate (optional)
+        ↓
+FDM validation / acceptance
+        ↓
+ErrorObservation (authoritative)
+        ↓
+CLM interpretation
+        ↓
+SDT summary
+        ↓
+APE reinforcement / reassessment
+```
+
+`ErrorObservation` is historical evidence-linked domain state. LLM/LPH candidates, feedback, recurrence counters and SDT summaries cannot replace it. Recurrence remains a derived signal governed by a future approved policy.
+
 ## LPH architectural role
 
 LPH is a bounded control/validation harness. APE remains the pedagogical decision authority; FDM remains the domain/invariant enforcement boundary; CLM defines learning-state semantics; SDT represents derived learner state; the LLM remains a replaceable probabilistic capability.
 
-The LPH specification intentionally leaves final model, runtime, NPU/GPU strategy, STT/TTS, pronunciation/prosody assessment, persistence, budgets, and other technology choices unresolved until evidence-backed ADRs/specifications exist.
+For C-005, LPH may classify candidate errors and structure linguistic evidence, but cannot create authoritative `ErrorObservation` state without the governed evidence/assessment/FDM acceptance path.
 
 ## Current gate
 
