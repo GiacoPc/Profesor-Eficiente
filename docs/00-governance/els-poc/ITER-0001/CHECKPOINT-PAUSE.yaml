@@ -1,0 +1,26 @@
+checkpoint_id: CP-ELS-0001-PAUSE
+iteration_id: ITER-0001
+status: PAUSED
+phase: EXECUTION
+repository:
+  ref: recovery/els-poc-001
+  head_at_checkpoint: cf9e9c4c129385a6e20e4d353173fba644417c8b
+objective_id: OBJ-ELS-POC-001
+completed_steps:
+  - bootstrap
+  - context_resolution
+  - objective
+  - plan
+  - controlled_poc_setup
+current_step: simulated_interruption
+pending_steps:
+  - resume_verification
+  - anti_loop_drill
+  - evidence_recording
+  - self_audit
+  - reconciliation
+  - final_checkpoint
+next_authorized_action: resume_verification
+resume_instructions: Verify the branch ref resolves to the checkpoint HEAD, then continue only from this checkpoint.
+known_unknowns:
+  - provider quota telemetry is not being exercised because it is environment-dependent
