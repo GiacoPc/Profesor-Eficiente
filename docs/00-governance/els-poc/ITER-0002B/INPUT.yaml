@@ -1,0 +1,13 @@
+iteration: ITER-0002B
+poc: ELS-POC-002B
+status: EXECUTED
+risk_level: L2
+branch: recovery/els-poc-002
+objective: Validate checkpoint identity separation, crash/restart recovery, cross-agent handoff, and context-minimized resumption without relying on conversation memory.
+constraints:
+  - no product implementation
+  - no changes to PGKI/KCA authority
+  - no main or canonical branch mutation
+  - no force-update, merge, or cherry-pick of divergent commits
+  - state_head and checkpoint_commit MUST remain distinct concepts
+  - no production-readiness claim
