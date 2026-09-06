@@ -14,7 +14,7 @@ This matrix records findings from direct inspection of repository artifacts and 
 | ID | Severity | Finding | Resolution artifact | Status |
 |---|---|---|---|---|
 | C-001 | P1 | LPH section 4 diagram could imply LPH authority above APE/FDM/CLM. | `docs/architecture/P1-RESOLUTION-CONTRACTS-v0.1.md`, Contract 1 | **RESOLVED AT CONTRACT LEVEL; SOURCE SPEC INTEGRATION REQUIRED** |
-| C-002 | P1 | Competency/Objectives ownership and cardinality ambiguous. | P1 contract, Contract 2 | **RESOLVED AT CONTRACT LEVEL; FDM INTEGRATION REQUIRED** |
+| C-002 | P1 | Competency/Objectives ownership and cardinality ambiguous. | P1 Contract 2; `docs/05-domain/FDM.md` §4.3–4.4, §6; `docs/02-pedagogy/PAD.md` §4.2 | **INTEGRATED IN FDM + PAD; VERIFIED AGAINST CONTRACT** |
 | C-003 | P1 | No explicit authoritative MasteryPolicy contract. | P1 contract, Contract 3 | **RESOLVED AT CONTRACT LEVEL; POLICY SPEC/ADR REQUIRED BEFORE APPROVAL** |
 | C-004 | P1 | SDT artifact was missing on inspected branch. | `docs/03-cognitive/SDT.md` | **RESOLVED AS MISSING-ARTIFACT GAP; SDT REMAINS PROPOSED** |
 | C-005 | P1 | LPH `Error` versus FDM `ErrorObservation` lifecycle mismatch; recurrence semantics unclear. | P1 contract, Contract 5 | **RESOLVED AT CONTRACT LEVEL; SOURCE SPEC INTEGRATION REQUIRED** |
@@ -67,6 +67,6 @@ At the time of the original reconciliation the following were not found at expec
 
 **P1 RECONCILIATION: PARTIALLY RESOLVED / NOT READY FOR APPROVAL.**
 
-The missing SDT artifact has been formally created and the eleven P1 ambiguities have explicit proposed contracts. However, the source specifications still require integration of those contracts, the remaining missing governance/AI artifacts must be reconciled, automated checks must cover the contracts, and an independent secondary audit plus human approval is required.
+The missing SDT artifact has been formally created and the eleven P1 ambiguities have explicit proposed contracts. C-001 has been integrated into PAD, and C-002 has now been integrated into both FDM and PAD and checked against the P1 contract. The remaining P1 contracts still require source-spec integration, the remaining missing governance/AI artifacts must be reconciled, automated checks must cover the contracts, and an independent secondary audit plus human approval is required.
 
 Therefore this work does **not** authorize LPH v1.0, SRA implementation, or final baseline/tagging.
