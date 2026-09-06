@@ -36,9 +36,11 @@ This document indexes the governed architecture. Detailed specifications are add
 - Progression Eligibility Contract — **PROPOSED / DRAFT v0.1**, at `docs/architecture/PROGRESSION-ELIGIBILITY-CONTRACT-v0.1.md`.
 - Progression Eligibility Integration Matrix — **PROPOSED / v0.1**, at `docs/architecture/PROGRESSION-ELIGIBILITY-INTEGRATION-MATRIX-v0.1.md`.
 - Mastery Policy Reference Boundary Integration Matrix — **PROPOSED / DRAFT v0.1**, at `docs/architecture/MASTERY-POLICY-REFERENCE-BOUNDARY-INTEGRATION-MATRIX-v0.1.md`.
+- LLMGenerationCandidate Lifecycle — **PROPOSED / DRAFT v0.1**, at `docs/architecture/LLM-GENERATION-CANDIDATE-LIFECYCLE-v0.1.md`.
+- LLMGenerationCandidate Integration Matrix — **PROPOSED / v0.1**, at `docs/architecture/LLM-GENERATION-CANDIDATE-INTEGRATION-MATRIX-v0.1.md`.
 - P1 reconciliation contracts — **PROPOSED / v0.1**, at `docs/architecture/P1-RESOLUTION-CONTRACTS-v0.1.md`.
 - Contract Matrix — **PROPOSED / v0.2**, at `docs/architecture/CONTRACT-MATRIX-v0.1.md`.
-- Contradiction Matrix — **PROPOSED / v0.6**, at `docs/architecture/CONTRADICTION-MATRIX-v0.1.md`.
+- Contradiction Matrix — **PROPOSED / v0.7**, at `docs/architecture/CONTRADICTION-MATRIX-v0.1.md`.
 - SRA — pending; must consume approved upstream contracts rather than redefine them during implementation.
 - LLM/inference architecture — pending; expected artifact not found on inspected branch.
 - RAG architecture — pending; expected artifact not found on inspected branch.
@@ -62,7 +64,7 @@ P1 findings C-001 through C-011 have explicit proposed contracts. They are **not
 - C-006 → `SPEECH-EVIDENCE-ASSESSMENT-CONTRACT-v0.1.md` plus `SPEECH-EVIDENCE-INTEGRATION-MATRIX-v0.1.md`; authoritative sequence is speech artifact → bounded processing → validated evidence → assessment → MasteryPolicy/CLM → governed state → SDT → APE.
 - C-007/C-008 → `ProgressionEligibility` and APE `PROGRESS` hard gates in P1 Contract 6, plus dedicated progression contract/integration matrix.
 - C-009 → policy reference versus policy definition in P1 Contract 7 plus `MASTERY-POLICY-REFERENCE-BOUNDARY-INTEGRATION-MATRIX-v0.1.md`; APE, CLM, FDM and LPH source specifications explicitly preserve the boundary.
-- C-010 → `LLMGenerationCandidate` lifecycle in P1 Contract 8.
+- C-010 → `LLMGenerationCandidate` lifecycle in P1 Contract 8 plus `LLM-GENERATION-CANDIDATE-LIFECYCLE-v0.1.md` and `LLM-GENERATION-CANDIDATE-INTEGRATION-MATRIX-v0.1.md`.
 - C-011 → LPH candidate assessment versus FDM authoritative assessment/evidence in P1 Contract 9.
 
 ## C-009 mastery policy reference rule
@@ -83,6 +85,30 @@ If policy resolution is undefined, unavailable, stale, malformed, out of scope o
 
 Every authoritative mastery evaluation must retain the exact `mastery_policy_id` and `mastery_policy_version` used for reproducibility. A policy revision creates governed new versioning and does not silently rewrite historical decisions.
 
+## C-010 generation candidate rule
+
+The normative distinction is:
+
+```text
+LLMRequest
+   ↓
+LLMGenerationCandidate
+   ↓
+validation
+   ├── REJECTED → discard / repair / regenerate
+   └── ACCEPTED_FOR_USE → scoped controlled delivery
+
+candidate ≠ evidence
+candidate ≠ assessment
+candidate ≠ mastery
+candidate ≠ progression eligibility
+candidate ≠ SDT state
+```
+
+Acceptance is scoped to the declared use. A candidate accepted for learner-facing wording is not automatically authorized for assessment use. If a candidate contributes to an assessment workflow, a separate governed evidence/assessment record and provenance path is required.
+
+LLM-generated claims about learner error, mastery or readiness cannot directly mutate authoritative state. Repair/regeneration creates a new candidate identity and preserves lineage where applicable. Replacing or removing the LLM cannot alter authoritative domain gates, and LLM unavailability must remain a controlled capability failure rather than learner-state failure.
+
 ## Current gate
 
 **GATE A: IN PROGRESS — NOT READY FOR APPROVAL.**
@@ -91,7 +117,7 @@ Before LPH v1.0 or SRA:
 
 1. integrate P1 contracts into PAD/CLM/FDM/APE/LPH/SDT source specifications;
 2. reconcile remaining missing governance/AI artifacts;
-3. add automated checks for normative contracts, including C-009 identity/version/scope/no-fallback behavior;
+3. add automated checks for normative contracts, including C-009 identity/version/scope/no-fallback behavior and C-010 candidate-authority/validation/isolation behavior;
 4. verify CI against the exact resulting HEAD;
 5. run the mandatory independent secondary audit for P1 architecture/governance;
 6. record human approval;
