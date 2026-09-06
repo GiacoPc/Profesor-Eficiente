@@ -5,7 +5,7 @@ phase: CHECKPOINT
 repository:
   ref: recovery/els-poc-001
   state_head: e33685a9059057438ca965c39189f9ba32029020
-  checkpoint_commit: PENDING_WRITEBACK
+  checkpoint_commit: 7fbc6df92093ee7577437675377f0b903d8cac03
 objective_id: OBJ-ELS-POC-001
 completed_steps:
   - bootstrap
@@ -20,7 +20,7 @@ completed_steps:
   - evidence_recording
   - self_audit
   - reconciliation
-current_step: checkpoint_writeback
+current_step: completed
 pending_steps: []
 changed_artifacts:
   - docs/00-governance/els-poc/ITER-0001/
