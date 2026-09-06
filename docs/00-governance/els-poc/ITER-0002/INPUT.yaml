@@ -1,0 +1,12 @@
+iteration: ITER-0002
+poc: ELS-POC-002
+status: EXECUTED
+risk_level: L2
+branch: recovery/els-poc-002
+base_state_head: e15b4aaffc67147c677c22ec52bbf0d9a9cdeb33
+objective: Validate the corrected ELS checkpoint identity semantics and recovery controls under interruption, handoff, minimization, failure, conflict, evidence, exact-head, and simulated budget exhaustion.
+constraints:
+  - no product implementation
+  - no changes to PGKI/KCA authority
+  - no claim of production readiness
+  - process simulation where real infrastructure is unavailable
