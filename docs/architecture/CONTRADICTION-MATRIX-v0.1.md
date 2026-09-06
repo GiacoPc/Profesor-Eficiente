@@ -1,6 +1,6 @@
 # Contradiction Matrix — PAD / CLM / FDM / APE / LPH
 
-**Version:** 0.6
+**Version:** 0.7
 **Status:** PROPOSED / REQUIRES INTEGRATION + INDEPENDENT AUDIT
 **Branch:** `architecture/pad-clm-fdm-ape-v1.0`
 **Scope:** Cross-document reconciliation before LPH v1.0 and SRA.
@@ -22,10 +22,42 @@ This matrix records findings from direct inspection of repository artifacts and 
 | C-007 | P1 | `ProgressionEligibility` versus APE `PROGRESS` boundary incomplete. | P1 Contract 6; `PROGRESSION-ELIGIBILITY-CONTRACT-v0.1.md`; `PROGRESSION-ELIGIBILITY-INTEGRATION-MATRIX-v0.1.md` | **RESOLVED AT CONTRACT LEVEL; SOURCE SPEC INTEGRATION REQUIRED** |
 | C-008 | P1 | APE progression discretion versus mandatory mastery/progression gates underspecified. | P1 Contract 6; `PROGRESSION-ELIGIBILITY-CONTRACT-v0.1.md`; `PROGRESSION-ELIGIBILITY-INTEGRATION-MATRIX-v0.1.md` | **RESOLVED AT CONTRACT LEVEL; SOURCE SPEC INTEGRATION REQUIRED** |
 | C-009 | P1 | APE/LPH mastery requirements could be interpreted as policy definition. | P1 Contract 7; `MASTERY-POLICY-REFERENCE-BOUNDARY-INTEGRATION-MATRIX-v0.1.md`; APE §6, §7, §10, §17, §21 | **SOURCE-SPEC BOUNDARY INTEGRATED; CLM/FDM/LPH REFERENCES VERIFIED; APPROVAL/AUTOMATION PENDING** |
-| C-010 | P1 | LLM candidate acceptance/persistence boundary incomplete. | P1 Contract 8 | **RESOLVED AT CONTRACT LEVEL; SOURCE SPEC INTEGRATION REQUIRED** |
+| C-010 | P1 | LLM candidate acceptance/persistence boundary incomplete. | P1 Contract 8; `LLM-GENERATION-CANDIDATE-LIFECYCLE-v0.1.md`; `LLM-GENERATION-CANDIDATE-INTEGRATION-MATRIX-v0.1.md` | **INTEGRATED AT CONTRACT LEVEL; SOURCE-SPEC DIRECT REFERENCES/AUTOMATION/AUDIT PENDING** |
 | C-011 | P1 | LPH linguistic assessment versus FDM authoritative evidence ownership ambiguous. | P1 Contract 9 | **RESOLVED AT CONTRACT LEVEL; SOURCE SPEC INTEGRATION REQUIRED** |
 
-## 2. C-009 mastery-policy reference boundary verification
+## 2. C-010 generation-candidate boundary verification
+
+C-010 is formally defined by P1 Contract 8 and the dedicated lifecycle/integration artifacts. The central distinction is normative:
+
+```text
+LLMRequest
+   ↓
+LLMGenerationCandidate
+   ↓
+validation
+   ├── REJECTED → discard / repair / regenerate
+   └── ACCEPTED_FOR_USE → scoped controlled delivery
+
+candidate ≠ evidence
+candidate ≠ assessment
+candidate ≠ mastery
+candidate ≠ progression eligibility
+candidate ≠ SDT state
+```
+
+The candidate is non-authoritative. A validation pass authorizes only the declared use; it does not promote the candidate to domain authority. Assessment contribution requires a separate governed evidence/assessment path with provenance.
+
+The lifecycle contract also establishes repair/regeneration lineage, historical candidate integrity, model replacement isolation and offline failure containment. These are contract-level requirements, not implementation evidence.
+
+### C-010 acceptance tests
+
+The dedicated matrix defines authority, validation, lifecycle, model-replacement and offline tests, including direct-mutation rejection, scoped acceptance, candidate error/mastery claim isolation, repair lineage and LLM-unavailable behavior.
+
+### Remaining gate
+
+C-010 is **not APPROVED**. Source-spec direct references, automated executable checks, exact-head CI verification, independent secondary AI audit and human approval remain pending. This status does not claim those activities have occurred.
+
+## 3. C-009 mastery-policy reference boundary verification
 
 C-009 is formally defined by P1 Contract 7 and the dedicated integration matrix. The central distinction is normative:
 
@@ -44,7 +76,7 @@ Directly inspected source specifications establish the same boundary:
 - `MASTERY-POLICY-v0.1.md` defines the policy as governed project data and prohibits consumer override.
 - `CLM.md` states that MasteryPolicy defines applicable mastery requirements while CLM preserves policy identity/version and does not define thresholds.
 - `FDM.md` states that consumers reference policy identity/version, `MasteryRecord` retains policy provenance, and `EvaluateMastery` cannot accept an ad-hoc threshold.
-- `APE.md` now explicitly distinguishes policy references from embedded ad-hoc definitions and requires validation of policy identity/version/scope.
+- `APE.md` explicitly distinguishes policy references from embedded ad-hoc definitions and requires validation of policy identity/version/scope.
 - `LINGUISTIC-PEDAGOGICAL-HARNESS-SPEC.md` states that APE/LPH reference policy identity/version and do not redefine thresholds/evidence requirements.
 
 Forbidden fallback is explicit: undefined, unavailable, stale, malformed, out-of-scope or conflicting policy references must enter controlled resolution; no hard-coded or LLM-generated replacement is authoritative.
@@ -57,7 +89,7 @@ The dedicated matrix defines C009-T01 through C009-T10 covering explicit referen
 
 C-009 is **not APPROVED**. Automated executable checks, independent secondary AI audit and human approval remain pending. This status does not claim those activities have occurred.
 
-## 3. P2 findings retained
+## 4. P2 findings retained
 
 | ID | Severity | Finding | Disposition |
 |---|---|---|---|
@@ -67,7 +99,7 @@ C-009 is **not APPROVED**. Automated executable checks, independent secondary AI
 | C-015 | P2 | Offline critical path shared invariant. | Retain as cross-cutting invariant; test in SRA. |
 | C-016 | P2 | Conceptual schemas not ready for implementation. | Block SRA until contracts are executable/testable. |
 
-## 4. Resolution principles
+## 5. Resolution principles
 
 1. APE is the pedagogical decision authority.
 2. FDM is the domain/invariant enforcement boundary.
@@ -84,11 +116,12 @@ C-009 is **not APPROVED**. Automated executable checks, independent secondary AI
 13. Speech processing components are bounded evidence producers; they are not pedagogical authorities.
 14. Speech-derived mastery requires accepted evidence, assessment and explicit MasteryPolicy provenance.
 15. A MasteryPolicy reference is not a policy definition; consumer components cannot introduce hidden thresholds or fallback policy semantics.
+16. An `LLMGenerationCandidate` is a bounded, non-authoritative artifact; candidate acceptance is scoped and cannot bypass evidence, assessment, mastery, progression or state-ownership boundaries.
 
-## 5. Gate status
+## 6. Gate status
 
 **P1 RECONCILIATION: PARTIALLY RESOLVED / NOT READY FOR APPROVAL.**
 
-C-001 through C-004 are integrated at contract level with repository evidence. C-005 and C-006 are formally specified with dedicated canonical contracts/integration matrices. C-009 now has dedicated boundary formalization plus direct source-spec boundary verification. Remaining P1 contracts, automated contract checks, exact-head CI verification, independent secondary audit and human approval remain required.
+C-001 through C-004 are integrated at contract level with repository evidence. C-005 and C-006 are formally specified with dedicated canonical contracts/integration matrices. C-009 and C-010 now have dedicated boundary formalization plus source-spec verification where inspected. Remaining P1 contracts, automated contract checks, exact-head CI verification, independent secondary audit and human approval remain required.
 
 Therefore this work does **not** authorize LPH v1.0, SRA implementation, or final baseline/tagging.
