@@ -1,0 +1,12 @@
+id: ELS-POC-002-CP-001
+status: PREPARED
+repository:
+  ref: recovery/els-poc-002
+  state_head: e48ded7dd5065de0fa76dcfb0eb0b32652c160b2
+  state_tree: UNKNOWN_NOT_REQUIRED_FOR_THIS_TEST
+  checkpoint_commit: PENDING_DURABLE_COMMIT
+  checkpoint_tree: UNKNOWN_NOT_REQUIRED_FOR_THIS_TEST
+semantics:
+  - state_head identifies the state to resume
+  - checkpoint_commit will identify the later durable checkpoint record
+  - ref is not required to equal state_head
