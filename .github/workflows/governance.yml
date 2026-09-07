@@ -79,3 +79,9 @@ jobs:
         run: |
           set -euo pipefail
           python3 tools/els/test_checkpoint_integrity_verifier.py
+
+      - name: ELS continuity failure-control regression suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/els/test_continuity_controls.py
