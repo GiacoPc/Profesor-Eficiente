@@ -1,0 +1,19 @@
+iteration: ITER-0002E
+status: CHECKPOINTED
+repository:
+  ref: recovery/els-poc-002
+  state_head: 720c6338e59939c5ed27816a74827df7ad8787b4
+objective: Validate mechanical checkpoint identity integrity.
+completed:
+  - verifier specification
+  - read-only verifier implementation
+  - four-case regression suite
+  - local functional execution
+  - CI invocation added without claiming observed CI execution
+pending:
+  - human approval of ELS-CHECKPOINT v0.2
+  - exact GitHub-hosted CI evidence
+  - real crash/restart execution
+  - real provider quota exhaustion execution
+  - genuinely independent secondary-agent execution
+next_authorized_action: human review of ELS-POC-002E evidence and revised checkpoint contract
