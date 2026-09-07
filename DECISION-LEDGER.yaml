@@ -49,6 +49,18 @@ entries:
     status: APPROVED-DIRECTION
     evidence: [BASELINE-RECONCILIATION-v1.0]
     affected_artifacts: [CONTEXT-MANIFEST.yaml, AI-GOVERNANCE.md]
+  - id: ELS-DEC-001
+    decision: approve_ELS_secondary_audit_reconciliation_v1_0
+    status: APPROVED
+    evidence: [ELS-SECONDARY-AUDIT-RECONCILIATION-v1.0, HUMAN-APPROVAL-2026-09-07]
+    affected_artifacts: [docs/00-governance/els-secondary-audit/ELS-SECONDARY-AUDIT-RECONCILIATION-v1.0.md]
+    scope: reconciliation_artifact_only
+    constraints:
+      - ELS remains PROPOSED / NOT READY
+      - operational_readiness remains BLOCKED
+      - P1-001 through P1-005 remain OPEN
+      - verifier_implementation_remains_unmodified
+      - no_autonomous_continuation_authorized
 unresolved:
   - final_LLM
   - inference_runtime
