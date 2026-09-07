@@ -27,53 +27,50 @@ evidence:
 
   implementation:
     - path: tools/els/checkpoint_integrity_verifier.py
-      ref: a1f3344c9309dc8051114b67831ce83cf44604f65
+      ref: a1f3344c9309dc8051114b67831ce83f44604f65
       purpose: read-only checkpoint verifier
-      note: verify exact blob identity from Git before relying on this manifest entry
     - path: tools/els/test_checkpoint_integrity_verifier.py
-      ref: a1f3344c9309dc8051114b67831ce83cf44604f65
+      ref: a1f3344c9309dc8051114b67831ce83f44604f65
       purpose: verifier regression suite
-      note: verify exact blob identity from Git before relying on this manifest entry
     - path: tools/els/test_continuity_controls.py
-      ref: a1f3344c9309dc8051114b67831ce83cf44604f65
+      ref: a1f3344c9309dc8051114b67831ce83f44604f65
       purpose: executable continuity-control simulation
-      note: verify exact blob identity from Git before relying on this manifest entry
 
   poc_evidence:
     - path: docs/00-governance/els-poc/ITER-0002E/EXECUTION-EVIDENCE.md
-      ref: a1f3344c9309dc8051114b67831ce83cf44604f65
+      ref: a1f3344c9309dc8051114b67831ce83f44604f65
       purpose: verifier functional evidence and limitations
     - path: docs/00-governance/els-poc/ITER-0002F/EXECUTION-EVIDENCE.md
-      ref: a1f3344c9309dc8051114b67831ce83cf44604f65
+      ref: a1f3344c9309dc8051114b67831ce83f44604f65
       purpose: human approval and exact-head CI evidence
     - path: docs/00-governance/els-poc/ITER-0002G/INPUT.yaml
-      ref: a1f3344c9309dc8051114b67831ce83cf44604f65
+      ref: a1f3344c9309dc8051114b67831ce83f44604f65
       purpose: POC scope and constraints
     - path: docs/00-governance/els-poc/ITER-0002G/FAILURE-SIMULATION.md
-      ref: a1f3344c9309dc8051114b67831ce83cf44604f65
+      ref: a1f3344c9309dc8051114b67831ce83f44604f65
       purpose: bounded failure and budget simulation semantics
     - path: docs/00-governance/els-poc/ITER-0002G/EXECUTION-EVIDENCE.md
-      ref: a1f3344c9309dc8051114b67831ce83cf44604f65
+      ref: a1f3344c9309dc8051114b67831ce83f44604f65
       purpose: exact-head CI and executable simulation evidence
     - path: docs/00-governance/els-poc/ITER-0002G/CHECKPOINT.yaml
-      ref: a1f3344c9309dc8051114b67831ce83cf44604f65
+      ref: a1f3344c9309dc8051114b67831ce83f44604f65
       purpose: intermediate checkpoint evidence
     - path: docs/00-governance/els-poc/ITER-0002G/CHECKPOINT-FINAL.yaml
-      ref: a1f3344c9309dc8051114b67831ce83cf44604f65
+      ref: a1f3344c9309dc8051114b67831ce83f44604f65
       purpose: final POC checkpoint and explicit pending gates
     - path: docs/00-governance/els-poc/ITER-0002G/SECONDARY-AUDIT-PACK.md
-      ref: a1f3344c9309dc8051114b67831ce83cf44604f65
+      ref: a1f3344c9309dc8051114b67831ce83f44604f65
       purpose: prior audit scope/questions and independence requirement
 
   prior_poc_context:
     - path: docs/00-governance/els-poc/ITER-0001/FAILURE-LEARNING.md
-      ref: a1f3344c9309dc8051114b67831ce83cf44604f65
+      ref: a1f3344c9309dc8051114b67831ce83f44604f65
       purpose: checkpoint identity defect FL-001 context
     - path: docs/00-governance/els-poc/ITER-0002B/CHECKPOINT.yaml
-      ref: a1f3344c9309dc8051114b67831ce83cf44604f65
+      ref: a1f3344c9309dc8051114b67831ce83f44604f65
       purpose: original checkpoint conflict evidence
     - path: docs/00-governance/els-poc/ITER-0002C/AGENT-B-ASSESSMENT.md
-      ref: a1f3344c9309dc8051114b67831ce83cf44604f65
+      ref: a1f3344c9309dc8051114b67831ce83f44604f65
       purpose: prior conflict detection evidence
 
   ci_claims:
