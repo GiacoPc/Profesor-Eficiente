@@ -1,0 +1,20 @@
+iteration: ITER-0002G
+status: CHECKPOINTED
+repository:
+  ref: recovery/els-poc-002G
+  state_head: 6121c0b3c00fb4e1972a842b5441053bd300a6ab
+objective: Preserve a verified continuity checkpoint after executable POC-002G tests and preparation of the mandatory independent secondary-audit handoff.
+completed:
+  - ELS-CHECKPOINT v0.2 approved by human authority
+  - checkpoint verifier regression suite passed in CI
+  - exact-head CI success observed for POC-002G continuity-control test commit
+  - process interruption/restart simulation passed
+  - synthetic budget exhaustion stop passed
+  - secondary audit pack prepared with explicit independence requirement
+pending:
+  - exact-head CI evidence for this final checkpoint commit
+  - genuinely independent secondary-agent audit execution
+  - real workstation crash/restart execution
+  - real external-provider quota exhaustion execution
+  - broader ELS operational-readiness review
+next_authorized_action: verify final checkpoint commit and obtain the independent secondary audit before any ELS operational-readiness promotion
