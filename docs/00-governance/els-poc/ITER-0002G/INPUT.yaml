@@ -1,0 +1,14 @@
+iteration: ITER-0002G
+poc: ELS-POC-002G
+status: EXECUTED
+risk_level: L2
+branch: recovery/els-poc-002G
+base_state_head: 79d8ceae61f1d3db0fe89e8a4438bc103f674519
+objective: Validate executable crash/restart and budget-exhaustion continuity controls without claiming real provider quota behavior.
+constraints:
+  - no product implementation
+  - no changes to PGKI/KCA authority
+  - preserve prior POC evidence unchanged
+  - no force-update, merge, cherry-pick, or deletion
+  - distinguish CI process simulation from real workstation/provider behavior
+  - no claim of production readiness
