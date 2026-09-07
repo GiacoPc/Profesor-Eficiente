@@ -5,8 +5,12 @@ on:
     branches:
       - audit/els-secondary-v1.0
 
+permissions:
+  contents: write
+
 jobs:
   package:
+    if: "!startsWith(github.event.head_commit.message, '[skip ci]')"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout packaging branch
@@ -22,11 +26,8 @@ jobs:
           OUT="ELS-SECONDARY-AUDIT-PACK-v1.0"
           rm -rf "$OUT" "$OUT.zip"
           mkdir -p "$OUT"
-
           git cat-file -e "$BASELINE^{commit}"
-          git ls-tree -r --name-only "$BASELINE" > /tmp/baseline-files.txt
 
-          # Audit instructions and traceability metadata from this packaging branch.
           mkdir -p "$OUT/AUDIT-PACK"
           git show HEAD:docs/00-governance/els-secondary-audit/ELS-SECONDARY-AUDIT-PACK-v1.0/README.md > "$OUT/AUDIT-PACK/README.md"
           git show HEAD:docs/00-governance/els-secondary-audit/ELS-SECONDARY-AUDIT-PACK-v1.0/AUDIT-PROMPT.md > "$OUT/AUDIT-PACK/AUDIT-PROMPT.md"
@@ -34,37 +35,32 @@ jobs:
           git show HEAD:docs/00-governance/els-secondary-audit/ELS-SECONDARY-AUDIT-PACK-v1.0/CLAIM-EVIDENCE-MATRIX.yaml > "$OUT/AUDIT-PACK/CLAIM-EVIDENCE-MATRIX.yaml"
           git show HEAD:docs/00-governance/els-secondary-audit/ELS-SECONDARY-AUDIT-PACK-v1.0/INTEGRITY-REVIEW.md > "$OUT/AUDIT-PACK/INTEGRITY-REVIEW.md"
 
-          # Evidence files are extracted from the frozen engineering baseline, never from HEAD.
-          while IFS= read -r path; do
-            case "$path" in
-              docs/00-governance/ENGINEERING-LOOP-SYSTEM-v0.1.md|\
-              docs/00-governance/ENGINEERING-LOOP-SYSTEM-v0.1.1-CHECKPOINT-IDENTITY-AMENDMENT.md|\
-              docs/00-governance/els-poc/ITER-0002D/CHECKPOINT-CONTRACT-v0.2-DRAFT.yaml|\
-              tools/els/checkpoint_integrity_verifier.py|\
-              tools/els/test_checkpoint_integrity_verifier.py|\
-              tools/els/test_continuity_controls.py|\
-              docs/00-governance/els-poc/ITER-0002E/EXECUTION-EVIDENCE.md|\
-              docs/00-governance/els-poc/ITER-0002F/EXECUTION-EVIDENCE.md|\
-              docs/00-governance/els-poc/ITER-0002G/INPUT.yaml|\
-              docs/00-governance/els-poc/ITER-0002G/FAILURE-SIMULATION.md|\
-              docs/00-governance/els-poc/ITER-0002G/EXECUTION-EVIDENCE.md|\
-              docs/00-governance/els-poc/ITER-0002G/CHECKPOINT.yaml|\
-              docs/00-governance/els-poc/ITER-0002G/CHECKPOINT-FINAL.yaml|\
-              docs/00-governance/els-poc/ITER-0002G/SECONDARY-AUDIT-PACK.md|\
-              docs/00-governance/els-poc/ITER-0001/FAILURE-LEARNING.md|\
-              docs/00-governance/els-poc/ITER-0002B/CHECKPOINT.yaml|\
-              docs/00-governance/els-poc/ITER-0002C/AGENT-B-ASSESSMENT.md)
-                mkdir -p "$OUT/ENGINEERING-EVIDENCE/$(dirname "$path")"
-                git show "$BASELINE:$path" > "$OUT/ENGINEERING-EVIDENCE/$path"
-                ;;
-            esac
-          done < /tmp/baseline-files.txt
+          for path in \
+            docs/00-governance/ENGINEERING-LOOP-SYSTEM-v0.1.md \
+            docs/00-governance/ENGINEERING-LOOP-SYSTEM-v0.1.1-CHECKPOINT-IDENTITY-AMENDMENT.md \
+            docs/00-governance/els-poc/ITER-0002D/CHECKPOINT-CONTRACT-v0.2-DRAFT.yaml \
+            tools/els/checkpoint_integrity_verifier.py \
+            tools/els/test_checkpoint_integrity_verifier.py \
+            tools/els/test_continuity_controls.py \
+            docs/00-governance/els-poc/ITER-0002E/EXECUTION-EVIDENCE.md \
+            docs/00-governance/els-poc/ITER-0002F/EXECUTION-EVIDENCE.md \
+            docs/00-governance/els-poc/ITER-0002G/INPUT.yaml \
+            docs/00-governance/els-poc/ITER-0002G/FAILURE-SIMULATION.md \
+            docs/00-governance/els-poc/ITER-0002G/EXECUTION-EVIDENCE.md \
+            docs/00-governance/els-poc/ITER-0002G/CHECKPOINT.yaml \
+            docs/00-governance/els-poc/ITER-0002G/CHECKPOINT-FINAL.yaml \
+            docs/00-governance/els-poc/ITER-0002G/SECONDARY-AUDIT-PACK.md \
+            docs/00-governance/els-poc/ITER-0001/FAILURE-LEARNING.md \
+            docs/00-governance/els-poc/ITER-0002B/CHECKPOINT.yaml \
+            docs/00-governance/els-poc/ITER-0002C/AGENT-B-ASSESSMENT.md; do
+            mkdir -p "$OUT/ENGINEERING-EVIDENCE/$(dirname "$path")"
+            git show "$BASELINE:$path" > "$OUT/ENGINEERING-EVIDENCE/$path"
+          done
 
           printf '%s\n' "$BASELINE" > "$OUT/ENGINEERING-EVIDENCE-BASELINE.txt"
           git rev-parse "$BASELINE^{tree}" > "$OUT/ENGINEERING-EVIDENCE-TREE.txt"
           git rev-parse HEAD > "$OUT/PACKAGING-COMMIT.txt"
           printf '%s\n' 'Packaging metadata is not engineering evidence. Engineering evidence is extracted exclusively from the frozen baseline commit above.' > "$OUT/PACKAGING-BOUNDARY.txt"
-
           find "$OUT" -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/SHA256SUMS.txt"
           zip -qr "$OUT.zip" "$OUT"
           sha256sum "$OUT.zip" > "$OUT.zip.sha256"
@@ -73,9 +69,19 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          test -s ELS-SECONDARY-AUDIT-PACK-v1.0.zip
           unzip -t ELS-SECONDARY-AUDIT-PACK-v1.0.zip
           sha256sum -c ELS-SECONDARY-AUDIT-PACK-v1.0.zip.sha256
+
+      - name: Persist package in branch for user download
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ELS-SECONDARY-AUDIT-PACK-v1.0.zip ELS-SECONDARY-AUDIT-PACK-v1.0.zip.sha256
+          git diff --cached --quiet && exit 0
+          git commit -m "[skip ci] build: persist ELS secondary audit pack artifact"
+          git push
 
       - name: Upload audit package
         uses: actions/upload-artifact@v4
