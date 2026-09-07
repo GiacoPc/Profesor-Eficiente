@@ -1,0 +1,19 @@
+iteration: ITER-0002F
+status: CHECKPOINTED
+repository:
+  ref: recovery/els-poc-002
+  state_head: bf14774ce86496669c92115e4e4717a9342a54ab
+objective: Validate operational use of the approved ELS-CHECKPOINT v0.2 contract and exact-head GitHub CI evidence.
+completed:
+  - human approval recorded for ELS-CHECKPOINT v0.2 only
+  - approved contract persisted in repository
+  - exact-head GitHub Actions success observed for contract approval commit
+  - POC-002F evidence recorded
+  - checkpoint payload uses state_head without self-referential storage SHA
+pending:
+  - exact-head CI evidence for this final checkpoint commit
+  - real crash/restart execution
+  - real provider quota exhaustion execution
+  - genuinely independent secondary-agent execution
+  - broader ELS operational-readiness review
+next_authorized_action: verify final checkpoint storage commit from Git evidence and run the next authorized ELS recovery/continuity gate
