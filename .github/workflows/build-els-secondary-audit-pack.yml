@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - audit/els-secondary-v1.0
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: write
@@ -71,17 +74,6 @@ jobs:
           set -euo pipefail
           unzip -t ELS-SECONDARY-AUDIT-PACK-v1.0.zip
           sha256sum -c ELS-SECONDARY-AUDIT-PACK-v1.0.zip.sha256
-
-      - name: Persist package in branch for user download
-        shell: bash
-        run: |
-          set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add ELS-SECONDARY-AUDIT-PACK-v1.0.zip ELS-SECONDARY-AUDIT-PACK-v1.0.zip.sha256
-          git diff --cached --quiet && exit 0
-          git commit -m "[skip ci] build: persist ELS secondary audit pack artifact"
-          git push
 
       - name: Upload audit package
         uses: actions/upload-artifact@v4
