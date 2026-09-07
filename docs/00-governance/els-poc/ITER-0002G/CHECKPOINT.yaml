@@ -1,0 +1,18 @@
+iteration: ITER-0002G
+status: CHECKPOINTED
+repository:
+  ref: recovery/els-poc-002G
+  state_head: 7a2dfcc5db4b43ff7df0985bf827a4a14d26f711
+objective: Validate executable continuity controls and preserve evidence boundaries.
+completed:
+  - human-approved ELS-CHECKPOINT v0.2 in force
+  - exact-head CI success verified for the continuity-control test commit
+  - process interruption/restart simulation passed
+  - synthetic budget exhaustion stop passed
+pending:
+  - exact-head CI evidence for this checkpoint commit
+  - real workstation crash/restart execution
+  - real external-provider quota exhaustion execution
+  - genuinely independent secondary-agent execution
+  - broader ELS operational-readiness review
+next_authorized_action: verify checkpoint storage commit from Git evidence, then execute the next ELS gate without promoting synthetic tests to real-world claims
