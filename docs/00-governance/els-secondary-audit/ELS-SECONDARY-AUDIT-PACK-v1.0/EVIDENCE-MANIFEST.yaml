@@ -1,0 +1,99 @@
+pack_id: ELS-SECONDARY-AUDIT-PACK-v1.0
+status: PREPARED
+frozen_evidence_baseline:
+  repository: GiacoPc/Profesor-Eficiente
+  branch: recovery/els-poc-002G
+  commit: a1f3344c9309dc8051114b67831ce83f44604f65
+  tree: efc2205f2416a3464d73c17e51af8618330bf633
+
+rules:
+  - Only evidence reachable from the frozen baseline is in audit scope.
+  - Packaging commits on audit/els-secondary-v1.0 are not engineering evidence.
+  - Missing or inaccessible evidence is UNKNOWN; it must not be inferred.
+  - Historical evidence must not be represented as current-head evidence.
+  - The external auditor is read-only and must not repair the audited repository.
+
+evidence:
+  specification:
+    - path: docs/00-governance/ENGINEERING-LOOP-SYSTEM-v0.1.md
+      ref: a1f3344c9309dc8051114b67831ce83f44604f65
+      purpose: ELS process, authority, state machine, evidence, recovery, budget, anti-loop and audit rules
+    - path: docs/00-governance/els-poc/ITER-0002D/CHECKPOINT-CONTRACT-v0.2-DRAFT.yaml
+      ref: a1f3344c9309dc8051114b67831ce83f44604f65
+      purpose: approved ELS-CHECKPOINT v0.2 contract
+    - path: docs/00-governance/ENGINEERING-LOOP-SYSTEM-v0.1.1-CHECKPOINT-IDENTITY-AMENDMENT.md
+      ref: a1f3344c9309dc8051114b67831ce83f44604f65
+      purpose: checkpoint identity correction history
+
+  implementation:
+    - path: tools/els/checkpoint_integrity_verifier.py
+      ref: a1f3344c9309dc8051114b67831ce83cf44604f65
+      purpose: read-only checkpoint verifier
+      note: verify exact blob identity from Git before relying on this manifest entry
+    - path: tools/els/test_checkpoint_integrity_verifier.py
+      ref: a1f3344c9309dc8051114b67831ce83cf44604f65
+      purpose: verifier regression suite
+      note: verify exact blob identity from Git before relying on this manifest entry
+    - path: tools/els/test_continuity_controls.py
+      ref: a1f3344c9309dc8051114b67831ce83cf44604f65
+      purpose: executable continuity-control simulation
+      note: verify exact blob identity from Git before relying on this manifest entry
+
+  poc_evidence:
+    - path: docs/00-governance/els-poc/ITER-0002E/EXECUTION-EVIDENCE.md
+      ref: a1f3344c9309dc8051114b67831ce83cf44604f65
+      purpose: verifier functional evidence and limitations
+    - path: docs/00-governance/els-poc/ITER-0002F/EXECUTION-EVIDENCE.md
+      ref: a1f3344c9309dc8051114b67831ce83cf44604f65
+      purpose: human approval and exact-head CI evidence
+    - path: docs/00-governance/els-poc/ITER-0002G/INPUT.yaml
+      ref: a1f3344c9309dc8051114b67831ce83cf44604f65
+      purpose: POC scope and constraints
+    - path: docs/00-governance/els-poc/ITER-0002G/FAILURE-SIMULATION.md
+      ref: a1f3344c9309dc8051114b67831ce83cf44604f65
+      purpose: bounded failure and budget simulation semantics
+    - path: docs/00-governance/els-poc/ITER-0002G/EXECUTION-EVIDENCE.md
+      ref: a1f3344c9309dc8051114b67831ce83cf44604f65
+      purpose: exact-head CI and executable simulation evidence
+    - path: docs/00-governance/els-poc/ITER-0002G/CHECKPOINT.yaml
+      ref: a1f3344c9309dc8051114b67831ce83cf44604f65
+      purpose: intermediate checkpoint evidence
+    - path: docs/00-governance/els-poc/ITER-0002G/CHECKPOINT-FINAL.yaml
+      ref: a1f3344c9309dc8051114b67831ce83cf44604f65
+      purpose: final POC checkpoint and explicit pending gates
+    - path: docs/00-governance/els-poc/ITER-0002G/SECONDARY-AUDIT-PACK.md
+      ref: a1f3344c9309dc8051114b67831ce83cf44604f65
+      purpose: prior audit scope/questions and independence requirement
+
+  prior_poc_context:
+    - path: docs/00-governance/els-poc/ITER-0001/FAILURE-LEARNING.md
+      ref: a1f3344c9309dc8051114b67831ce83cf44604f65
+      purpose: checkpoint identity defect FL-001 context
+    - path: docs/00-governance/els-poc/ITER-0002B/CHECKPOINT.yaml
+      ref: a1f3344c9309dc8051114b67831ce83cf44604f65
+      purpose: original checkpoint conflict evidence
+    - path: docs/00-governance/els-poc/ITER-0002C/AGENT-B-ASSESSMENT.md
+      ref: a1f3344c9309dc8051114b67831ce83cf44604f65
+      purpose: prior conflict detection evidence
+
+  ci_claims:
+    - run: 34073267798
+      workflow: Governance
+      branch: recovery/els-poc-002G
+      head: 1c1eb393891d79b7d9d00debe4a5cec3b5ac921c
+      conclusion: success
+      purpose: POC-002G continuity-control regression suite
+    - run: 34072938168
+      workflow: Governance
+      branch: recovery/els-poc-002
+      head: 46534917644be9cabb80c7d49489fb4fbe51fa57
+      conclusion: success
+      purpose: ELS-CHECKPOINT v0.2 approval commit
+
+  explicitly_unproven:
+    - real workstation crash or power-loss recovery
+    - Android process-death/filesystem recovery
+    - real external model-provider quota exhaustion
+    - real IDE quota accounting
+    - genuinely independent secondary-agent execution
+    - full ELS operational readiness
