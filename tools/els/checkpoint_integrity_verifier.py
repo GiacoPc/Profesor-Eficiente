@@ -6,10 +6,9 @@ Exit codes:
   2 CONFLICT
   3 UNKNOWN / invalid input
 
-The verifier treats `state_head` as the resume-state identity. If the
-checkpoint payload contains the historical `checkpoint_storage_commit` field,
-it is checked against Git-derived storage identity but is never trusted as
-proof. The corrected contract does not require that field in the payload.
+`state_head` is the resume-state identity. Any historical
+`checkpoint_storage_commit` field is treated only as a claim and is checked
+against Git-derived evidence; the corrected contract does not require it.
 """
 
 from __future__ import annotations
@@ -68,7 +67,7 @@ def main() -> int:
         if current_ref != expected_ref:
             return emit("CONFLICT", f"current ref {current_ref!r} != expected ref {expected_ref!r}")
 
-        git("cat-file", "-e", f"{state_head}^{commit}")
+        git("cat-file", "-e", f"{state_head}^{{commit}}")
         resolved_state = git("rev-parse", state_head)
         if resolved_state != state_head:
             return emit("UNKNOWN", "state_head is not a full, directly resolvable commit identity")
@@ -85,7 +84,12 @@ def main() -> int:
             return emit("UNKNOWN", "no Git commit contains the checkpoint artifact")
         derived_storage = storage_candidates[0]
 
-        if not git("merge-base", "--is-ancestor", derived_storage, "HEAD"):
+        ancestry = subprocess.run(
+            ["git", "merge-base", "--is-ancestor", derived_storage, "HEAD"],
+            text=True,
+            capture_output=True,
+        )
+        if ancestry.returncode != 0:
             return emit("CONFLICT", "checkpoint storage commit is not reachable from current HEAD")
 
         if declared_storage and declared_storage != derived_storage:
