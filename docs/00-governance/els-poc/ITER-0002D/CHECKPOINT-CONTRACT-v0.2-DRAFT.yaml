@@ -1,6 +1,10 @@
 contract_id: ELS-CHECKPOINT
-version: 0.2-draft
-status: PROPOSED
+version: 0.2
+status: APPROVED
+approval:
+  authority: HUMAN
+  approved_in_chat: "APROBADO — ELS-CHECKPOINT v0.2"
+  approved_scope: "ELS-CHECKPOINT v0.2 only"
 identity:
   repository_ref: required
   state_head: required
