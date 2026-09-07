@@ -1,0 +1,13 @@
+iteration: ITER-0002F
+poc: ELS-POC-002F
+status: EXECUTING
+risk_level: L2
+branch: recovery/els-poc-002
+objective: Validate operational use of the approved ELS-CHECKPOINT v0.2 contract and exact-head GitHub CI evidence.
+constraints:
+  - no product implementation
+  - no changes to PGKI/KCA authority
+  - preserve all prior POC evidence, including the POC-002B checkpoint conflict
+  - no force-update, merge, cherry-pick, or deletion
+  - no claim of full ELS production readiness
+  - checkpoint identity must follow ELS-CHECKPOINT v0.2
