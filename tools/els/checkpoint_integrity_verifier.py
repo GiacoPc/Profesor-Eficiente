@@ -47,6 +47,14 @@ def emit(status: str, reason: str) -> int:
     return {"PASS": PASS, "CONFLICT": CONFLICT, "UNKNOWN": UNKNOWN}[status]
 
 
+def is_ancestor(ancestor: str, descendant: str) -> bool:
+    return subprocess.run(
+        ["git", "merge-base", "--is-ancestor", ancestor, descendant],
+        text=True,
+        capture_output=True,
+    ).returncode == 0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("checkpoint", type=Path)
@@ -68,8 +76,7 @@ def main() -> int:
             return emit("CONFLICT", f"current ref {current_ref!r} != expected ref {expected_ref!r}")
 
         git("cat-file", "-e", f"{state_head}^{{commit}}")
-        resolved_state = git("rev-parse", state_head)
-        if resolved_state != state_head:
+        if git("rev-parse", state_head) != state_head:
             return emit("UNKNOWN", "state_head is not a full, directly resolvable commit identity")
 
         state_tree = scalar(text, "state_tree")
@@ -78,18 +85,20 @@ def main() -> int:
             if actual_tree != state_tree:
                 return emit("CONFLICT", f"state_tree {state_tree!r} != Git tree {actual_tree!r}")
 
-        checkpoint_path = str(args.checkpoint)
+        repo_root = Path(git("rev-parse", "--show-toplevel"))
+        try:
+            checkpoint_path = str(args.checkpoint.resolve().relative_to(repo_root.resolve()))
+        except ValueError:
+            return emit("UNKNOWN", "checkpoint artifact must reside inside the Git repository")
+
         storage_candidates = git("log", "--format=%H", "-1", "--", checkpoint_path).splitlines()
         if not storage_candidates:
             return emit("UNKNOWN", "no Git commit contains the checkpoint artifact")
         derived_storage = storage_candidates[0]
 
-        ancestry = subprocess.run(
-            ["git", "merge-base", "--is-ancestor", derived_storage, "HEAD"],
-            text=True,
-            capture_output=True,
-        )
-        if ancestry.returncode != 0:
+        if not is_ancestor(state_head, derived_storage):
+            return emit("CONFLICT", "checkpoint storage commit does not descend from state_head")
+        if not is_ancestor(derived_storage, "HEAD"):
             return emit("CONFLICT", "checkpoint storage commit is not reachable from current HEAD")
 
         if declared_storage and declared_storage != derived_storage:
