@@ -1,0 +1,15 @@
+contract_id: ELS-CHECKPOINT
+version: 0.2-draft
+status: PROPOSED
+identity:
+  repository_ref: required
+  state_head: required
+  state_tree: optional
+  checkpoint_storage_commit: derived_metadata_only
+rules:
+  - state_head identifies the engineering state to resume from
+  - checkpoint_storage_commit identifies the Git commit containing the checkpoint record and is derived from repository evidence
+  - checkpoint_storage_commit must not be a self-authored prerequisite for validity
+  - a conflict between derived storage metadata and repository evidence is CONFLICT and blocks continuation
+  - checkpoint payload remains valid when storage commit differs from state_head
+  - original conflicting checkpoint artifacts must be preserved during reconciliation
