@@ -1,0 +1,101 @@
+matrix_id: ELS-SEC-AUDIT-CEM-v1.0
+status: PREPARED
+basis: frozen evidence baseline a1f3344c9309dc8051114b67831ce83f44604f65
+
+claims:
+  - id: CEM-001
+    claim: ELS-CHECKPOINT v0.2 is approved by the human project authority.
+    evidence:
+      - docs/00-governance/els-poc/ITER-0002D/CHECKPOINT-CONTRACT-v0.2-DRAFT.yaml
+      - docs/00-governance/els-poc/ITER-0002F/EXECUTION-EVIDENCE.md
+    status_expected_by_primary: VERIFIED
+    auditor_task: independently verify the evidence and scope of approval
+
+  - id: CEM-002
+    claim: state_head identifies the engineering state to resume from.
+    evidence:
+      - docs/00-governance/els-poc/ITER-0002D/CHECKPOINT-CONTRACT-v0.2-DRAFT.yaml
+      - docs/00-governance/ENGINEERING-LOOP-SYSTEM-v0.1.md
+    status_expected_by_primary: VERIFIED
+    auditor_task: test semantic and implementation consistency
+
+  - id: CEM-003
+    claim: checkpoint storage identity is derived from Git evidence rather than being a self-authored prerequisite.
+    evidence:
+      - docs/00-governance/els-poc/ITER-0002D/CHECKPOINT-CONTRACT-v0.2-DRAFT.yaml
+      - tools/els/checkpoint_integrity_verifier.py
+      - docs/00-governance/els-poc/ITER-0002E/EXECUTION-EVIDENCE.md
+    status_expected_by_primary: VERIFIED
+    auditor_task: look for bypasses and implementation gaps
+
+  - id: CEM-004
+    claim: verifier regression cases passed.
+    evidence:
+      - docs/00-governance/els-poc/ITER-0002E/EXECUTION-EVIDENCE.md
+      - tools/els/test_checkpoint_integrity_verifier.py
+    status_expected_by_primary: SUPPORTED
+    auditor_task: determine exact property demonstrated by each case
+
+  - id: CEM-005
+    claim: POC-002G continuity-control tests passed in exact-head CI.
+    evidence:
+      - docs/00-governance/els-poc/ITER-0002G/EXECUTION-EVIDENCE.md
+      - CI run 34073267798 at head 1c1eb393891d79b7d9d00debe4a5cec3b5ac921c
+    status_expected_by_primary: VERIFIED
+    auditor_task: verify claim scope and distinguish CI evidence from real-world recovery
+
+  - id: CEM-006
+    claim: process interruption/restart control has been executable-tested.
+    evidence:
+      - docs/00-governance/els-poc/ITER-0002G/FAILURE-SIMULATION.md
+      - docs/00-governance/els-poc/ITER-0002G/EXECUTION-EVIDENCE.md
+    status_expected_by_primary: VERIFIED
+    auditor_task: determine what the simulation actually proves
+
+  - id: CEM-007
+    claim: synthetic budget exhaustion stop has been executable-tested.
+    evidence:
+      - docs/00-governance/els-poc/ITER-0002G/FAILURE-SIMULATION.md
+      - docs/00-governance/els-poc/ITER-0002G/EXECUTION-EVIDENCE.md
+    status_expected_by_primary: VERIFIED
+    auditor_task: determine what it does not prove about real provider quotas
+
+  - id: CEM-008
+    claim: real workstation crash/power-loss recovery is not yet proven.
+    evidence:
+      - docs/00-governance/els-poc/ITER-0002G/EXECUTION-EVIDENCE.md
+      - docs/00-governance/els-poc/ITER-0002G/CHECKPOINT-FINAL.yaml
+    status_expected_by_primary: VERIFIED
+    auditor_task: confirm bounded non-claim
+
+  - id: CEM-009
+    claim: real external provider quota exhaustion is not yet proven.
+    evidence:
+      - docs/00-governance/els-poc/ITER-0002G/FAILURE-SIMULATION.md
+      - docs/00-governance/els-poc/ITER-0002G/CHECKPOINT-FINAL.yaml
+    status_expected_by_primary: VERIFIED
+    auditor_task: confirm bounded non-claim
+
+  - id: CEM-010
+    claim: genuinely independent secondary-agent execution remains pending.
+    evidence:
+      - docs/00-governance/els-poc/ITER-0002G/CHECKPOINT-FINAL.yaml
+      - docs/00-governance/els-poc/ITER-0002G/SECONDARY-AUDIT-PACK.md
+    status_expected_by_primary: VERIFIED
+    auditor_task: ensure no same-agent evidence is incorrectly treated as independence
+
+  - id: CEM-011
+    claim: the final POC checkpoint records pending independent audit and real-world tests.
+    evidence:
+      - docs/00-governance/els-poc/ITER-0002G/CHECKPOINT-FINAL.yaml
+    status_expected_by_primary: VERIFIED
+    auditor_task: compare pending state against any readiness claim
+
+  - id: CEM-012
+    claim: ELS itself is not production-ready based on this evidence.
+    evidence:
+      - docs/00-governance/ENGINEERING-LOOP-SYSTEM-v0.1.md
+      - docs/00-governance/els-poc/ITER-0002G/EXECUTION-EVIDENCE.md
+      - docs/00-governance/els-poc/ITER-0002G/CHECKPOINT-FINAL.yaml
+    status_expected_by_primary: SUPPORTED
+    auditor_task: independently determine readiness; do not accept this as a premise
