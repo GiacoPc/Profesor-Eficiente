@@ -73,3 +73,9 @@ jobs:
             exit 1
           fi
           echo 'Basic secret hygiene OK.'
+
+      - name: ELS checkpoint verifier regression suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/els/test_checkpoint_integrity_verifier.py
