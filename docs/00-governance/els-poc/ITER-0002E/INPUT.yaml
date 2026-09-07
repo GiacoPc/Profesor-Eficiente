@@ -1,0 +1,14 @@
+iteration: ITER-0002E
+poc: ELS-POC-002E
+status: EXECUTING
+risk_level: L2
+branch: recovery/els-poc-002
+objective: Implement and exercise a mechanical verifier for ELS checkpoint identity integrity.
+constraints:
+  - no product implementation
+  - no changes to PGKI/KCA authority
+  - preserve the original POC-002B conflicting checkpoint
+  - do not silently repair historical evidence
+  - verifier must distinguish PASS, CONFLICT and UNKNOWN
+  - storage identity must be derived from Git evidence, not trusted solely from checkpoint payload
+  - no claim of ELS production readiness
