@@ -211,7 +211,7 @@ The gate input MUST include at minimum:
 
 The checkpoint bytes validated and the immutable repository object used as their provenance MUST refer to the same artifact before integrity is declared.
 
-The approved `ELS-CHECKPOINT v0.2` contract remains unchanged. Its `state_head` identifies the engineering state; `checkpoint_storage_commit` is derived metadata only and is not a self-authored prerequisite. fileciteturn872file0
+The approved `ELS-CHECKPOINT v0.2` contract remains unchanged. Its `state_head` identifies the engineering state; `checkpoint_storage_commit` is derived metadata only and is not a self-authored prerequisite.
 
 ### Required binding model
 
