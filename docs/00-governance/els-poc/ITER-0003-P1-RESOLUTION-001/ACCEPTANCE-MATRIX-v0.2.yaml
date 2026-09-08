@@ -1,0 +1,51 @@
+contract_id: ITER-0003-P1-RESOLUTION-001
+contract_version: v0.2
+status: PROPOSED
+risk: L2
+implementation_authorized: false
+verifier_modification_authorized: false
+supersedes_for_review: v0.1
+findings:
+  P1-001:
+    title: continuity_recovery_evidence_fidelity
+    dependencies: []
+    criteria: [P1-001-A, P1-001-B, P1-001-C, P1-001-D, P1-001-E]
+    closure_requires: [test_specification, execution_evidence, exact_identity, evidence_boundary, self_audit, independent_l2_review]
+  P1-002:
+    title: verifier_adversarial_coverage
+    dependencies: []
+    criteria: [P1-002-A, P1-002-B, P1-002-C, P1-002-D, P1-002-E, P1-002-F, P1-002-G]
+    closure_requires: [reproducible_fixtures, encoded_oracles, same_path_evidence, regression_results, diagnostic_assertions]
+  P1-003:
+    title: exact_head_ci_evidence
+    dependencies: []
+    criteria: [P1-003-A, P1-003-B, P1-003-C, P1-003-D, P1-003-E]
+    closure_requires: [exact_head_ci_run, durable_ci_evidence]
+  P1-004:
+    title: non_bypassable_current_checkpoint_continuation_gate
+    dependencies: [P1-001, P1-002, P1-003, P1-005]
+    criteria: [P1-004-A, P1-004-B, P1-004-C, P1-004-D, P1-004-E, P1-004-F, P1-004-G, P1-004-H, P1-004-I]
+    closure_requires: [single_authoritative_gate, current_checkpoint_pass, deny_by_default, negative_tests, exact_identity_evidence, governed_surface_inventory]
+  P1-005:
+    title: immutable_checkpoint_content_provenance_binding
+    dependencies: []
+    criteria: [P1-005-A, P1-005-B, P1-005-C, P1-005-D, P1-005-E, P1-005-F, P1-005-G]
+    closure_requires: [immutable_content_binding, tamper_tests, provenance_evidence, self_reference_exclusion]
+closure_rules:
+  unknown_blocks: true
+  conflict_blocks: true
+  fail_blocks: true
+  regression_pass_is_not_current_checkpoint_verification: true
+  current_checkpoint_verification_is_distinct_property: true
+  human_approval_required: true
+  independent_secondary_audit_required_for_l2: true
+  model_verdict_is_not_an_oracle: true
+canonical_dependency_graph:
+  - [P1-001, P1-004]
+  - [P1-002, P1-004]
+  - [P1-003, P1-004]
+  - [P1-005, P1-004]
+prohibited_dependency_edges:
+  - [P1-001, P1-002]
+  - [P1-002, P1-001]
+  - [P1-002, P1-005]
