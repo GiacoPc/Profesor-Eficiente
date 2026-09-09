@@ -1,0 +1,26 @@
+iteration: ITER-0003-P1-RESOLUTION-001
+status: OPEN
+risk_level: L2
+branch: els/l2-p1-resolution-001
+base_state_head: ac1271269098972f96a045ba3b81423f29941adc
+objective: Resolve P1-001 through P1-005 identified and reconciled by the ELS secondary audit.
+constraints:
+  - no modification to main
+  - no modification to forensic recovery branches
+  - no autonomous promotion
+  - preserve historical audit evidence
+  - verifier implementation may not be changed until an approved implementation contract and plan authorize it
+  - every implementation claim requires exact repository evidence and exact-head CI evidence where applicable
+  - P1 closure requires explicit acceptance evidence and independent secondary audit when required by risk policy
+scope:
+  - P1-001 continuity test fidelity
+  - P1-002 checkpoint verifier adversarial coverage
+  - P1-003 final-checkpoint exact-head CI evidence
+  - P1-004 non-bypassable current-checkpoint continuation gate
+  - P1-005 checkpoint content/provenance binding
+out_of_scope:
+  - wider ELS approval
+  - product implementation
+  - pedagogical architecture changes
+  - closure of any P1 without acceptance evidence
+next_authorized_action: specification and impact analysis for P1-001 through P1-005 before implementation

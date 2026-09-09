@@ -1,0 +1,79 @@
+schema_version: "0.1"
+status: PROPOSED
+finding: P1-001
+purpose: continuity_recovery_evidence
+
+record:
+  required:
+    - evidence_id
+    - failure_class
+    - environment
+    - interruption_method
+    - interruption_point
+    - persisted_artifact
+    - expected_recovery
+    - evidence_boundary
+    - repository
+    - ref
+    - engineering_head
+    - execution_identity
+    - observed_result
+    - oracle_result
+    - timestamp_or_run_id
+  fields:
+    evidence_id: string
+    failure_class: string
+    environment: string
+    interruption_method: string
+    interruption_point: string
+    persisted_artifact: string
+    expected_recovery: string
+    evidence_boundary: string
+    repository: string
+    ref: string
+    engineering_head: git_sha
+    execution_identity:
+      controller_identity: string
+      target_identity: string
+    observed_result: string
+    oracle_result:
+      enum: [PASS, FAIL, UNKNOWN, CONFLICT]
+    timestamp_or_run_id: string
+
+failure_classes:
+  - process_interruption
+  - partial_write
+  - workstation_crash
+  - power_loss
+  - android_process_death
+  - provider_or_ide_quota_exhaustion
+
+fidelity_rules:
+  - "process_interruption evidence MUST NOT be promoted to workstation_crash, power_loss, or android_process_death evidence."
+  - "synthetic quota exhaustion MUST NOT be promoted to provider_or_ide_quota_exhaustion evidence."
+  - "UNKNOWN is required when the requested failure class was not actually executed or the evidence is inconclusive."
+  - "CONFLICT is required when authoritative evidence disagrees."
+
+partial_write_oracle:
+  output_states: [RECOVERABLE, INVALID, CONFLICT, UNKNOWN]
+  required_inputs:
+    - write_boundary
+    - persisted_bytes_identity
+    - expected_artifact_identity
+    - parse_or_integrity_result
+    - repository_identity
+  decision_table:
+    - when: "persisted artifact is complete and matches expected identity"
+      result: RECOVERABLE
+    - when: "persisted artifact is incomplete but deterministically rejected by integrity rules"
+      result: INVALID
+    - when: "available evidence contains authoritative identity disagreement"
+      result: CONFLICT
+    - when: "required identity or integrity evidence is unavailable or inconclusive"
+      result: UNKNOWN
+
+independence:
+  process_interruption:
+    controller_must_differ_from_target: true
+    record_controller_identity: true
+    record_target_identity: true
