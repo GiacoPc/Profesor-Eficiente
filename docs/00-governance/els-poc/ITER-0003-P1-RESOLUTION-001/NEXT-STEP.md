@@ -1,0 +1,1 @@
+Next step: execute P1-001 schema validation and then produce bounded execution evidence. Do not claim P1-001 closure until all contract criteria and closure gates are satisfied.
