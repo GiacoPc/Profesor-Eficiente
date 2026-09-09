@@ -61,6 +61,18 @@ entries:
       - P1-001 through P1-005 remain OPEN
       - verifier_implementation_remains_unmodified
       - no_autonomous_continuation_authorized
+  - id: ELS-DEC-002
+    decision: approve_P1_resolution_contract_v0_2_for_governing_implementation_specification
+    status: PROPOSED
+    evidence: [ELS-SECOND-ORDER-AUDIT-RECONCILIATION-v1.0, GROK-L2-AUDIT-v0.2]
+    affected_artifacts: [docs/00-governance/els-poc/ITER-0003-P1-RESOLUTION-001/P1-RESOLUTION-CONTRACT-v0.2.md, docs/00-governance/els-poc/ITER-0003-P1-RESOLUTION-001/ACCEPTANCE-MATRIX-v0.2.yaml]
+    scope: human_approval_required
+    constraints:
+      - P1-001 through P1-005 remain OPEN
+      - implementation_not_authorized_by_audit
+      - verifier_modification_not_authorized_by_audit
+      - ELS operational/autonomous readiness remains BLOCKED / NOT READY
+      - CONTINUE_AUTHORIZED remains inadmissible until all required P1 closure gates are satisfied
 unresolved:
   - final_LLM
   - inference_runtime
