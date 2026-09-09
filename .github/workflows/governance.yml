@@ -85,3 +85,39 @@ jobs:
         run: |
           set -euo pipefail
           python3 tools/els/test_continuity_controls.py
+
+      - name: P1-001 schema validation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          text = Path('docs/00-governance/els-poc/ITER-0003-P1-RESOLUTION-001/P1-001-EVIDENCE-SCHEMA-v0.1.yaml').read_text(encoding='utf-8')
+          required = [
+              'evidence_id', 'failure_class', 'environment', 'interruption_method',
+              'interruption_point', 'persisted_artifact', 'expected_recovery',
+              'evidence_boundary', 'repository', 'ref', 'engineering_head',
+              'execution_identity', 'observed_result', 'oracle_result', 'timestamp_or_run_id'
+          ]
+          for key in required:
+              assert key in text, f'missing schema key: {key}'
+          for value in ['PASS', 'FAIL', 'UNKNOWN', 'CONFLICT', 'RECOVERABLE', 'INVALID']:
+              assert value in text, f'missing decision value: {value}'
+          print(json.dumps({'schema_validation': 'PASS', 'required_fields': len(required)}))
+          PY
+
+      - name: P1-001 real controller-target SIGTERM test
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/els/test_p1_001_process_interruption.py
+
+      - name: Upload P1-001 evidence artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p1-001-process-interruption-evidence
+          path: artifacts/p1-001-process-interruption-evidence.json
+          if-no-files-found: warn
