@@ -42,7 +42,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          ruby -e 'require "yaml"; ARGV.each { |f| YAML.load_file(f); puts "OK: #{f}" }' \
+          ruby -e 'require "yaml"; ARGV.each { |f| YAML.parse_file(f); puts "OK: #{f}" }' \
             PROJECT-STATE.yaml CONTEXT-MANIFEST.yaml DECISION-LEDGER.yaml
 
       - name: Governance invariants and state consistency
