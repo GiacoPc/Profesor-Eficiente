@@ -1,0 +1,24 @@
+AUDIT BASELINE — ITER-0003-P1-RESOLUTION-001
+
+Branch: els/l2-p1-resolution-001
+Audit target contract commit lineage: see repository history for this branch.
+
+AUDIT TARGETS
+- docs/00-governance/els-poc/ITER-0003-P1-RESOLUTION-001/P1-RESOLUTION-CONTRACT-v0.1.md
+- docs/00-governance/els-poc/ITER-0003-P1-RESOLUTION-001/ACCEPTANCE-MATRIX.yaml
+
+CONTEXT ONLY
+- docs/00-governance/els-secondary-audit/ELS-SECONDARY-AUDIT-RECONCILIATION-v1.0.md
+
+PROTECTED DURING AUDIT
+- tools/els/checkpoint_integrity_verifier.py
+- tools/els/test_checkpoint_integrity_verifier.py
+
+AUDIT BOUNDARY
+- Contract review only.
+- No implementation authorization.
+- No repository modification by auditor.
+- No inference of unavailable evidence.
+- Overall verdict must be one of PASS, PASS_WITH_LIMITATIONS, FAIL, UNKNOWN, CONFLICT.
+
+The authoritative content is the repository state actually inspected by the independent auditor, not this text alone.
