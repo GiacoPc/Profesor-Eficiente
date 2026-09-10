@@ -1,0 +1,172 @@
+test_spec_id: P1-001-C-TEST-SPEC-v0.1
+finding: P1-001-C
+status: APPROVED_FOR_IMPLEMENTATION_DESIGN_ONLY
+execution_status: NOT_EXECUTED
+risk: L2
+contract:
+  id: ITER-0003-P1-RESOLUTION-001
+  version: v0.2
+  criterion: P1-001-C
+  requirement: "Exercise partial/interrupted writes for each supported write boundary with deterministic classification."
+engineering_identity:
+  ref: els/iter-0003-p1-implementation-001
+  design_base_head: 31c406fd1264c54e702931134f6f7db14b494000
+  prior_implementation_inspection_head: 7ce7115a0a4d061b4bfd9fdd648eea2a18c2cfed
+supported_boundary_inventory:
+  - id: WB-001
+    status: EVIDENCED_REFERENCE_BOUNDARY
+    mechanism: single_file_write
+    operation: "open checkpoint path for binary write -> write payload -> flush -> fsync"
+    source: tools/els/test_p1_001_process_interruption.py
+    evidence: "Existing P1-001 fixture directly executes this persistence path."
+    test_required: true
+    interruption_target: "inside the write operation, before complete payload persistence"
+  - id: WB-002
+    status: UNKNOWN
+    mechanism: temporary_file_atomic_replace
+    test_required: false
+    authorization: "Do not test or claim until implementation evidence establishes support."
+  - id: WB-003
+    status: UNKNOWN
+    mechanism: append
+    test_required: false
+    authorization: "Do not test or claim until implementation evidence establishes support."
+  - id: WB-004
+    status: UNKNOWN
+    mechanism: multi_file_transaction
+    test_required: false
+    authorization: "Do not test or claim until implementation evidence establishes support."
+  - id: WB-005
+    status: UNKNOWN
+    mechanism: android_specific_persistence
+    test_required: false
+    authorization: "Outside current POSIX Python implementation evidence."
+
+objective:
+  primary: "Determine the persisted state produced when the evidenced single-file write boundary is interrupted before complete payload persistence."
+  secondary: "Classify the resulting state deterministically without promoting unsupported recovery claims."
+
+fixture_design:
+  controller:
+    role: "independent test controller"
+    requirement: "Must be a distinct process from the target writer."
+    responsibilities:
+      - "Create disposable test repository/workspace."
+      - "Launch target writer."
+      - "Record exact repository/ref/HEAD identity."
+      - "Establish target readiness before the controlled interruption point."
+      - "Trigger interruption at the instrumented write boundary."
+      - "Wait for target termination."
+      - "Read persisted artifact bytes independently."
+      - "Invoke deterministic oracle."
+      - "Persist evidence record."
+  target:
+    role: "checkpoint writer under test"
+    requirement: "Must execute the same evidenced single-file persistence path as the current P1-001 fixture, with only the minimum instrumentation required to create a reproducible interruption point."
+    payload:
+      type: deterministic_utf8_bytes
+      requirement: "Payload must be sufficiently large or explicitly chunked so an interruption point can be deterministically placed before complete persistence."
+    instrumentation:
+      requirement: "The interruption hook must be located inside the write boundary, before the operation can be considered complete."
+      prohibition: "Do not replace the real write path with an unrelated mock persistence mechanism."
+
+interruption_protocol:
+  method: controlled_process_termination
+  required_fidelity: "process interruption during persistence write"
+  sequence:
+    - "Target opens checkpoint artifact using the evidenced binary-write path."
+    - "Target begins persistence of deterministic payload."
+    - "Target reaches a deterministic pre-completion interruption hook inside the write operation."
+    - "Target signals readiness to controller."
+    - "Controller records pre-interruption metadata available without falsely treating incomplete bytes as durable success."
+    - "Controller terminates target process."
+    - "Controller verifies target termination independently."
+    - "Controller reads artifact bytes from the disposable filesystem."
+    - "Controller computes observed byte identity and integrity state."
+    - "Controller evaluates the oracle decision table."
+
+required_evidence:
+  - evidence_id
+  - failure_class
+  - environment
+  - interruption_method
+  - interruption_point
+  - persisted_artifact
+  - expected_recovery
+  - evidence_boundary
+  - repository
+  - ref
+  - engineering_head
+  - controller_identity
+  - target_identity
+  - pre_interruption_checkpoint_identity
+  - post_interruption_recovery_result
+  - write_boundary
+  - expected_artifact_identity
+  - observed_artifact_identity
+  - persisted_byte_length
+  - parse_or_integrity_result
+  - oracle_result
+  - timestamp_or_run_id
+
+oracle:
+  inputs:
+    - write_boundary
+    - artifact_exists
+    - persisted_byte_length
+    - observed_artifact_identity
+    - expected_artifact_identity
+    - parse_or_integrity_result
+    - repository_identity
+  decision_table:
+    - condition: "repository identity cannot be established or is contradictory"
+      result: CONFLICT
+    - condition: "write boundary is not in the evidenced supported-boundary inventory"
+      result: UNKNOWN
+    - condition: "artifact is absent where the implementation contract requires a recoverable artifact, or the resulting state cannot be deterministically classified"
+      result: UNKNOWN
+    - condition: "persisted bytes exactly equal the expected complete artifact and integrity/parsing succeeds after interruption"
+      result: RECOVERABLE
+    - condition: "persisted bytes are incomplete/partial but the resulting artifact is deterministically valid and the defined recovery procedure can reconstruct the authoritative state"
+      result: RECOVERABLE
+    - condition: "persisted bytes are partial/corrupt and deterministic validation establishes that the resulting state is invalid and cannot be accepted as the checkpoint artifact"
+      result: INVALID
+    - condition: "multiple authoritative identities or repository/provenance interpretations disagree"
+      result: CONFLICT
+    - condition: "none of the above conditions can be established from the captured evidence"
+      result: UNKNOWN
+  deny_by_default: true
+
+expected_recovery:
+  status: "MUST_BE_DEFINED_BY_EXECUTION_EVIDENCE"
+  rule: "The test must not assume that an interrupted write is recoverable. The oracle determines the observed state; recovery semantics are only claimed if the corresponding evidence demonstrates them."
+
+negative_controls:
+  - id: NC-001
+    purpose: "Complete-write control"
+    expected: "The uninterrupted reference path remains valid and its complete artifact identity is deterministic."
+  - id: NC-002
+    purpose: "Pre-write interruption control"
+    expected: "An interruption before any write must not be represented as successful checkpoint persistence."
+
+non_claims:
+  - "Does not prove workstation crash recovery."
+  - "Does not prove power-loss recovery."
+  - "Does not prove Android process-death recovery."
+  - "Does not prove provider or IDE quota exhaustion recovery."
+  - "Does not establish unsupported persistence mechanisms."
+  - "Does not close P1-001 until A-E and all closure gates are satisfied."
+  - "Does not authorize P1-004 continuation."
+
+execution_gate:
+  preconditions:
+    - "Human-approved P1 Resolution Contract v0.2 is governing."
+    - "WB-001 remains evidenced in the inspected implementation."
+    - "Test implementation preserves the same persistence path."
+    - "Oracle and evidence schema are unchanged unless separately versioned and reviewed."
+  postconditions:
+    - "Execution produces machine-readable evidence."
+    - "Exact repository identity is captured."
+    - "Deterministic oracle result is captured."
+    - "Self-audit is performed."
+    - "Independent L2 review is performed before any closure recommendation."
