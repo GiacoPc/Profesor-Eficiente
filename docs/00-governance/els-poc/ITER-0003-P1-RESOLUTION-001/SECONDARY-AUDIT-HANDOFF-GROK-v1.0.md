@@ -14,12 +14,16 @@ Your review must be independent of the authoring agent. Do not rely on conversat
 
 Audit only the technical contract for resolution of P1-001 through P1-005:
 
-- `docs/00-governance/els-poc/ITER-0003-P1-RESOLUTION-001/P1-RESOLUTION-CONTRACT-v0.1.md`
-- `docs/00-governance/els-poc/ITER-0003-P1-RESOLUTION-001/ACCEPTANCE-MATRIX.yaml`
+- `P1-RESOLUTION-CONTRACT-v0.1.md`
+- `ACCEPTANCE-MATRIX.yaml`
 
-Contextual source:
+The governing audit prompt for this iteration is:
 
-- `docs/00-governance/els-secondary-audit/ELS-SECONDARY-AUDIT-RECONCILIATION-v1.0.md`
+- `ELS-ITER-0003-CONTRACT-AUDIT-PROMPT-v1.0.md`
+
+Contextual source only:
+
+- `ELS-SECONDARY-AUDIT-RECONCILIATION-v1.0.md`
 
 Repository baseline/ref:
 
