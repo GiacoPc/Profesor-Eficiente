@@ -1,16 +1,5 @@
 #!/usr/bin/env python3
-"""P1-001-C WB-001 reproducible interrupted-write test.
-
-The target executes the evidenced single-file binary write path, but writes the
-payload in deterministic chunks. It pauses after a deterministic partial write;
-the independent controller then terminates the target. The controller inspects
-persisted bytes and applies the P1-001-C oracle.
-
-This test intentionally proves only the WB-001 POSIX Python file-write boundary.
-It does not claim atomic rename, append, multi-file transactions, Android
-process-death recovery, workstation crash recovery, power-loss recovery, or
-provider/IDE quota behavior.
-"""
+"""P1-001-C WB-001 reproducible interrupted-write test."""
 from __future__ import annotations
 
 import hashlib
@@ -23,6 +12,8 @@ import tempfile
 import time
 from pathlib import Path
 
+# Deliberately large deterministic payload so the test has an observable
+# incomplete state before the final payload bytes are written.
 PAYLOAD = ("schema_version: '0.1'\n" + "payload_marker: 'WB-001-partial-write'\n" + ("x" * 8192) + "\n").encode("utf-8")
 CHUNK_SIZE = 256
 PARTIAL_CHUNKS = 3
@@ -37,6 +28,8 @@ def process_identity(pid: int, role: str) -> dict[str, object]:
 
 
 def target(checkpoint: Path, ready: Path) -> None:
+    # Same evidenced binary single-file write boundary as the existing P1-001
+    # fixture, with deterministic chunking only to expose an interruption point.
     with checkpoint.open("wb") as f:
         for index in range(PARTIAL_CHUNKS):
             start = index * CHUNK_SIZE
@@ -44,13 +37,12 @@ def target(checkpoint: Path, ready: Path) -> None:
             f.write(PAYLOAD[start:end])
             f.flush()
             if index + 1 == PARTIAL_CHUNKS:
-                # This is the deterministic interruption point: bytes have been
-                # written and flushed, but the payload is deliberately incomplete.
+                # Deterministic interruption point: write is incomplete and fsync
+                # has not yet occurred.
                 ready.write_text("partial-write-ready\n", encoding="utf-8")
                 while True:
                     time.sleep(0.05)
-        # Unreachable in the interrupted test; retained to document the same
-        # complete-write path used by the existing P1-001 fixture.
+        # Complete path retained for control/documentation.
         f.flush()
         os.fsync(f.fileno())
 
@@ -113,7 +105,6 @@ def controller() -> int:
 
         pre_sha = hashlib.sha256(checkpoint.read_bytes()).hexdigest()
         pre_len = checkpoint.stat().st_size
-
         os.kill(target_pid, signal.SIGTERM)
         return_code = child.wait(timeout=5)
 
@@ -121,11 +112,10 @@ def controller() -> int:
         observed_sha = hashlib.sha256(persisted).hexdigest()
         expected_sha = hashlib.sha256(PAYLOAD).hexdigest()
         repository_identity_ok = bool(repo and ref and head and remote)
-        boundary_supported = True
 
         oracle_result = oracle(
             repository_identity_ok=repository_identity_ok,
-            boundary_supported=boundary_supported,
+            boundary_supported=True,
             artifact_exists=checkpoint.exists(),
             observed_len=len(persisted),
             expected_len=len(PAYLOAD),
@@ -133,6 +123,7 @@ def controller() -> int:
             expected_sha=expected_sha,
         )
 
+        stable_sha = hashlib.sha256(checkpoint.read_bytes()).hexdigest() if checkpoint.exists() else ""
         observed = {
             "target_return_code": return_code,
             "target_terminated_by_sigterm": return_code == -signal.SIGTERM,
@@ -145,7 +136,7 @@ def controller() -> int:
             "expected_sha256": expected_sha,
             "bytes_match_expected": persisted == PAYLOAD,
             "partial_write_observed": 0 < len(persisted) < len(PAYLOAD),
-            "bytes_stable_after_termination": hashlib.sha256(checkpoint.read_bytes()).hexdigest() == observed_sha if checkpoint.exists() else False,
+            "bytes_stable_after_termination": stable_sha == observed_sha,
         }
 
         evidence = {
@@ -167,19 +158,10 @@ def controller() -> int:
             "engineering_head": head,
             "controller_identity": process_identity(controller_pid, "controller"),
             "target_identity": process_identity(target_pid, "target"),
-            "pre_interruption_checkpoint_identity": {
-                "length": pre_len,
-                "sha256": pre_sha,
-            },
+            "pre_interruption_checkpoint_identity": {"length": pre_len, "sha256": pre_sha},
             "post_interruption_recovery_result": "partial artifact persisted after target termination",
-            "expected_artifact_identity": {
-                "length": len(PAYLOAD),
-                "sha256": expected_sha,
-            },
-            "observed_artifact_identity": {
-                "length": len(persisted),
-                "sha256": observed_sha,
-            },
+            "expected_artifact_identity": {"length": len(PAYLOAD), "sha256": expected_sha},
+            "observed_artifact_identity": {"length": len(persisted), "sha256": observed_sha},
             "parse_or_integrity_result": {
                 "complete_payload_match": persisted == PAYLOAD,
                 "partial_write": 0 < len(persisted) < len(PAYLOAD),
@@ -190,13 +172,11 @@ def controller() -> int:
         }
         artifact.write_text(json.dumps(evidence, indent=2, sort_keys=True) + "\n", encoding="utf-8")
         print(json.dumps(evidence, indent=2, sort_keys=True))
-        # INVALID is an expected deterministic oracle for this intentionally
-        # truncated artifact, so only unexpected oracle behavior fails the test.
         return 0 if oracle_result == "INVALID" and observed["partial_write_observed"] else 1
 
 
 if __name__ == "__main__":
-    if len(sys.argv) == 3 and sys.argv[1] == "--target":
+    if len(sys.argv) == 4 and sys.argv[1] == "--target":
         target(Path(sys.argv[2]), Path(sys.argv[3]))
         raise SystemExit(0)
     raise SystemExit(controller())
