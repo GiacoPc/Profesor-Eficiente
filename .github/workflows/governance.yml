@@ -114,10 +114,16 @@ jobs:
           set -euo pipefail
           python3 tools/els/test_p1_001_process_interruption.py
 
-      - name: Upload P1-001 evidence artifact
+      - name: P1-001-C WB-001 interrupted-write test
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/els/test_p1_001_c_wb001_partial_write.py
+
+      - name: Upload P1-001 evidence artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: p1-001-process-interruption-evidence
-          path: artifacts/p1-001-process-interruption-evidence.json
+          name: p1-001-process-and-partial-write-evidence
+          path: artifacts/p1-001-*-evidence.json
           if-no-files-found: warn
