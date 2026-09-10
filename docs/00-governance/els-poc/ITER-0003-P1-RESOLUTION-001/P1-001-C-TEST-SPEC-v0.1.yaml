@@ -38,13 +38,6 @@ supported_boundary_inventory:
 objective:
   primary: "Determine the persisted state produced when WB-001 is interrupted before complete payload persistence."
   secondary: "Classify the resulting state deterministically without assuming recoverability."
-fixture_design:
-  controller:
-    role: independent_test_controller
-    requirement: "Distinct process from target writer."
-  target:
-    role: checkpoint_writer_under_test
-    requirement: "Execute the evidenced single-file persistence path with minimum instrumentation needed for deterministic interruption."
 interruption_protocol:
   method: controlled_process_termination
   fidelity: "process interruption during persistence write"
@@ -52,10 +45,10 @@ interruption_protocol:
     - "Open checkpoint using binary write path."
     - "Write deterministic payload in fixed chunks."
     - "Flush after each chunk."
-    - "Signal readiness after a deterministic partial prefix and before completion/fsync."
+    - "Signal readiness after deterministic partial prefix and before completion/fsync."
     - "Controller sends SIGTERM."
     - "Controller verifies termination and independently reads persisted bytes."
-    - "Controller computes identities and evaluates the oracle."
+    - "Controller computes identities and evaluates oracle."
 oracle:
   inputs: [write_boundary, artifact_exists, persisted_byte_length, observed_artifact_identity, expected_artifact_identity, parse_or_integrity_result, repository_identity]
   decision_table:
@@ -86,13 +79,3 @@ non_claims:
   - android_process_death_recovery
   - provider_or_ide_quota_recovery
   - unsupported_persistence_mechanisms
-execution_gate:
-  preconditions:
-    - "Human-approved P1 Resolution Contract v0.2 governs implementation."
-    - "WB-001 remains evidenced."
-    - "Test preserves the same persistence path."
-  postconditions:
-    - "Machine-readable evidence is produced."
-    - "Exact repository identity is captured."
-    - "Deterministic oracle result is captured."
-    - "Self-audit and independent L2 review precede closure recommendation."
