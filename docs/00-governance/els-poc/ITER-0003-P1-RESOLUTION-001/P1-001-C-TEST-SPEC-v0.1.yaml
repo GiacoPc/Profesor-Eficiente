@@ -1,0 +1,98 @@
+test_spec_id: P1-001-C-TEST-SPEC-v0.1
+finding: P1-001-C
+status: APPROVED_FOR_IMPLEMENTATION_DESIGN_ONLY
+execution_status: NOT_EXECUTED
+risk: L2
+contract:
+  id: ITER-0003-P1-RESOLUTION-001
+  version: v0.2
+  criterion: P1-001-C
+  requirement: "Exercise partial/interrupted writes for each supported write boundary with deterministic classification."
+engineering_identity:
+  ref: els/iter-0003-p1-001-c-wb001-execution-001
+  design_base_head: 31c406fd1264c54e702931134f6f7db14b494000
+supported_boundary_inventory:
+  - id: WB-001
+    status: EVIDENCED_REFERENCE_BOUNDARY
+    mechanism: single_file_write
+    operation: "open checkpoint path for binary write -> write payload -> flush -> fsync"
+    source: tools/els/test_p1_001_process_interruption.py
+    test_required: true
+    interruption_target: "inside write operation before complete payload persistence"
+  - id: WB-002
+    status: UNKNOWN
+    mechanism: temporary_file_atomic_replace
+    test_required: false
+  - id: WB-003
+    status: UNKNOWN
+    mechanism: append
+    test_required: false
+  - id: WB-004
+    status: UNKNOWN
+    mechanism: multi_file_transaction
+    test_required: false
+  - id: WB-005
+    status: UNKNOWN
+    mechanism: android_specific_persistence
+    test_required: false
+objective:
+  primary: "Determine the persisted state produced when WB-001 is interrupted before complete payload persistence."
+  secondary: "Classify the resulting state deterministically without assuming recoverability."
+fixture_design:
+  controller:
+    role: independent_test_controller
+    requirement: "Distinct process from target writer."
+  target:
+    role: checkpoint_writer_under_test
+    requirement: "Execute the evidenced single-file persistence path with minimum instrumentation needed for deterministic interruption."
+interruption_protocol:
+  method: controlled_process_termination
+  fidelity: "process interruption during persistence write"
+  sequence:
+    - "Open checkpoint using binary write path."
+    - "Write deterministic payload in fixed chunks."
+    - "Flush after each chunk."
+    - "Signal readiness after a deterministic partial prefix and before completion/fsync."
+    - "Controller sends SIGTERM."
+    - "Controller verifies termination and independently reads persisted bytes."
+    - "Controller computes identities and evaluates the oracle."
+oracle:
+  inputs: [write_boundary, artifact_exists, persisted_byte_length, observed_artifact_identity, expected_artifact_identity, parse_or_integrity_result, repository_identity]
+  decision_table:
+    - condition: "repository identity cannot be established or is contradictory"
+      result: CONFLICT
+    - condition: "write boundary is not supported/evidenced"
+      result: UNKNOWN
+    - condition: "artifact is absent or state cannot be deterministically classified"
+      result: UNKNOWN
+    - condition: "persisted bytes exactly equal expected complete artifact and integrity succeeds"
+      result: RECOVERABLE
+    - condition: "persisted bytes are partial/corrupt and deterministic validation establishes invalid checkpoint state"
+      result: INVALID
+    - condition: "multiple authoritative identities or interpretations disagree"
+      result: CONFLICT
+    - condition: "none of the above can be established"
+      result: UNKNOWN
+  deny_by_default: true
+required_evidence: [evidence_id, failure_class, environment, interruption_method, interruption_point, persisted_artifact, expected_recovery, evidence_boundary, repository, ref, engineering_head, controller_identity, target_identity, pre_interruption_checkpoint_identity, post_interruption_recovery_result, write_boundary, expected_artifact_identity, observed_artifact_identity, persisted_byte_length, parse_or_integrity_result, oracle_result, timestamp_or_run_id]
+negative_controls:
+  - id: NC-001
+    purpose: complete_write_control
+  - id: NC-002
+    purpose: pre_write_interruption_control
+non_claims:
+  - workstation_crash_recovery
+  - power_loss_recovery
+  - android_process_death_recovery
+  - provider_or_ide_quota_recovery
+  - unsupported_persistence_mechanisms
+execution_gate:
+  preconditions:
+    - "Human-approved P1 Resolution Contract v0.2 governs implementation."
+    - "WB-001 remains evidenced."
+    - "Test preserves the same persistence path."
+  postconditions:
+    - "Machine-readable evidence is produced."
+    - "Exact repository identity is captured."
+    - "Deterministic oracle result is captured."
+    - "Self-audit and independent L2 review precede closure recommendation."
