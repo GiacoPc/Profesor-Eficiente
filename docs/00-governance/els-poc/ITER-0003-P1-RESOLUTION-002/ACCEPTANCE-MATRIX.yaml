@@ -1,0 +1,92 @@
+contract_id: ITER-0003-P1-RESOLUTION-002
+contract_version: v0.1
+parent_contract: ITER-0003-P1-RESOLUTION-001
+status: PROPOSED
+risk: L2
+implementation_authorized: false
+verifier_modification_authorized: false
+p1_closure_authorized: false
+
+canonical_dependency_edges:
+  - P1-001 -> P1-004
+  - P1-002 -> P1-005
+  - P1-005 -> P1-004
+  - P1-003 -> P1-004
+forbidden_dependency_edges:
+  - P1-001 -> P1-002
+
+corrections:
+  R-001:
+    title: markdown_yaml_dependency_identity
+    dependencies: []
+    criteria: [R-001]
+    closure_requires: [markdown_matrix_cross_check]
+  R-002:
+    title: canonical_graph_acyclicity
+    dependencies: []
+    criteria: [R-002]
+    closure_requires: [dependency_graph_review]
+  R-003:
+    title: independent_execution_definition
+    dependencies: []
+    criteria: [R-003]
+    closure_requires: [contract_text_review]
+  R-004:
+    title: unsupported_topology_fail_closed
+    dependencies: [R-005]
+    criteria: [R-004]
+    closure_requires: [contract_text_review]
+  R-005:
+    title: versioned_topology_declaration
+    dependencies: []
+    criteria: [R-005]
+    closure_requires: [admissibility_specification]
+  R-006:
+    title: governed_continuation_surface
+    dependencies: []
+    criteria: [R-006]
+    closure_requires: [contract_text_review]
+  R-007:
+    title: blocking_semantics_preserved
+    dependencies: []
+    criteria: [R-007]
+    closure_requires: [markdown_matrix_cross_check]
+  R-008:
+    title: p1_005_integrity_preserved
+    dependencies: []
+    criteria: [R-008]
+    closure_requires: [contract_text_review]
+  R-009:
+    title: specification_matrix_semantic_identity
+    dependencies: [R-001, R-002, R-003, R-004, R-005, R-006, R-007, R-008]
+    criteria: [R-009]
+    closure_requires: [markdown_matrix_cross_check]
+  R-010:
+    title: authorization_boundary_preserved
+    dependencies: []
+    criteria: [R-010]
+    closure_requires: [authorization_boundary_review]
+
+closure_rules:
+  unknown_blocks: true
+  conflict_blocks: true
+  fail_blocks: true
+  regression_pass_is_not_current_checkpoint_verification: true
+  human_approval_required: true
+  independent_secondary_audit_required_for_l2: true
+  implementation_requires_approved_corrected_contract: true
+  implementation_requires_fresh_independent_l2_review: true
+
+required_review_outputs:
+  - correction_evidence
+  - self_audit
+  - independent_secondary_audit
+  - reconciliation
+  - human_approval_decision
+
+non_actions:
+  - verifier_modification
+  - verifier_test_modification
+  - p1_closure
+  - els_operational_readiness_authorization
+  - autonomous_continuation_authorization
