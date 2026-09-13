@@ -1,37 +1,20 @@
-iteration_id: KCA-ELS-INTEGRITY-HARDENING-001
-status: CONTRACT_DRAFT_READY_FOR_INDEPENDENT_L2_REVIEW
-repository:
-  ref: kca/els-integrity-hardening-001
-  base_state_head: f784961382121b42f3de2e0cd31caa7641d53498
-  latest_iteration_state_head: 0585dcfef65d08d30d13390a7885283bef80a867
-phase: specification
-completed:
-  - branch isolation
-  - input declaration
-  - hardening contract draft
-  - acceptance matrix draft
-  - failure/threat model draft
-  - objective and plan
-pending:
-  - contract self-audit
-  - semantic contract/matrix cross-check
-  - independent L2 audit
-  - audit reconciliation
-  - human approval
-  - implementation
-blocked_until:
-  - independent_l2_audit
-  - human_approval
-unknowns:
-  - operational behavior of future validator/control-plane implementation
-  - local Obsidian configuration state
-  - independent backup configuration state
-  - real provider/IDE quota recovery behavior
-next_authorized_action: perform contract-level self-audit and prepare bounded independent L2 audit
-prohibitions:
-  - no verifier modification
-  - no verifier-test modification
-  - no P1 closure
-  - no KCA READY declaration
-  - no ELS readiness declaration
-  - no autonomous continuation
+artifact_type: incident_quarantine_record
+record_id: KCA-ELS-INTEGRITY-HARDENING-001-MAIN-WRITE-INCIDENT
+status: QUARANTINED
+authority: FORENSIC_RECORD_ONLY
+purpose: Record the accidental wrong-target write incident on main without presenting it as an active iteration checkpoint.
+incident:
+  class: F21_WRONG_TARGET_WRITE_BRANCH_PARAMETER_OMISSION
+  description: Draft hardening artifacts were unintentionally written to main because write operations omitted the explicit target branch parameter.
+  affected_branch: main
+  intended_branch: kca/els-integrity-hardening-001
+  resolution: All accidentally written draft artifacts except this quarantine record were removed from main through auditable deletion commits. This record replaces the remaining accidental CHECKPOINT.yaml so main no longer contains an active hardening checkpoint.
+  continuation_blocked: true
+controls:
+  no_iteration_authority: true
+  no_self_audit_authority: true
+  no_implementation_authority: true
+  no_p1_closure_authority: true
+  no_els_readiness_authority: true
+  no_autonomous_continuation: true
+next_action: Verify target branch isolation before recreating any hardening artifacts.
