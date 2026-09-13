@@ -1,0 +1,74 @@
+contract_id: KCA-ELS-INTEGRITY-HARDENING-001
+contract_version: v0.1
+status: PROPOSED
+risk: L2
+implementation_authorized: false
+verifier_modification_authorized: false
+p1_closure_authorized: false
+els_readiness_authorized: false
+autonomous_continuation_authorized: false
+criteria:
+  KCAH-001:
+    requirement: exact canonical state identity is required for governed current-state claims
+    result: PASS | FAIL | UNKNOWN | CONFLICT
+    blocks_on: [FAIL, UNKNOWN, CONFLICT]
+  KCAH-002:
+    requirement: material artifacts have explicit content/object identity and authority status
+    result: PASS | FAIL | UNKNOWN | CONFLICT
+    blocks_on: [FAIL, UNKNOWN, CONFLICT]
+  KCAH-003:
+    requirement: bootstrap context declares scope, selected/excluded artifacts, identities, freshness and unknowns
+    result: PASS | FAIL | UNKNOWN | CONFLICT
+    blocks_on: [FAIL, UNKNOWN, CONFLICT]
+  KCAH-004:
+    requirement: audit-pack manifest declares prompt, scope, required evidence and included artifact identities
+    result: PASS | FAIL | UNKNOWN | CONFLICT
+    blocks_on: [FAIL, UNKNOWN, CONFLICT]
+  KCAH-005:
+    requirement: prompt/evidence compatibility is explicitly validated; unavailable requirements cannot silently pass
+    result: PASS | FAIL | UNKNOWN | CONFLICT
+    blocks_on: [FAIL, UNKNOWN, CONFLICT]
+  KCAH-006:
+    requirement: integrity manifest is non-circular and excludes self-hash or equivalent recursive identity
+    result: PASS | FAIL | UNKNOWN | CONFLICT
+    blocks_on: [FAIL, UNKNOWN, CONFLICT]
+  KCAH-007:
+    requirement: package completeness and path-boundary checks fail closed
+    result: PASS | FAIL | UNKNOWN | CONFLICT
+    blocks_on: [FAIL, UNKNOWN, CONFLICT]
+  KCAH-008:
+    requirement: stale, superseded, conflicting or substituted artifacts cannot silently satisfy current-state requirements
+    result: PASS | FAIL | UNKNOWN | CONFLICT
+    blocks_on: [FAIL, UNKNOWN, CONFLICT]
+  KCAH-009:
+    requirement: adversarial failure classes are represented in the implementation test plan
+    result: PASS | FAIL | UNKNOWN | CONFLICT
+    blocks_on: [FAIL, UNKNOWN, CONFLICT]
+  KCAH-010:
+    requirement: governed continuation consumes one machine-checkable integrity decision and has no undocumented bypass surface
+    result: PASS | FAIL | UNKNOWN | CONFLICT
+    blocks_on: [FAIL, UNKNOWN, CONFLICT]
+  KCAH-011:
+    requirement: generated package validation is bound to exact package bytes and declared source state
+    result: PASS | FAIL | UNKNOWN | CONFLICT
+    blocks_on: [FAIL, UNKNOWN, CONFLICT]
+  KCAH-012:
+    requirement: human approval remains mandatory before promotion or implementation
+    result: PASS | FAIL | UNKNOWN | CONFLICT
+    blocks_on: [FAIL, UNKNOWN, CONFLICT]
+closure:
+  all_criteria_required: true
+  unknown_blocks: true
+  conflict_blocks: true
+  fail_blocks: true
+  documentation_exists_is_not_operational_pass: true
+  human_approval_required: true
+  independent_l2_audit_required: true
+non_actions:
+  - modify_checkpoint_verifier
+  - modify_verifier_tests
+  - close_p1_findings
+  - declare_kca_ready
+  - declare_els_ready
+  - authorize_autonomous_continuation
+  - install_or_configure_external_tools
