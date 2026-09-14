@@ -2,12 +2,12 @@
 
 Iteration: KCA-ELS-INTEGRITY-HARDENING-002-CORRECTION
 Target branch: `kca/els-integrity-hardening-002-correction`
-Audit baseline HEAD: `a02981ff6b3185d9cb9379d5a7721ab6c565a6cd`
+Audit baseline HEAD: `7974927e725252d57d6fe941f19c527a558944b0`
 Parent baseline: `ba843822bc46eca1a2fd8d7f565fd218ff588475`
 Governing prompt: `INDEPENDENT-L2-AUDIT-PROMPT.md`
 Status: PROPOSED / REQUIRES INDEPENDENT L2 REVIEW
 
-The audit baseline is the exact commit containing the correction contract, acceptance matrix, self-audit, reconciliation, independent audit prompt, baseline freeze record, and this handoff. No correction artifact changes are permitted after baseline freeze.
+The audit baseline is the exact commit identified above. The audit baseline branch must point to this commit. Subsequent engineering-branch metadata commits are not part of the audit baseline.
 
 ## Audit target
 
