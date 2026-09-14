@@ -1,0 +1,98 @@
+contract_id: KCA-ELS-INTEGRITY-HARDENING-002-CORRECTION
+contract_version: v0.1
+parent_contract: KCA-ELS-INTEGRITY-HARDENING-001
+status: PROPOSED
+risk: L2
+implementation_authorized: false
+p1_closure_authorized: false
+kca_readiness_authorized: false
+els_readiness_authorized: false
+autonomous_continuation_authorized: false
+criteria:
+  C01:
+    name: Canonical Artifact Identity
+    requirement: exact artifact identity, authority status, and source binding are independently checkable
+    pass_evidence: direct machine-checkable identity evidence
+    fail_condition: identity absent, mismatched, or unverifiable
+    unknown_condition: required identity cannot be established
+    conflict_condition: authoritative identities disagree
+    blocks_on: [FAIL, UNKNOWN, CONFLICT]
+  C02:
+    name: Context Resolution / Bootstrap
+    requirement: bounded context declares source identity, scope, exclusions, freshness, and unknowns
+    pass_evidence: deterministic bootstrap output bound to exact source state
+    fail_condition: required scope/source/freshness semantics missing or violated
+    unknown_condition: source state or required context cannot be established
+    conflict_condition: bootstrap inputs disagree
+    blocks_on: [FAIL, UNKNOWN, CONFLICT]
+  C03:
+    name: Audit-Pack Manifest
+    requirement: package contents, identities, scope, and non-circular manifest are independently validated
+    pass_evidence: machine-checkable manifest validation
+    fail_condition: missing, extra, circular, or boundary-violating package state
+    unknown_condition: completeness or identity cannot be established
+    conflict_condition: manifest and package/source identities disagree
+    blocks_on: [FAIL, UNKNOWN, CONFLICT]
+  C04:
+    name: Prompt/Evidence Compatibility
+    requirement: governing prompt requirements map explicitly to available evidence and exact artifact identities
+    pass_evidence: compatibility validation with no unresolved required evidence
+    fail_condition: requirement mismatch or silent scope substitution
+    unknown_condition: required evidence availability cannot be established
+    conflict_condition: prompt and evidence inventories disagree
+    blocks_on: [FAIL, UNKNOWN, CONFLICT]
+  C05:
+    name: Integrity Validator
+    requirement: validator contract defines deterministic PASS/FAIL/UNKNOWN/CONFLICT semantics and failure-closed behavior
+    pass_evidence: contract and later implementation evidence satisfy all defined checks
+    fail_condition: validator permits invalid state to pass
+    unknown_condition: behavior cannot be established
+    conflict_condition: validator result conflicts with authoritative evidence
+    blocks_on: [FAIL, UNKNOWN, CONFLICT]
+  C06:
+    name: Continuation Gate Integration
+    requirement: governed continuation consumes one machine-checkable current integrity decision with no undocumented bypass surface
+    pass_evidence: direct enforcement evidence across governed continuation surfaces
+    fail_condition: continuation possible after blocking result or through bypass
+    unknown_condition: enforcement or surface inventory cannot be established
+    conflict_condition: registered and observed continuation surfaces disagree
+    blocks_on: [FAIL, UNKNOWN, CONFLICT]
+  F21:
+    name: Wrong-target write / branch-parameter omission
+    requirement: every governed write declares and resolves an explicit target, verifies target HEAD before write, writes against that target, re-fetches target, and verifies result
+    pass_evidence: direct machine-checkable pre-write and post-write target verification evidence for every governed write surface
+    fail_condition: implicit/omitted target, wrong target mutation, or missing mandatory verification step
+    unknown_condition: a governed write surface cannot be enumerated or verified
+    conflict_condition: declared target identity and observed mutation disagree
+    blocks_on: [FAIL, UNKNOWN, CONFLICT]
+  KCAH-011-A:
+    name: Exact package-byte identity
+    requirement: exact package bytes are independently identified and verified
+    blocks_on: [FAIL, UNKNOWN, CONFLICT]
+  KCAH-011-B:
+    name: Declared source-state identity
+    requirement: package identity is bound to declared source state
+    blocks_on: [FAIL, UNKNOWN, CONFLICT]
+  KCAH-011-C:
+    name: Reproducible package generation
+    requirement: package generation is deterministic from declared source state and specification
+    blocks_on: [FAIL, UNKNOWN, CONFLICT]
+closure:
+  all_criteria_required: true
+  unknown_blocks: true
+  conflict_blocks: true
+  fail_blocks: true
+  documentation_exists_is_not_operational_pass: true
+  human_approval_required: true
+  independent_l2_audit_required: true
+  implementation_requires_approved_correction: true
+  p1_closure_requires_reconciled_evidence: true
+canonical_dependency_edges:
+  - C01 -> C02
+  - C01 -> C03
+  - C02 -> C04
+  - C03 -> C04
+  - C04 -> C05
+  - C05 -> C06
+  - C01 -> F21
+  - C06 -> F21
