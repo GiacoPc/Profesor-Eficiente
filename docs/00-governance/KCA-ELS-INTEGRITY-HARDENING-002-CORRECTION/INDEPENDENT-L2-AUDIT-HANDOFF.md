@@ -1,11 +1,11 @@
 # Independent L2 Audit Handoff — KCA/ELS Integrity Hardening 002 Correction
 
-**Iteration:** KCA-ELS-INTEGRITY-HARDENING-002-CORRECTION  
-**Target branch:** `kca/els-integrity-hardening-002-correction`  
-**Audit baseline HEAD:** `646f338b869af9e34b71ac13f3d9b9b3572899b8`  
-**Parent baseline:** `ba843822bc46eca1a2fd8d7f565fd218ff588475`  
-**Governing prompt:** `INDEPENDENT-L2-AUDIT-PROMPT.md`  
-**Status:** PROPOSED / REQUIRES INDEPENDENT L2 REVIEW
+Iteration: KCA-ELS-INTEGRITY-HARDENING-002-CORRECTION
+Target branch: `kca/els-integrity-hardening-002-correction`
+Audit baseline HEAD: `FINAL-HEAD-TO-BE-RECORDED-AFTER-HANDOFF-COMMIT`
+Parent baseline: `ba843822bc46eca1a2fd8d7f565fd218ff588475`
+Governing prompt: `INDEPENDENT-L2-AUDIT-PROMPT.md`
+Status: PROPOSED / REQUIRES INDEPENDENT L2 REVIEW
 
 ## Audit target
 
@@ -29,3 +29,7 @@ A PASS from the auditor is evidence only. Human approval remains mandatory.
 ## Evidence boundary
 
 Operational enforcement of F21, C01-C06, continuation-gate integration, provider/runtime behavior, workstation recovery, and autonomous execution is not established merely by these documents. Such claims must remain UNKNOWN/NOT_AVAILABLE unless independently evidenced.
+
+## Baseline identity rule
+
+The final audit baseline MUST be the exact commit that contains this handoff and all correction artifacts. After this commit, the baseline HEAD MUST be resolved and recorded in a separate immutable audit manifest; no artifact changes are permitted after the baseline freeze.
