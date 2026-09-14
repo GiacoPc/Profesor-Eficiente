@@ -1,0 +1,5 @@
+Frozen source baseline for independent L2 audit:
+commit=6acf83d3a9190ca4b6139279f44332f46282e320
+tree=0c94bb75a6d31fc6a21adefe5e7f75f706e6dbce
+
+This reference itself is outside the frozen source commit and must not be included in substantive source claims.
