@@ -2,14 +2,16 @@
 
 Iteration: KCA-ELS-INTEGRITY-HARDENING-002-CORRECTION
 Target branch: `kca/els-integrity-hardening-002-correction`
-Audit baseline HEAD: `FINAL-HEAD-TO-BE-RECORDED-AFTER-HANDOFF-COMMIT`
+Audit baseline HEAD: `b0aecb58e69e9e8dc605fc8c739f8169671d88ea`
 Parent baseline: `ba843822bc46eca1a2fd8d7f565fd218ff588475`
 Governing prompt: `INDEPENDENT-L2-AUDIT-PROMPT.md`
 Status: PROPOSED / REQUIRES INDEPENDENT L2 REVIEW
 
+The audit baseline is the exact commit containing the correction contract, acceptance matrix, self-audit, reconciliation, independent audit prompt, and this handoff. No correction artifact changes are permitted after baseline freeze.
+
 ## Audit target
 
-Determine whether the correction contract genuinely resolves the two accepted P1 findings from the parent audit:
+Determine whether the correction genuinely resolves the two accepted P1 findings from the parent audit:
 
 1. P1-F21 — wrong-target write / branch-parameter omission.
 2. P1-C01-C06 — missing one-to-one acceptance traceability.
@@ -29,7 +31,3 @@ A PASS from the auditor is evidence only. Human approval remains mandatory.
 ## Evidence boundary
 
 Operational enforcement of F21, C01-C06, continuation-gate integration, provider/runtime behavior, workstation recovery, and autonomous execution is not established merely by these documents. Such claims must remain UNKNOWN/NOT_AVAILABLE unless independently evidenced.
-
-## Baseline identity rule
-
-The final audit baseline MUST be the exact commit that contains this handoff and all correction artifacts. After this commit, the baseline HEAD MUST be resolved and recorded in a separate immutable audit manifest; no artifact changes are permitted after the baseline freeze.
