@@ -1,0 +1,17 @@
+baseline_id: KCA-ELS-INTEGRITY-HARDENING-002-CORRECTION-L2-001
+repository: GiacoPc/Profesor-Eficiente
+correction_branch: kca/els-integrity-hardening-002-correction
+frozen_head: 6acf83d3a9190ca4b6139279f44332f46282e320
+frozen_tree: 0c94bb75a6d31fc6a21adefe5e7f75f706e6dbce
+parent: 78059fae8bd2829dd193b197f745486a26869b93
+status: PROPOSED / REQUIRES INDEPENDENT L2 AUDIT
+rules:
+  - this file records the intended frozen identity after this commit
+  - the audit branch must point to the frozen_head
+  - no source artifact may be modified after freeze
+  - any post-freeze modification invalidates this baseline and requires a new freeze
+  - implementation is not authorized
+  - P1 closure is not authorized
+  - KCA readiness is not authorized
+  - ELS readiness is not authorized
+  - autonomous continuation is not authorized
