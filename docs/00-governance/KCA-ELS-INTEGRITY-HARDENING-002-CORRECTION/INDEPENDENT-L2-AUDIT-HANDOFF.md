@@ -1,13 +1,14 @@
 # Independent L2 Audit Handoff — KCA/ELS Integrity Hardening 002 Correction
 
 Iteration: KCA-ELS-INTEGRITY-HARDENING-002-CORRECTION
-Target branch: `kca/els-integrity-hardening-002-correction`
-Audit baseline HEAD: `7974927e725252d57d6fe941f19c527a558944b0`
+Target correction branch: `kca/els-integrity-hardening-002-correction-v2`
+Audit baseline branch: `audit/kca-els-l2-correction-baseline-v3-2026-09-14`
+Audit baseline identity: resolve the audit baseline branch immediately before substantive review and record its exact commit and tree in the audit report.
 Parent baseline: `ba843822bc46eca1a2fd8d7f565fd218ff588475`
 Governing prompt: `INDEPENDENT-L2-AUDIT-PROMPT.md`
 Status: PROPOSED / REQUIRES INDEPENDENT L2 REVIEW
 
-The audit baseline is the exact commit identified above. The audit baseline branch must point to this commit. Subsequent engineering-branch metadata commits are not part of the audit baseline.
+The audit baseline is the exact commit resolved from the immutable audit-baseline branch. The moving correction branch is not authoritative for substantive review after freeze.
 
 ## Audit target
 
