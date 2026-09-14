@@ -1,0 +1,13 @@
+baseline:
+  repository: GiacoPc/Profesor-Eficiente
+  correction_branch: kca/els-integrity-hardening-002-correction
+  audit_baseline_branch: audit/kca-els-l2-correction-baseline-2026-09-14
+  audit_baseline_commit: b0aecb58e69e9e8dc605fc8c739f8169671d88ea
+  parent_baseline_commit: ba843822bc46eca1a2fd8d7f565fd218ff588475
+  status: FROZEN_FOR_INDEPENDENT_L2_AUDIT
+rules:
+  - no_artifact_changes_after_freeze
+  - audit_commit_is_the_exact_source_state
+  - audit_branch_must_point_to_audit_commit
+  - human_approval_required_after_audit
+  - implementation_not_authorized
