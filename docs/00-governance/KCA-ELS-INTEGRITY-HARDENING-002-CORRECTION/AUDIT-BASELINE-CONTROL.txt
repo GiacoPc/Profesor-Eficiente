@@ -1,0 +1,6 @@
+The authoritative immutable audit identity is fixed by Git object identity, not by the moving branch tip:
+
+COMMIT: 6acf83d3a9190ca4b6139279f44332f46282e320
+TREE:   0c94bb75a6d31fc6a21adefe5e7f75f706e6dbce
+
+Any later commit is excluded from substantive audit unless a new baseline is explicitly declared.
