@@ -1,0 +1,56 @@
+version: "1.0"
+contract: "KCA-ELS-CONTEXT-ECONOMY"
+status: "IMPLEMENTED_ON_ISOLATED_BRANCH_REQUIRES_VALIDATION"
+implementation_scope:
+  - policy
+  - schema
+  - resolution_protocol
+  - bootstrap_template
+criteria:
+  CEC-01:
+    requirement: "Git remains canonical authority."
+    pass_evidence: "Policy and protocol explicitly designate Git as canonical."
+    fail: "Any derived context is treated as canonical."
+    unknown: "Canonical source cannot be resolved."
+    conflict: "Two authoritative source states disagree."
+    blocks_on: [FAIL, UNKNOWN, CONFLICT]
+  CEC-02:
+    requirement: "C0 bootstrap is sufficient to establish fresh-session continuity."
+    pass_evidence: "Bootstrap template contains identity, state, objective, contracts, blockers, evidence and next action."
+    fail: "Fresh session requires full chat replay."
+    unknown: "Required bootstrap field cannot be established."
+    conflict: "Bootstrap contradicts authoritative state."
+    blocks_on: [FAIL, UNKNOWN, CONFLICT]
+  CEC-03:
+    requirement: "C1 contains only task-relevant authoritative context."
+    pass_evidence: "Protocol defines exact artifact selection and minimization."
+    fail: "Irrelevant or duplicated context is mandatory."
+    unknown: "Task dependencies cannot be resolved."
+    conflict: "Selected artifact state conflicts."
+    blocks_on: [FAIL, UNKNOWN, CONFLICT]
+  CEC-04:
+    requirement: "C2/C3 are demand-driven and provenance preserving."
+    pass_evidence: "Protocol and schema define C2/C3 and source identities."
+    fail: "Forensic/history material is silently treated as current authority."
+    unknown: "Required provenance is unavailable."
+    conflict: "Source identities disagree."
+    blocks_on: [FAIL, UNKNOWN, CONFLICT]
+  CEC-05:
+    requirement: "FAIL/UNKNOWN/CONFLICT fail closed for governed continuation."
+    pass_evidence: "Policy and protocol define blocking semantics."
+    fail: "Continuation proceeds despite a blocking state."
+    unknown: "Gate behavior is not observable."
+    conflict: "Different layers define incompatible gate semantics."
+    blocks_on: [FAIL, UNKNOWN, CONFLICT]
+  CEC-06:
+    requirement: "F21 target verification is explicit for governed writes."
+    pass_evidence: "Protocol specifies target declaration, resolution, HEAD verification, explicit write target, re-fetch and result verification."
+    fail: "Write can proceed without explicit target."
+    unknown: "Target identity cannot be verified."
+    conflict: "Observed write target differs from declared target."
+    blocks_on: [FAIL, UNKNOWN, CONFLICT]
+closure:
+  all_criteria_required: true
+  independent_validation_required: true
+  human_approval_required_for_governance_promotion: true
+  token_savings_claim_requires_measurement: true
