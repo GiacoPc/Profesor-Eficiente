@@ -1,0 +1,28 @@
+version: "1.0"
+package:
+  required:
+    - package_id
+    - generated_at
+    - source_state
+    - context_class
+    - objective
+    - source_artifacts
+    - blockers
+    - next_authorized_action
+  fields:
+    package_id: "stable identifier for the derived context package"
+    generated_at: "UTC timestamp"
+    source_state: "exact authoritative repository state used for resolution"
+    context_class: "C0|C1|C2|C3"
+    objective: "current task objective"
+    source_artifacts: "exact paths and identities used"
+    blockers: "FAIL|UNKNOWN|CONFLICT items affecting continuation"
+    next_authorized_action: "single bounded next action"
+    evidence_refs: "optional exact evidence references"
+    omitted_context: "non-authoritative/redundant context intentionally excluded"
+  provenance:
+    source_type: "git_artifact|approved_decision|evidence|conversation"
+    authority_status: "APPROVED|DECIDED|PROPOSED|PENDING|UNVERIFIED|UNKNOWN|REJECTED|DEPRECATED|SUPERSEDED"
+    evidence_status: "FACT|EVIDENCE|INFERENCE|PROPOSAL|DECISION|UNKNOWN"
+resolution_result:
+  allowed: [READY, BLOCKED, UNKNOWN, CONFLICT, NEEDS_HUMAN]
