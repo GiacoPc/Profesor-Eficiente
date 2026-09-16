@@ -1,0 +1,44 @@
+version: "1.0"
+status: "IMPLEMENTED_ON_ISOLATED_BRANCH_REQUIRES_VALIDATION"
+authority: "PGKI"
+canonical_source: "git"
+context_classes:
+  C0:
+    purpose: "bootstrap"
+    required: true
+  C1:
+    purpose: "task"
+    required: true
+  C2:
+    purpose: "cross-contract dependencies"
+    required: false
+  C3:
+    purpose: "forensic evidence"
+    required: false
+selection:
+  default: [C0, C1]
+  demand_driven: [C2, C3]
+  no_full_chat_replay_required: true
+provenance:
+  preserve_source_identity: true
+  preserve_status_labels: true
+  preserve_evidence_labels: true
+  inferred_content_is_authority: false
+blocking:
+  states: [FAIL, UNKNOWN, CONFLICT]
+  governed_continuation: BLOCK
+f21_write_control:
+  sequence:
+    - TARGET_REF_DECLARED
+    - TARGET_REF_RESOLVED
+    - TARGET_HEAD_VERIFIED
+    - WRITE_WITH_EXPLICIT_TARGET
+    - REFETCH_TARGET
+    - VERIFY_RESULT
+  missing_explicit_target: BLOCK
+continuity:
+  new_chat_bootstrap_required: true
+  chat_history_is_authority: false
+measurement:
+  token_savings: "UNVERIFIED_UNTIL_MEASURED"
+  context_budget: "POLICY_PARAMETER_NOT_YET_EMPIRICALLY_CALIBRATED"
