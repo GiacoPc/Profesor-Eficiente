@@ -85,7 +85,8 @@ execution_record:
   ci_workflow: Governance
   ci_run_id: 35743631536
   ci_job_id: 106799420430
-  engineering_head: 95225c5fd17c9d94a09fb76c75fbc4f2792063b2
+  workflow_source_commit: 95225c5fd17c9d94a09fb76c75fbc4f2792063b2
+  engineering_head: 6ddb9d4e88800c399e52d3ea20da3bc8fb832776
   execution_ref: refs/pull/10/merge
   ref: els/iter-0003-p1-001-c-wb001-execution-001
   ref_source: github-actions-env
