@@ -12,6 +12,8 @@ import tempfile
 import time
 from pathlib import Path
 
+from ci_identity import resolve_identity
+
 # Deliberately large deterministic payload so the test has an observable
 # incomplete state before the final payload bytes are written.
 PAYLOAD = ("schema_version: '0.1'\n" + "payload_marker: 'WB-001-partial-write'\n" + ("x" * 8192) + "\n").encode("utf-8")
@@ -64,10 +66,12 @@ def oracle(*, repository_identity_ok: bool, boundary_supported: bool,
 
 
 def controller() -> int:
-    repo = git("rev-parse", "--show-toplevel")
-    ref = git("symbolic-ref", "--short", "HEAD")
-    head = git("rev-parse", "HEAD")
-    remote = git("remote", "get-url", "origin")
+    identity_data = resolve_identity(git)
+    repo = identity_data["repository"]
+    ref = identity_data["ref"]
+    head = identity_data["engineering_head"]
+    remote = identity_data["remote"]
+    execution_ref = identity_data["execution_ref"]
 
     with tempfile.TemporaryDirectory(prefix="p1-001-c-wb001-") as td:
         root = Path(td)
@@ -155,6 +159,8 @@ def controller() -> int:
             "repository": repo,
             "remote": remote,
             "ref": ref,
+            "ref_source": identity_data["ref_source"],
+            "execution_ref": execution_ref,
             "engineering_head": head,
             "controller_identity": process_identity(controller_pid, "controller"),
             "target_identity": process_identity(target_pid, "target"),
