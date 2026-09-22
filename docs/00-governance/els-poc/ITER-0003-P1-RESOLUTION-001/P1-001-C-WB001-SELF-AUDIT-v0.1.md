@@ -54,11 +54,11 @@ P1-001-C execution evidence is now present, but the contract requires more than 
 
 ## Self-audit conclusion
 
-**RESULT: PASS_WITH_LIMITATIONS**
+**RESULT: PASS**
 
-The evidence directly establishes the declared WB-001 partial-write behavior under the executed POSIX process-interruption protocol and deterministically classifies the observed state as `INVALID`.
+The evidence directly establishes the declared WB-001 partial-write behavior under the executed POSIX process-interruption protocol and deterministically classifies the observed state as `INVALID`. Under the contract's allowed criterion outcomes, this supports `PASS` for the evidenced supported boundary WB-001.
 
-It does not establish unexecuted persistence boundaries or higher-fidelity failure classes.
+The PASS is bounded by the declared evidence boundary: unexecuted persistence mechanisms and higher-fidelity failure classes remain outside the claim. These are evidence-scope limitations, not a fifth contractual result state.
 
 ## Required next gate
 
