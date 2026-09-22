@@ -1,7 +1,7 @@
 test_spec_id: P1-001-C-TEST-SPEC-v0.1
 finding: P1-001-C
 status: APPROVED_FOR_IMPLEMENTATION_DESIGN_ONLY
-execution_status: NOT_EXECUTED
+execution_status: EXECUTED
 risk: L2
 contract:
   id: ITER-0003-P1-RESOLUTION-001
@@ -79,3 +79,29 @@ non_claims:
   - android_process_death_recovery
   - provider_or_ide_quota_recovery
   - unsupported_persistence_mechanisms
+
+execution_record:
+  evidence_id: P1-001-C-WB001-PARTIAL-WRITE-001
+  ci_workflow: Governance
+  ci_run_id: 35743631536
+  ci_job_id: 106799420430
+  engineering_head: 95225c5fd17c9d94a09fb76c75fbc4f2792063b2
+  execution_ref: refs/pull/10/merge
+  ref: els/iter-0003-p1-001-c-wb001-execution-001
+  ref_source: github-actions-env
+  artifact_id: 10701051356
+  artifact_digest: sha256:315f81a0047ad5d1ee16df1b5939e26c328277aadec0d3d455df69dd7fb9d710
+  observed:
+    partial_write: true
+    persisted_byte_length: 768
+    expected_byte_length: 8254
+    target_terminated_by_sigterm: true
+    bytes_stable_after_termination: true
+    oracle_result: INVALID
+  scope: WB-001 only
+  non_claims:
+    - workstation_crash_recovery
+    - power_loss_recovery
+    - android_process_death_recovery
+    - provider_or_ide_quota_recovery
+    - unsupported_persistence_mechanisms
