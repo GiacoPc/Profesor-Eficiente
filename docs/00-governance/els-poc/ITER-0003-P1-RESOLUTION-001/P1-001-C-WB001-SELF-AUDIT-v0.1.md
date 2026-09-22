@@ -4,7 +4,8 @@
 **Evidence:** `P1-001-C-WB001-EXECUTION-EVIDENCE-001.md`  
 **Evidence ID:** `P1-001-C-WB001-PARTIAL-WRITE-001`  
 **CI run:** `35743631536`  
-**Engineering HEAD:** `95225c5fd17c9d94a09fb76c75fbc4f2792063b2`
+**Engineering HEAD observed by test:** `6ddb9d4e88800c399e52d3ea20da3bc8fb832776`  
+**Workflow source commit:** `95225c5fd17c9d94a09fb76c75fbc4f2792063b2`
 
 ## Audit objective
 
@@ -18,7 +19,7 @@ The execution corresponds to criterion P1-001-C of contract v0.2 and the WB-001 
 
 ### 2. Repository and execution identity — PASS
 
-The evidence records repository `GiacoPc/Profesor-Eficiente`, engineering ref `els/iter-0003-p1-001-c-wb001-execution-001`, engineering HEAD `95225c5fd17c9d94a09fb76c75fbc4f2792063b2`, execution ref `refs/pull/10/merge`, and CI run `35743631536`.
+The evidence records repository `GiacoPc/Profesor-Eficiente`, engineering ref `els/iter-0003-p1-001-c-wb001-execution-001`, engineering HEAD `6ddb9d4e88800c399e52d3ea20da3bc8fb832776`, execution ref `refs/pull/10/merge`, and CI run `35743631536`.
 
 The distinction between engineering HEAD and PR merge execution ref is preserved. The CI identity regression specifically exercised the detached-HEAD case that had previously blocked this test.
 
@@ -41,7 +42,7 @@ This is a bounded result for WB-001. It is not a statement that all interrupted 
 
 ### 6. Evidence provenance — PASS
 
-The execution is tied to CI run `35743631536`, job `106799420430`, engineering HEAD `95225c5fd17c9d94a09fb76c75fbc4f2792063b2`, and artifact ID `10701051356` with digest `sha256:315f81a0047ad5d1ee16df1b5939e26c328277aadec0d3d455df69dd7fb9d710`.
+The execution is tied to CI run `35743631536`, job `106799420430`, engineering HEAD `6ddb9d4e88800c399e52d3ea20da3bc8fb832776`, workflow source commit `95225c5fd17c9d94a09fb76c75fbc4f2792063b2`, and artifact ID `10701051356` with digest `sha256:315f81a0047ad5d1ee16df1b5939e26c328277aadec0d3d455df69dd7fb9d710`.
 
 ### 7. Fidelity boundary and non-claims — PASS
 
