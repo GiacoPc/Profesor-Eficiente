@@ -19,15 +19,16 @@
 
 - Repository: `GiacoPc/Profesor-Eficiente`
 - Engineering ref: `els/iter-0003-p1-001-c-wb001-execution-001`
-- Exact engineering HEAD: `95225c5fd17c9d94a09fb76c75fbc4f2792063b2`
+- Exact engineering HEAD observed by the executed test: `6ddb9d4e88800c399e52d3ea20da3bc8fb832776`
 - Execution ref: `refs/pull/10/merge`
 - Ref source: `github-actions-env`
 - Workflow: `Governance`
 - CI run: `35743631536`
 - CI job: `106799420430`
+- Workflow source commit: `95225c5fd17c9d94a09fb76c75fbc4f2792063b2`
 - CI conclusion: `success`
 
-The distinction between engineering ref and PR merge execution ref is intentional. The former identifies the engineering branch; the latter identifies the GitHub Actions execution context.
+The distinction between the workflow source commit, engineering HEAD, and PR merge execution ref is intentional. The workflow source commit is `95225c5fd17c9d94a09fb76c75fbc4f2792063b2`; the executed PR merge commit resolved by the checkout is `6ddb9d4e88800c399e52d3ea20da3bc8fb832776`; the engineering ref is the head branch named above.
 
 ## Controller / target separation
 
