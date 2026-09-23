@@ -50,6 +50,28 @@ The L3 report becomes evidence only after:
 
 L3 is an evidence source, not an authority.
 
+## External execution files
+
+Master prompt for Grok:
+`P1-001-L3-GROK-MASTER-PROMPT-v0.1.md`
+
+Master prompt blob SHA:
+`645d5bfbbf9bd9adf9319a05eda4b3be8050ab69`
+
+Response capture template:
+`P1-001-L3-RESPONSE-CAPTURE-TEMPLATE-v0.1.md`
+
+Response template blob SHA:
+`1411e63ab324dbbd3fcdb9fa1c3455bd851b31ea`
+
+The intended transfer package is therefore:
+1. `P1-001-L3-EXTERNAL-AUDIT-PACKET-v0.1.md`
+2. `P1-001-L3-HANDOFF-INSTRUCTIONS-v0.1.md`
+3. `P1-001-L3-GROK-MASTER-PROMPT-v0.1.md`
+4. `P1-001-L3-RESPONSE-CAPTURE-TEMPLATE-v0.1.md`
+
+The external auditor should receive the packet plus the master prompt. The response template is for the project side to capture the returned report and provenance.
+
 ## Current packet identity
 
 Packet:
