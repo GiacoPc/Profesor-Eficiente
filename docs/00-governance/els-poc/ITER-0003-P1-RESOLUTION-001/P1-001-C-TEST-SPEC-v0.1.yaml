@@ -9,6 +9,7 @@ contract:
   criterion: P1-001-C
   requirement: "Exercise partial/interrupted writes for each supported write boundary with deterministic classification."
 engineering_identity:
+  repository: https://github.com/GiacoPc/Profesor-Eficiente.git
   ref: els/iter-0003-p1-001-c-wb001-execution-001
   design_base_head: 31c406fd1264c54e702931134f6f7db14b494000
 supported_boundary_inventory:
