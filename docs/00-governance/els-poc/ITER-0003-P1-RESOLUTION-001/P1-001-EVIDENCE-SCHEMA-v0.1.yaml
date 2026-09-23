@@ -37,8 +37,13 @@ record:
       target_identity: string
     observed_result: string
     oracle_result:
-      enum: [PASS, FAIL, UNKNOWN, CONFLICT]
+      enum: [PASS, FAIL, RECOVERABLE, INVALID, UNKNOWN, CONFLICT]
     timestamp_or_run_id: string
+
+  oracle_result_semantics:
+    - "PASS/FAIL are generic verification outcomes used by process-interruption evidence."
+    - "RECOVERABLE/INVALID are partial-write-specific classification states defined by partial_write_oracle."
+    - "UNKNOWN/CONFLICT retain their contract-level blocking semantics."
 
 failure_classes:
   - process_interruption
