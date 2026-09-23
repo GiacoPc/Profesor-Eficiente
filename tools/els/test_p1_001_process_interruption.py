@@ -20,6 +20,8 @@ import tempfile
 import time
 from pathlib import Path
 
+from ci_identity import resolve_identity
+
 PAYLOAD = (
     "schema_version: '0.1'\n"
     "evidence_id: 'P1-001-REAL-PROCESS-INTERRUPTION-001'\n"
@@ -49,10 +51,12 @@ def target(checkpoint: Path, ready: Path) -> None:
 
 
 def controller() -> int:
-    repo = git("rev-parse", "--show-toplevel")
-    ref = git("symbolic-ref", "--short", "HEAD")
-    head = git("rev-parse", "HEAD")
-    remote = git("remote", "get-url", "origin")
+    identity_data = resolve_identity(git)
+    repo = identity_data["repository"]
+    ref = identity_data["ref"]
+    head = identity_data["engineering_head"]
+    remote = identity_data["remote"]
+    execution_ref = identity_data["execution_ref"]
 
     with tempfile.TemporaryDirectory(prefix="p1-001-interruption-") as td:
         root = Path(td)
@@ -115,6 +119,8 @@ def controller() -> int:
             "repository": repo,
             "remote": remote,
             "ref": ref,
+            "ref_source": identity_data["ref_source"],
+            "execution_ref": execution_ref,
             "engineering_head": head,
             "controller_identity": identity(controller_pid),
             "target_identity": identity(target_pid),
