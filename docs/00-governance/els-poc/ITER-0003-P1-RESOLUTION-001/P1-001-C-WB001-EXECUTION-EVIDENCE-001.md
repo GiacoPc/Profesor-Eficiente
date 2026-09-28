@@ -24,7 +24,7 @@
 - Ref source: `github-actions-env`
 - Workflow: `Governance`
 - CI run: `35743631536`
-- CI job: `106799420430`
+- CI job: `106799462365`
 - Workflow source commit: `95225c5fd17c9d94a09fb76c75fbc4f2792063b2`
 - CI conclusion: `success`
 
@@ -54,7 +54,7 @@ The successful CI run executed both the identity-regression test and the WB-001 
 - Expected complete artifact length: `8254` bytes
 - Expected complete artifact SHA-256: `f3f8655b3909dec9ca6451454804ea9c048b04da2557af9b971e0dc0d93bc2c8`
 - Observed persisted length: `768` bytes
-- Observed persisted SHA-256: `e5079e8d1342845ff804f44c134f0e2f177c83a14d476c21758bc3a720d375a6`
+- Observed persisted SHA-256: `e5079e8d1342842845ff804f44c134f0e2f177c83a14d476c21758bc3a720d375a6`
 
 ## Observed result
 
