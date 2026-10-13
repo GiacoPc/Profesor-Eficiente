@@ -1,0 +1,62 @@
+version: 1.1
+status: APPROVED_FOR_BASELINE
+schema:
+  required_fields: [id, decision, status, evidence, affected_artifacts]
+  statuses: [PROPOSED, APPROVED-DIRECTION, APPROVED, REJECTED, SUPERSEDED, UNKNOWN]
+entries:
+  - id: ARCH-DIR-001
+    decision: pedagogical_authority_outside_llm
+    status: APPROVED-DIRECTION
+    evidence: [BASELINE-RECONCILIATION-v1.0]
+    affected_artifacts: [PROJECT-CONSTITUTION.md, AI-GOVERNANCE.md, docs/ARCHITECTURE-BIBLE.md]
+  - id: ARCH-DIR-002
+    decision: APE_as_pedagogical_director
+    status: APPROVED-DIRECTION
+    evidence: [BASELINE-RECONCILIATION-v1.0]
+    affected_artifacts: [docs/ARCHITECTURE-BIBLE.md]
+  - id: ARCH-DIR-003
+    decision: SDT_means_Student_Digital_Twin
+    status: APPROVED-DIRECTION
+    evidence: [BASELINE-RECONCILIATION-v1.0]
+    affected_artifacts: [PROJECT-STATE.yaml, docs/ARCHITECTURE-BIBLE.md]
+  - id: ARCH-DIR-004
+    decision: FDM_as_formal_domain_model
+    status: APPROVED-DIRECTION
+    evidence: [BASELINE-RECONCILIATION-v1.0]
+    affected_artifacts: [docs/ARCHITECTURE-BIBLE.md]
+  - id: ARCH-DIR-005
+    decision: LLM_replaceability
+    status: APPROVED-DIRECTION
+    evidence: [BASELINE-RECONCILIATION-v1.0]
+    affected_artifacts: [PROJECT-STATE.yaml, docs/ARCHITECTURE-BIBLE.md]
+  - id: ARCH-DIR-006
+    decision: governed_local_RAG
+    status: APPROVED-DIRECTION
+    evidence: [BASELINE-RECONCILIATION-v1.0]
+    affected_artifacts: [PROJECT-STATE.yaml, docs/ARCHITECTURE-BIBLE.md]
+  - id: ARCH-DIR-007
+    decision: Rust_plus_Kotlin
+    status: APPROVED-DIRECTION
+    evidence: [BASELINE-RECONCILIATION-v1.0]
+    affected_artifacts: [PROJECT-STATE.yaml, docs/ARCHITECTURE-BIBLE.md]
+  - id: ARCH-DIR-008
+    decision: governance_precedes_implementation
+    status: APPROVED
+    evidence: [BASELINE-RECONCILIATION-v1.0]
+    affected_artifacts: [PROJECT-CONSTITUTION.md, AI-GOVERNANCE.md]
+  - id: ARCH-DIR-009
+    decision: task_routed_context
+    status: APPROVED-DIRECTION
+    evidence: [BASELINE-RECONCILIATION-v1.0]
+    affected_artifacts: [CONTEXT-MANIFEST.yaml, AI-GOVERNANCE.md]
+unresolved:
+  - final_LLM
+  - inference_runtime
+  - NPU_strategy
+  - STT
+  - TTS
+  - pronunciation_assessment
+  - prosody_analysis
+  - mastery_thresholds
+  - database
+  - performance_targets
