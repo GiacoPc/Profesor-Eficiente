@@ -1,12 +1,12 @@
 """Adversarial regression tests for the KCA context resolver fail-closed gate."""
 import hashlib
 import importlib.util
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-# The implementation lives under tools/, not beside this test module.
 MODULE_PATH = Path(__file__).resolve().parents[1] / "tools" / "kca_context_resolver.py"
 SPEC = importlib.util.spec_from_file_location("kca_context_resolver", MODULE_PATH)
 resolver = importlib.util.module_from_spec(SPEC)
@@ -56,6 +56,27 @@ class ResolverFailClosedTests(unittest.TestCase):
         self.assertEqual(package["gate"], "BLOCKED")
         self.assertIn("SOURCE_IDENTITY_UNVERIFIED",
                       {item["code"] for item in package["blockers"]})
+
+    def test_dirty_git_worktree_is_rejected_by_real_identity_check(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            subprocess.run(["git", "init", "-b", "test-branch"], cwd=root,
+                           check=True, capture_output=True)
+            subprocess.run(["git", "config", "user.email", "test@example.invalid"],
+                           cwd=root, check=True, capture_output=True)
+            subprocess.run(["git", "config", "user.name", "Test"], cwd=root,
+                           check=True, capture_output=True)
+            source = root / "tracked.txt"
+            source.write_text("committed", encoding="utf-8")
+            subprocess.run(["git", "add", "tracked.txt"], cwd=root, check=True,
+                           capture_output=True)
+            subprocess.run(["git", "commit", "-m", "baseline"], cwd=root, check=True,
+                           capture_output=True)
+            with patch.object(resolver, "ROOT", root):
+                self.assertEqual(resolver.identity()["branch"], "test-branch")
+                source.write_text("modified", encoding="utf-8")
+                with self.assertRaises(resolver.ResolverError):
+                    resolver.identity()
 
     def test_c0_paths_match_repository_topology(self):
         repo_root = Path(__file__).resolve().parents[1]
@@ -109,6 +130,22 @@ class ResolverFailClosedTests(unittest.TestCase):
                 package = resolver.resolve("sample", 8)
         self.assertEqual(package["gate"], "BLOCKED")
         self.assertIn("SOURCE_IDENTITY_CONFLICT",
+                      {item["code"] for item in package["blockers"]})
+
+    def test_repository_head_change_during_resolution_blocks(self):
+        first = {"branch": "test", "head": "abc", "tree": "def"}
+        second = {"branch": "test", "head": "changed", "tree": "changed-tree"}
+        with tempfile.TemporaryDirectory() as directory:
+            with (
+                patch.object(resolver, "ROOT", Path(directory)),
+                patch.object(resolver, "CORE", ()),
+                patch.object(resolver, "REQUIRED_GOVERNANCE", ()),
+                patch.object(resolver, "candidate_files", return_value=[]),
+                patch.object(resolver, "identity", side_effect=[first, second]),
+            ):
+                package = resolver.resolve("bounded task", 8)
+        self.assertEqual(package["gate"], "BLOCKED")
+        self.assertIn("SOURCE_STATE_CHANGED",
                       {item["code"] for item in package["blockers"]})
 
 
