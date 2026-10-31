@@ -5,7 +5,8 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-MODULE_PATH = Path(__file__).with_name("kca_context_resolver.py")
+# The implementation lives under tools/, not beside this test module.
+MODULE_PATH = Path(__file__).resolve().parents[1] / "tools" / "kca_context_resolver.py"
 SPEC = importlib.util.spec_from_file_location("kca_context_resolver", MODULE_PATH)
 resolver = importlib.util.module_from_spec(SPEC)
 assert SPEC and SPEC.loader
