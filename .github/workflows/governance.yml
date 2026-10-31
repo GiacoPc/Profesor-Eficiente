@@ -74,6 +74,12 @@ jobs:
           fi
           echo 'Basic secret hygiene OK.'
 
+      - name: KCA context resolver fail-closed regression suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_kca_context_resolver.py' -v
+
       - name: ELS checkpoint verifier regression suite
         shell: bash
         run: |
