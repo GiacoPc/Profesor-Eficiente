@@ -167,12 +167,11 @@ def resolve(objective: str, limit: int = 8) -> dict[str, Any]:
                     "state": "CONFLICT",
                     "detail": f"Working file differs from committed HEAD content: {path}",
                 })
-        except (OSError, ResolverError) as exc:
+        except (OSError, ResolverError, UnicodeError) as exc:
             blockers.append({"code": "SOURCE_IDENTITY_UNVERIFIED", "state": "UNKNOWN",
                              "detail": f"{path}: {exc}"})
 
-    # Re-check each selected source after the full package has been assembled.
-    # This catches source mutation between initial hashing and package emission.
+    # Re-check selected source bytes and Git blob identities after package assembly.
     for record in sources:
         path = Path(record["path"])
         try:
@@ -185,9 +184,22 @@ def resolve(objective: str, limit: int = 8) -> dict[str, Any]:
             if committed_sha != record["committed_sha256"] or current_sha != committed_sha:
                 blockers.append({"code": "WORKTREE_HEAD_CONTENT_CONFLICT", "state": "CONFLICT",
                                  "detail": f"Source bytes do not match committed HEAD: {path}"})
-        except (OSError, ResolverError) as exc:
+        except (OSError, ResolverError, UnicodeError) as exc:
             blockers.append({"code": "SOURCE_IDENTITY_UNVERIFIED", "state": "UNKNOWN",
                              "detail": f"{path}: {exc}"})
+
+    # The branch/HEAD/tree identity itself must also remain stable during resolution.
+    try:
+        final_state = identity()
+        if final_state != source_state:
+            blockers.append({
+                "code": "SOURCE_STATE_CHANGED",
+                "state": "CONFLICT",
+                "detail": "Repository branch, HEAD, or tree changed during context resolution.",
+            })
+    except ResolverError as exc:
+        blockers.append({"code": "SOURCE_IDENTITY_UNVERIFIED", "state": "UNKNOWN",
+                         "detail": f"Could not re-verify repository identity: {exc}"})
 
     gate = "BLOCKED" if blockers else "ELIGIBLE_FOR_HUMAN_REVIEW"
     package_material = {
@@ -241,7 +253,7 @@ def main() -> int:
 if __name__ == "__main__":
     try:
         raise SystemExit(main())
-    except (OSError, ResolverError) as exc:
+    except (OSError, ResolverError, UnicodeError) as exc:
         print(json.dumps({
             "gate": "BLOCKED",
             "blockers": [{"code": "RESOLVER_FAILURE", "state": "UNKNOWN", "detail": str(exc)}],
