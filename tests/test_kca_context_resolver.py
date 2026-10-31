@@ -1,4 +1,5 @@
 """Adversarial regression tests for the KCA context resolver fail-closed gate."""
+import hashlib
 import importlib.util
 import tempfile
 import unittest
@@ -25,7 +26,6 @@ class ResolverFailClosedTests(unittest.TestCase):
         self.assertTrue(package["blockers"])
         self.assertTrue(all(item["state"] in {"FAIL", "UNKNOWN", "CONFLICT"}
                             for item in package["blockers"]))
-        self.assertNotEqual(package["blockers"], [])
 
     def test_missing_objective_blocks(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -55,6 +55,60 @@ class ResolverFailClosedTests(unittest.TestCase):
                 package = resolver.resolve("bounded task", 8)
         self.assertEqual(package["gate"], "BLOCKED")
         self.assertIn("SOURCE_IDENTITY_UNVERIFIED",
+                      {item["code"] for item in package["blockers"]})
+
+    def test_c0_paths_match_repository_topology(self):
+        repo_root = Path(__file__).resolve().parents[1]
+        self.assertEqual(
+            resolver.CORE,
+            (
+                Path("PROJECT-CONSTITUTION.md"),
+                Path("PROJECT-STATE.yaml"),
+                Path("docs/ARCHITECTURE-BIBLE.md"),
+            ),
+        )
+        self.assertTrue(all((repo_root / path).is_file() for path in resolver.CORE))
+
+    def test_working_file_mismatch_with_head_blocks(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "sample.md").write_bytes(b"working bytes")
+            committed = b"committed bytes"
+            with (
+                patch.object(resolver, "ROOT", root),
+                patch.object(resolver, "CORE", ()),
+                patch.object(resolver, "REQUIRED_GOVERNANCE", ()),
+                patch.object(resolver, "candidate_files", return_value=[Path("sample.md")]),
+                patch.object(resolver, "identity",
+                              return_value={"branch": "test", "head": "abc", "tree": "def"}),
+                patch.object(resolver, "git", return_value="blob123"),
+                patch.object(resolver, "git_bytes", return_value=committed),
+            ):
+                package = resolver.resolve("sample", 8)
+        self.assertEqual(package["gate"], "BLOCKED")
+        self.assertIn("WORKTREE_HEAD_CONTENT_CONFLICT",
+                      {item["code"] for item in package["blockers"]})
+
+    def test_source_mutation_during_resolution_blocks(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "sample.md").write_bytes(b"committed bytes")
+            committed_sha = hashlib.sha256(b"committed bytes").hexdigest()
+            with (
+                patch.object(resolver, "ROOT", root),
+                patch.object(resolver, "CORE", ()),
+                patch.object(resolver, "REQUIRED_GOVERNANCE", ()),
+                patch.object(resolver, "candidate_files", return_value=[Path("sample.md")]),
+                patch.object(resolver, "identity",
+                              return_value={"branch": "test", "head": "abc", "tree": "def"}),
+                patch.object(resolver, "git", return_value="blob123"),
+                patch.object(resolver, "git_bytes", return_value=b"committed bytes"),
+                patch.object(resolver, "sha256_file",
+                              side_effect=[committed_sha, "changed-during-resolution"]),
+            ):
+                package = resolver.resolve("sample", 8)
+        self.assertEqual(package["gate"], "BLOCKED")
+        self.assertIn("SOURCE_IDENTITY_CONFLICT",
                       {item["code"] for item in package["blockers"]})
 
 
