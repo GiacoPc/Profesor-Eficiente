@@ -1,0 +1,22 @@
+version: "1.0"
+artifact_type: "kca_context_dependency_manifest"
+status: "PROPOSED"
+authority: "DERIVED_CONFIGURATION_NOT_GOVERNANCE_AUTHORITY"
+required_c0:
+  - "docs/00-governance/PROJECT-CONSTITUTION.md"
+  - "docs/00-governance/PROJECT-STATE-BASELINE-v1.0.md"
+  - "docs/00-governance/ARCHITECTURE-BIBLE-v1.0.md"
+dependencies:
+  "KCA-ELS-CONTEXT-ECONOMY-v1.0":
+    sources:
+      - "docs/00-governance/KCA-ELS-CONTEXT-ECONOMY-v1.0/KCA-ELS-CONTEXT-ECONOMY-v1.0.md"
+      - "docs/00-governance/KCA-ELS-CONTEXT-ECONOMY-v1.0/CONTEXT-POLICY.yaml"
+      - "docs/00-governance/KCA-ELS-CONTEXT-ECONOMY-v1.0/CONTEXT-SCHEMA.yaml"
+      - "docs/00-governance/KCA-ELS-CONTEXT-ECONOMY-v1.0/CONTEXT-RESOLUTION-PROTOCOL.md"
+      - "docs/00-governance/KCA-ELS-CONTEXT-ECONOMY-v1.0/CONTEXT-BOOTSTRAP-TEMPLATE.md"
+    status: "PROPOSED"
+    evidence_class: "PROPOSAL"
+forbidden:
+  - "Treating keyword score as proof of authority or dependency completeness"
+  - "Treating missing dependency information as an empty dependency set"
+  - "Treating generated context packages as canonical sources"
