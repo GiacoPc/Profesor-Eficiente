@@ -1,0 +1,21 @@
+version: "0.1"
+iteration: "KCA-ELS-CONTEXT-RESOLVER-CORRECTION-001"
+status: "PROPOSED"
+baseline_head: "19bacd64ef723de9919b0d008d1cd78044821ead"
+criteria:
+  RCR-01: {requirement: "Reject empty objectives", pass_evidence: "Automated test returns non-zero and no package", blocks_on: [FAIL, UNKNOWN, CONFLICT]}
+  RCR-02: {requirement: "Verify repository, branch, HEAD, tree and Git blob identity", pass_evidence: "Automated tests compare emitted identities with Git", blocks_on: [FAIL, UNKNOWN, CONFLICT]}
+  RCR-03: {requirement: "Require every configured C0 source", pass_evidence: "Missing source produces blocker and blocked status", blocks_on: [FAIL, UNKNOWN, CONFLICT]}
+  RCR-04: {requirement: "Reject dirty source state by default", pass_evidence: "Dirty tracked or untracked input blocks output authorization", blocks_on: [FAIL, UNKNOWN, CONFLICT]}
+  RCR-05: {requirement: "Resolve transitive dependencies deterministically", pass_evidence: "Missing node and cycle tests block", blocks_on: [FAIL, UNKNOWN, CONFLICT]}
+  RCR-06: {requirement: "Preserve provenance and status labels", pass_evidence: "Every source has Git blob SHA, content SHA-256, status and evidence class", blocks_on: [FAIL, UNKNOWN, CONFLICT]}
+  RCR-07: {requirement: "Fail closed", pass_evidence: "FAIL/UNKNOWN/CONFLICT yields BLOCKED and no authorized action", blocks_on: [FAIL, UNKNOWN, CONFLICT]}
+  RCR-08: {requirement: "No constant empty-blocker shortcut", pass_evidence: "Failure injection tests show blockers are populated", blocks_on: [FAIL, UNKNOWN, CONFLICT]}
+  RCR-09: {requirement: "Isolate C3 forensic context", pass_evidence: "Forensic inputs are opt-in and explicitly non-authoritative", blocks_on: [FAIL, UNKNOWN, CONFLICT]}
+  RCR-10: {requirement: "Reproducible semantic output", pass_evidence: "Repeated runs compare equal after excluding generation timestamp", blocks_on: [FAIL, UNKNOWN, CONFLICT]}
+  RCR-11: {requirement: "Declare F21 write boundary", pass_evidence: "Read-only behavior and explicit non-enforcement statement are tested/documented", blocks_on: [FAIL, UNKNOWN, CONFLICT]}
+  RCR-12: {requirement: "Obtain independent English-language L2 audit", pass_evidence: "External auditor verdict and evidence are recorded", blocks_on: [FAIL, UNKNOWN, CONFLICT]}
+closure:
+  all_criteria_required: true
+  self_audit_is_independent_l2: false
+  human_approval_required_for_promotion: true
