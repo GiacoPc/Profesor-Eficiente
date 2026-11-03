@@ -1,0 +1,43 @@
+source_path: docs/00-governance/els-poc/ITER-0003-P1-RESOLUTION-001/P1-001-EVIDENCE-SCHEMA-v0.1.yaml
+source_git_blob_sha: c3a1ef42cd2fc9f5303e18a521175b1045b82137
+status: PROPOSED
+
+schema_version: "0.1"
+finding: P1-001
+purpose: continuity_recovery_evidence
+
+required_fields:
+  - evidence_id
+  - failure_class
+  - environment
+  - interruption_method
+  - interruption_point
+  - persisted_artifact
+  - expected_recovery
+  - evidence_boundary
+  - repository
+  - ref
+  - engineering_head
+  - execution_identity
+  - observed_result
+  - oracle_result
+  - timestamp_or_run_id
+
+failure_classes:
+  - process_interruption
+  - partial_write
+  - workstation_crash
+  - power_loss
+  - android_process_death
+  - provider_or_ide_quota_exhaustion
+
+fidelity_rules:
+  - process_interruption evidence must not be promoted to workstation_crash, power_loss, or android_process_death.
+  - synthetic quota exhaustion must not be promoted to provider_or_ide_quota_exhaustion.
+  - UNKNOWN is required when the requested failure class was not actually executed or evidence is inconclusive.
+  - CONFLICT is required when authoritative evidence disagrees.
+
+independence:
+  controller_must_differ_from_target: true
+  controller_identity_required: true
+  target_identity_required: true
