@@ -1,6 +1,6 @@
 contract_id: ITER-0003-P1-RESOLUTION-001
 contract_version: v0.2
-status: PROPOSED
+status: APPROVED
 risk: L2
 implementation_authorized: false
 verifier_modification_authorized: false
