@@ -1,9 +1,9 @@
 # ITER-0003-P1-RESOLUTION-001 — P1 Resolution Technical Contract v0.2
 
-**Status:** PROPOSED / REQUIRES HUMAN APPROVAL
+**Status:** APPROVED — HUMAN DECISION RECORDED 2026-09-09
 **Risk:** L2
-**Implementation:** NOT AUTHORIZED
-**Verifier modification:** NOT AUTHORIZED by this contract
+**Implementation authority:** BOUNDED BY `IMPLEMENTATION-PLAN-v0.1.md`; THIS CONTRACT DOES NOT GRANT GENERAL IMPLEMENTATION AUTHORITY
+**Verifier modification:** NOT AUTHORIZED BY THIS CONTRACT OR THE CURRENT INCREMENT
 **Supersedes for review:** `P1-RESOLUTION-CONTRACT-v0.1.md`
 **Scope:** P1-001 through P1-005
 
@@ -11,7 +11,7 @@
 
 This contract defines the exact properties, evidence, tests, provenance rules, and authorization conditions that an implementation must satisfy before the five open P1 findings may be recommended for closure.
 
-This contract does not authorize implementation. Human approval is required before implementation begins.
+This contract is the human-approved governing technical specification. It does not independently grant unrestricted implementation authority. Execution authority is separately bounded by the approved `IMPLEMENTATION-PLAN-v0.1.md` and its explicitly authorized current increment.
 
 The repository is the engineering source of truth. Audit findings are evidence inputs, not authority. No P1 may be closed by assertion, model verdict alone, or a passing test that does not establish the required property.
 
@@ -283,13 +283,13 @@ Sequencing is an execution plan, not a dependency declaration:
 9. independent L2 audit;
 10. reconcile and seek human closure.
 
-No implementation step is authorized until this v0.2 contract is human-approved.
+Implementation may proceed only within the separately approved implementation plan and its explicitly authorized current increment. Approval of this contract alone does not authorize additional increments, verifier changes, P1 closure, continuation authorization, or operational readiness.
 
 ## 12. Protected non-actions
 
 This contract does not:
 
-- approve implementation;
+- grant unrestricted implementation authority;
 - modify the verifier;
 - modify verifier tests;
 - alter ELS-CHECKPOINT v0.2;
@@ -299,6 +299,6 @@ This contract does not:
 
 ## 13. Decision
 
-**PROPOSED / REQUIRES HUMAN APPROVAL.**
+**APPROVED — HUMAN DECISION RECORDED 2026-09-09.**
 
-`P1-RESOLUTION-CONTRACT-v0.1.md` is rejected for approval by the reconciliation decision. This v0.2 is the corrected candidate and remains unapproved until human authority and the required independent L2 contract audit are complete.
+`P1-RESOLUTION-CONTRACT-v0.1.md` is rejected for approval by the reconciliation decision. This v0.2 is the governing technical specification. Execution remains limited to the separately approved `IMPLEMENTATION-PLAN-v0.1.md` and its explicitly authorized current increment.
