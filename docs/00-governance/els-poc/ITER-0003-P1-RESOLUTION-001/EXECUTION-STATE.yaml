@@ -11,17 +11,23 @@ completed:
   - implementation_plan_v0_1
   - p1_001_evidence_schema_v0_1
   - p1_001_partial_write_decision_table_v0_1
+  - p1_001_B_process_interruption_execution_evidence
+  - p1_001_C_WB001_partial_write_execution_evidence
+  - p1_001_B_scoped_self_audit
+  - p1_001_C_WB001_scoped_self_audit
+  - p1_001_criteria_reconciliation_A_through_E
 pending:
-  - p1_001_execution_evidence
-  - p1_001_self_audit
+  - p1_001_global_closure_self_audit
+  - p1_001_independent_l2_review
+  - p1_001_final_closure_reconciliation
+  - human_p1_001_closure
   - p1_002
   - p1_005
   - p1_004
   - p1_003
   - full_regression
-  - independent_l2_audit
-  - reconciliation
-  - human_p1_closure
+  - independent_l2_audit_for_remaining_scope
+  - human_p1_through_p1_005_closure
 blocking_conditions:
   - p1_001_through_p1_005_open
   - unknown_conflict_fail_blocking
